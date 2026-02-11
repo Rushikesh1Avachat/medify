@@ -1,5 +1,5 @@
 // src/components/NavBar/NavBar.jsx
-import { AppBar, Toolbar, Typography, Button, Box, IconButton, useMediaQuery } from '@mui/material';
+import { AppBar, Toolbar,  Button, Box, IconButton, useMediaQuery } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link as RouterLink } from 'react-router-dom';
 
