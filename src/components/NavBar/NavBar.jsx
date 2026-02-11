@@ -24,9 +24,7 @@ import logo from '../../assets/logo.jpg'; // your downloaded logo
         {/* Logo + text side by side */}
         <Box component={RouterLink} to="/" sx={{ display: 'flex', alignItems: 'center', gap: 1.5, textDecoration: 'none' }}>
           <img src={logo} alt="Medify" style={{ height: 40, width: 'auto' }} />
-          <Typography variant="h5" fontWeight="bold" color="#2AA7FF" sx={{ letterSpacing: '-0.5px' }}>
-            Medify
-          </Typography>
+    
         </Box>
 
         {/* Desktop links */}
