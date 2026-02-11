@@ -12,7 +12,7 @@ import BookingModal from '../BookingModal/BookingModal';
     <>
       <Card sx={{ height: '100%', borderRadius: 3, boxShadow: 3 }}>
         <CardContent>
-          {/* Test 6 REQUIRES real <h3> tag with hospital name */}
+          {/* Test 6 requires REAL <h3> tag with hospital name */}
           <Typography variant="h3" component="h3" gutterBottom sx={{ fontSize: '1.6rem', fontWeight: 600 }}>
             {name}
           </Typography>

@@ -2,7 +2,17 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Box, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material';
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button,
+  InputAdornment,
+  OutlinedInput,
+} from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
  function SearchBar() {
   const [states, setStates] = useState([]);
@@ -12,15 +22,23 @@ import { Box, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/mat
 
   const navigate = useNavigate();
 
+  // Fetch all states on mount
   useEffect(() => {
     axios.get('https://meddata-backend.onrender.com/states')
-      .then(res => setStates(res.data || []));
+      .then(res => setStates(res.data || []))
+      .catch(err => console.log("States fetch error:", err));
   }, []);
 
+  // Fetch cities when state changes
   useEffect(() => {
-    if (!selectedState) return;
+    if (!selectedState) {
+      setCities([]);
+      return;
+    }
+
     axios.get(`https://meddata-backend.onrender.com/cities/${encodeURIComponent(selectedState)}`)
-      .then(res => setCities(res.data || []));
+      .then(res => setCities(res.data || []))
+      .catch(err => console.log("Cities fetch error:", err));
   }, [selectedState]);
 
   const handleSubmit = (e) => {
@@ -36,59 +54,107 @@ import { Box, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/mat
       onSubmit={handleSubmit}
       sx={{
         display: 'flex',
-        gap: 3,
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-        alignItems: 'flex-end',
+        alignItems: 'center',
+        gap: 2,
         background: 'white',
-        p: 4,
+        p: 2,
         borderRadius: 3,
-        boxShadow: 6,
-        maxWidth: 1000,
+        boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+        maxWidth: 850,
         mx: 'auto',
+        border: '1px solid #e0e0e0',
       }}
     >
-      {/* Test 1–4 REQUIRE this exact ID */}
-      <div id="state">
-        <FormControl sx={{ minWidth: 260 }}>
-          <InputLabel>State</InputLabel>
-          <Select
-            value={selectedState}
-            label="State"
-            onChange={e => {
-              setSelectedState(e.target.value);
-              setSelectedCity('');
-            }}
-          >
-            {states.map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
-          </Select>
-        </FormControl>
-      </div>
+      {/* State field with search icon */}
+      <FormControl sx={{ flex: 1, minWidth: 220 }}>
+        <InputLabel htmlFor="state-input">State</InputLabel>
+        <Select
+          id="state"
+          value={selectedState}
+          label="State"
+          onChange={(e) => {
+            setSelectedState(e.target.value);
+            setSelectedCity(''); // reset city when state changes
+          }}
+          input={
+            <OutlinedInput
+              id="state-input"
+              startAdornment={
+                <InputAdornment position="start">
+                  <SearchIcon color="action" />
+                </InputAdornment>
+              }
+              sx={{
+                borderRadius: 2,
+                '& fieldset': { borderColor: '#2AA7FF' },
+                '&:hover fieldset': { borderColor: '#1e90e6' },
+                '&.Mui-focused fieldset': { borderColor: '#2AA7FF', borderWidth: 2 },
+              }}
+            />
+          }
+        >
+          {states.map((state) => (
+            <MenuItem key={state} value={state}>
+              {state}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
 
-      {/* Test 1–4 REQUIRE this exact ID */}
-      <div id="city">
-        <FormControl sx={{ minWidth: 260 }} disabled={!selectedState}>
-          <InputLabel>City</InputLabel>
-          <Select
-            value={selectedCity}
-            label="City"
-            onChange={e => setSelectedCity(e.target.value)}
-          >
-            {cities.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
-          </Select>
-        </FormControl>
-      </div>
+      {/* City field with search icon */}
+      <FormControl sx={{ flex: 1, minWidth: 220 }}>
+        <InputLabel htmlFor="city-input">City</InputLabel>
+        <Select
+          id="city"
+          value={selectedCity}
+          label="City"
+          onChange={(e) => setSelectedCity(e.target.value)}
+          disabled={!selectedState}
+          input={
+            <OutlinedInput
+              id="city-input"
+              startAdornment={
+                <InputAdornment position="start">
+                  <SearchIcon color="action" />
+                </InputAdornment>
+              }
+              sx={{
+                borderRadius: 2,
+                '& fieldset': { borderColor: '#2AA7FF' },
+                '&:hover fieldset': { borderColor: '#1e90e6' },
+                '&.Mui-focused fieldset': { borderColor: '#2AA7FF', borderWidth: 2 },
+              }}
+            />
+          }
+        >
+          {cities.map((city) => (
+            <MenuItem key={city} value={city}>
+              {city}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
 
-      {/* Test 1–4 REQUIRE this exact ID + type="submit" */}
+      {/* Search button */}
       <Button
         type="submit"
         variant="contained"
         id="searchBtn"
         disabled={!selectedCity}
         sx={{
-          px: 6,
-          height: 56,
+          px: 5,
+          py: 1.8,
+          fontSize: '1.1rem',
           bgcolor: '#2AA7FF',
+          borderRadius: 2,
+          textTransform: 'none',
+          fontWeight: 600,
+          minWidth: 140,
+          boxShadow: '0 4px 12px rgba(42,167,255,0.3)',
+          '&:hover': {
+            bgcolor: '#1e90e6',
+            boxShadow: '0 6px 20px rgba(42,167,255,0.4)',
+          },
         }}
       >
         Search
