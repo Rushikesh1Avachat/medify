@@ -5,10 +5,10 @@ import HeroSlider from "../components/HeroSlider/HeroSlider";
 function Home() {
   return (
     <Box component="main">
-      {/* ✅ Cypress anchor – MUST be first */}
+      {/* ✅ Cypress anchor – DO NOT MOVE */}
       <SearchBar />
 
-      {/* ✅ Optional UI – Cypress ignores this */}
+      {/* Optional UI */}
       <HeroSlider />
     </Box>
   );

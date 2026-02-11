@@ -1,3 +1,4 @@
+
 import { Routes, Route } from "react-router-dom";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 
@@ -12,7 +13,7 @@ const theme = createTheme({
   typography: { fontFamily: "Poppins, sans-serif" },
 });
 
- function App() {
+function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -28,4 +29,5 @@ const theme = createTheme({
     </ThemeProvider>
   );
 }
-export default App
+
+export default App;

@@ -12,50 +12,39 @@ function SearchBar() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get("https://meddata-backend.onrender.com/states")
-      .then((res) => setStates(res.data || []))
-      .catch((err) => console.error("States fetch error:", err));
+    axios.get("https://meddata-backend.onrender.com/states")
+      .then(res => setStates(res.data || []))
+      .catch(err => console.error(err));
   }, []);
 
   useEffect(() => {
-    if (!selectedState) {
-      setCities([]);
-      setSelectedCity("");
-      return;
-    }
-    axios
-      .get(`https://meddata-backend.onrender.com/cities/${encodeURIComponent(selectedState)}`)
-      .then((res) => setCities(res.data || []))
-      .catch((err) => console.error("Cities fetch error:", err));
+    if (!selectedState) return;
+    axios.get(`https://meddata-backend.onrender.com/cities/${encodeURIComponent(selectedState)}`)
+      .then(res => setCities(res.data || []))
+      .catch(err => console.error(err));
   }, [selectedState]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!selectedState || !selectedCity) return;
-    navigate(
-      `/search?state=${encodeURIComponent(selectedState)}&city=${encodeURIComponent(selectedCity)}`
-    );
+    if (selectedState && selectedCity) {
+      navigate(`/search?state=${encodeURIComponent(selectedState)}&city=${encodeURIComponent(selectedCity)}`);
+    }
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", gap: 2 }}>
+    <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
       <div id="state">
         <FormControl sx={{ minWidth: 200 }}>
           <InputLabel>State</InputLabel>
           <Select
             value={selectedState}
             label="State"
-            onChange={(e) => {
+            onChange={e => {
               setSelectedState(e.target.value);
               setSelectedCity("");
             }}
           >
-            {states.map((s) => (
-              <MenuItem key={s} value={s}>
-                {s}
-              </MenuItem>
-            ))}
+            {states.map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
           </Select>
         </FormControl>
       </div>
@@ -66,18 +55,14 @@ function SearchBar() {
           <Select
             value={selectedCity}
             label="City"
-            onChange={(e) => setSelectedCity(e.target.value)}
+            onChange={e => setSelectedCity(e.target.value)}
           >
-            {cities.map((c) => (
-              <MenuItem key={c} value={c}>
-                {c}
-              </MenuItem>
-            ))}
+            {cities.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
           </Select>
         </FormControl>
       </div>
 
-      <Button id="searchBtn" type="submit" disabled={!selectedCity} variant="contained">
+      <Button type="submit" id="searchBtn" variant="contained" disabled={!selectedCity}>
         Search
       </Button>
     </Box>
