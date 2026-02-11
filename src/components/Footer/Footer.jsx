@@ -1,50 +1,108 @@
-import styles from "./Footer.module.css";
-import apple from "../../assets/apple-logo.jpg";
-import pinterest from "../../assets/pinterest.jpg";
+// src/components/Footer/Footer.jsx
+import { Box, Typography, Grid, Link } from '@mui/material';
+import styles from './Footer.module.css';
+
+import facebook from '../../assets/fb.jpg';       // ← your downloaded FB icon
+import twitter from '../../assets/twitter.jpg';         // ← your downloaded Twitter/X icon
+import youtube from '../../assets/yt.jpg';         // ← your downloaded YouTube icon
+import pinterest from '../../assets/pinterest.jpg';     // ← your downloaded Pinterest icon
 
  function Footer() {
   return (
-    <footer className={styles.footer}>
-      <div className={styles.top}>
-        <div className={styles.brand}>
-          <h2>Medify</h2>
-          <p>
-            Medify is a trusted platform to find medical centers and
-            book appointments easily across the USA.
-          </p>
-        </div>
+    <Box component="footer" className={styles.footer}>
+      <Box className={styles.container}>
+        <Grid container spacing={4}>
+          {/* Brand column */}
+          <Grid item xs={12} md={4}>
+            <Typography variant="h5" className={styles.brandTitle}>
+              Medify
+            </Typography>
+            <Typography variant="body2" className={styles.brandDesc}>
+              Medify is a trusted platform to find medical centers and book
+              appointments easily across the USA.
+            </Typography>
+          </Grid>
 
-        <div className={styles.links}>
-          <h4>About</h4>
-          <p>About Us</p>
-          <p>Careers</p>
-          <p>Blog</p>
-        </div>
+          {/* About */}
+          <Grid item xs={6} sm={3} md={2}>
+            <Typography variant="subtitle1" className={styles.columnTitle}>
+              About
+            </Typography>
+            <Link href="#" underline="hover" className={styles.link}>
+              About Us
+            </Link>
+            <Link href="#" underline="hover" className={styles.link}>
+              Careers
+            </Link>
+            <Link href="#" underline="hover" className={styles.link}>
+              Blog
+            </Link>
+          </Grid>
 
-        <div className={styles.links}>
-          <h4>Services</h4>
-          <p>Hospitals</p>
-          <p>Doctors</p>
-          <p>Medicines</p>
-        </div>
+          {/* Services */}
+          <Grid item xs={6} sm={3} md={2}>
+            <Typography variant="subtitle1" className={styles.columnTitle}>
+              Services
+            </Typography>
+            <Link href="#" underline="hover" className={styles.link}>
+              Hospitals
+            </Link>
+            <Link href="#" underline="hover" className={styles.link}>
+              Doctors
+            </Link>
+            <Link href="#" underline="hover" className={styles.link}>
+              Medicines
+            </Link>
+          </Grid>
 
-        <div className={styles.links}>
-          <h4>Support</h4>
-          <p>Help Center</p>
-          <p>Contact Us</p>
-          <p>Privacy Policy</p>
-        </div>
+          {/* Support */}
+          <Grid item xs={6} sm={3} md={2}>
+            <Typography variant="subtitle1" className={styles.columnTitle}>
+              Support
+            </Typography>
+            <Link href="#" underline="hover" className={styles.link}>
+              Help Center
+            </Link>
+            <Link href="#" underline="hover" className={styles.link}>
+              Contact Us
+            </Link>
+            <Link href="#" underline="hover" className={styles.link}>
+              Privacy Policy
+            </Link>
+          </Grid>
 
-        <div className={styles.apps}>
-          <img src={apple} alt="Apple Store" />
-          <img src={pinterest} alt="Google Play" />
-        </div>
-      </div>
+      
+        
 
-      <div className={styles.bottom}>
-        © 2026 Medify. All rights reserved.
-      </div>
-    </footer>
+            {/* Social Icons – placed below app badges */}
+            <Box sx={{ mt: 4 }}>
+              <Typography variant="subtitle2" sx={{ mb: 1.5, opacity: 0.9 }}>
+                Follow Us
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
+                <Link href="#" underline="none">
+                  <img src={facebook} alt="Facebook" className={styles.socialIcon} />
+                </Link>
+                <Link href="#" underline="none">
+                  <img src={twitter} alt="Twitter" className={styles.socialIcon} />
+                </Link>
+                <Link href="#" underline="none">
+                  <img src={youtube} alt="YouTube" className={styles.socialIcon} />
+                </Link>
+                <Link href="#" underline="none">
+                  <img src={pinterest} alt="Pinterest" className={styles.socialIcon} />
+                </Link>
+              </Box>
+            </Box>
+          </Grid>
+   
+
+        {/* Copyright */}
+        <Box className={styles.copyright}>
+          © 2026 Medify. All rights reserved.
+        </Box>
+      </Box>
+    </Box>
   );
 }
 export default Footer

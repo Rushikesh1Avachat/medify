@@ -1,76 +1,89 @@
-import { useState } from "react";
-import { saveBooking } from "../../utils/bookingStorage";
-import styles from "./BookingModal.module.css";
+// src/components/BookingModal/BookingModal.jsx
+import { useState } from 'react';
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  Typography,
+  ToggleButton,
+  ToggleButtonGroup,
+  Box,
+} from '@mui/material';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider, DateCalendar } from '@mui/x-date-pickers';
+import { format, addDays, isToday } from 'date-fns';
 
 const timeSlots = {
-  Morning: ["09:00 AM", "10:00 AM", "11:00 AM"],
-  Afternoon: ["12:00 PM", "01:00 PM", "02:00 PM"],
-  Evening: ["05:00 PM", "06:00 PM", "07:00 PM"],
+  Morning: ['09:00 AM', '10:00 AM', '11:00 AM'],
+  Afternoon: ['12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM'],
+  Evening: ['04:00 PM', '05:00 PM', '06:00 PM', '07:00 PM'],
 };
 
-const getNext7Days = () => {
-  const days = [];
-  for (let i = 0; i < 7; i++) {
-    const d = new Date();
-    d.setDate(d.getDate() + i);
-    days.push(d.toDateString());
-  }
-  return days;
-};
+ function BookingModal({ open, onClose, hospital }) {
+  const [date, setDate] = useState(new Date());
+  const [time, setTime] = useState(null);
+  const [period, setPeriod] = useState('Morning');
 
- function BookingModal({ hospital }) {
-  const [selectedDate, setSelectedDate] = useState(null);
+  const minDate = new Date();
+  const maxDate = addDays(new Date(), 7);
 
-  const dates = getNext7Days();
+  const handleBook = () => {
+    if (!time) return alert('Please select a time slot');
 
-  const handleBooking = (time) => {
-    saveBooking({
+    const booking = {
       hospital: hospital["Hospital Name"],
-      address: hospital.Address,
-      date: selectedDate,
+      date: format(date, 'yyyy-MM-dd'),
       time,
-    });
-    alert("Booking confirmed!");
+      period,
+      bookedAt: new Date().toISOString(),
+    };
+
+    const existing = JSON.parse(localStorage.getItem('bookings') || '[]');
+    localStorage.setItem('bookings', JSON.stringify([...existing, booking]));
+
+    alert('Booking confirmed!');
+    onClose();
   };
 
   return (
-    <div className={styles.booking}>
-      <h4>Select Date</h4>
+    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+      <DialogTitle>Book Appointment at {hospital["Hospital Name"]}</DialogTitle>
+      <DialogContent>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <DateCalendar value={date} onChange={setDate} minDate={minDate} maxDate={maxDate} />
+        </LocalizationProvider>
 
-      <div className={styles.dates}>
-        {dates.map((d) => (
-          <button
-            key={d}
-            className={selectedDate === d ? styles.active : ""}
-            onClick={() => setSelectedDate(d)}
-          >
-            {d}
-          </button>
-        ))}
-      </div>
+        <Box sx={{ mt: 4 }}>
+          <Typography variant="subtitle1" gutterBottom>Available Slots</Typography>
 
-      {selectedDate && (
-        <>
-          <h4>Available Slots</h4>
+          <p style={{ fontWeight: 600, margin: '12px 0 8px' }}>
+            {isToday(date) ? 'Today' : format(date, 'EEEE, MMM d')}
+          </p>
 
-          {Object.keys(timeSlots).map((period) => (
-            <div key={period}>
-              <p>{period}</p>
-              <div className={styles.slots}>
-                {timeSlots[period].map((time) => (
-                  <button
-                    key={time}
-                    onClick={() => handleBooking(time)}
-                  >
-                    {time}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ))}
-        </>
-      )}
-    </div>
+          <ToggleButtonGroup value={period} exclusive onChange={(_, v) => v && setPeriod(v)} fullWidth sx={{ mb: 2 }}>
+            {Object.keys(timeSlots).map(p => <ToggleButton key={p} value={p}>{p}</ToggleButton>)}
+          </ToggleButtonGroup>
+
+          <p style={{ fontWeight: 600, margin: '16px 0 8px' }}>{period}</p>
+
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
+            {timeSlots[period].map(slot => (
+              <Button key={slot} variant={time === slot ? 'contained' : 'outlined'} onClick={() => setTime(slot)}>
+                {slot}
+              </Button>
+            ))}
+          </Box>
+        </Box>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>Cancel</Button>
+        <Button variant="contained" onClick={handleBook} disabled={!time}>
+          Confirm Booking
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
 export default BookingModal

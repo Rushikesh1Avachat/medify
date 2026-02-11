@@ -1,31 +1,33 @@
-import { Button } from "@mui/material";
-import { useState } from "react";
+// src/components/HospitalCard/HospitalCard.jsx
+import { useState } from 'react';
+import { Card, CardContent, Typography, Button, Rating } from '@mui/material';
+import BookingModal from '../BookingModal/BookingModal';
 
  function HospitalCard({ hospital }) {
-  const [showBooking, setShowBooking] = useState(false);
-
-  const book = () => {
-    const existing = JSON.parse(localStorage.getItem("bookings")) || [];
-    existing.push({
-      name: hospital["Hospital Name"],
-      city: hospital.City,
-    });
-    localStorage.setItem("bookings", JSON.stringify(existing));
-  };
+  const [open, setOpen] = useState(false);
 
   return (
-    <div>
-      {/* ✅ REQUIRED */}
-      <h3>{hospital["Hospital Name"].toLowerCase()}</h3>
+    <>
+      <Card sx={{ height: '100%', borderRadius: 3, boxShadow: 3 }}>
+        <CardContent>
+          <Typography variant="h3" component="h3" gutterBottom sx={{ fontSize: '1.6rem', fontWeight: 600 }}>
+            {hospital["Hospital Name"] || "Medical Center"}
+          </Typography>
 
-      <Button onClick={() => setShowBooking(true)}>
-        Book FREE Center Visit
-      </Button>
+          <Rating value={Number(hospital["Hospital overall rating"] || 0)} readOnly precision={0.5} />
 
-      {showBooking && (
-        <Button onClick={book}>Confirm Booking</Button>
-      )}
-    </div>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+            {hospital["Address"] || "No address"}
+          </Typography>
+
+          <Button variant="contained" fullWidth sx={{ mt: 3, py: 1.5 }} onClick={() => setOpen(true)}>
+            Book FREE Center Visit
+          </Button>
+        </CardContent>
+      </Card>
+
+      <BookingModal open={open} onClose={() => setOpen(false)} hospital={hospital} />
+    </>
   );
 }
 export default HospitalCard
