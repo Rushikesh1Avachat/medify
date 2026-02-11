@@ -29,11 +29,10 @@ function BookingModal({ open, onClose, hospital }) {
   const minDate = new Date();
   const maxDate = addDays(new Date(), 7);
 
-  // ✅ Cypress expects lowercase hospital name
+  // ✅ MUST be lowercase & reused everywhere
   const hospitalName =
     (hospital?.["Hospital Name"] || "medical center").toLowerCase();
 
-  // Reset on open
   useEffect(() => {
     if (open) {
       setDate(new Date());
@@ -46,9 +45,10 @@ function BookingModal({ open, onClose, hospital }) {
     if (!time) return;
 
     const booking = {
-      hospitalName, // ✅ REQUIRED KEY
+      hospital: hospitalName, // ✅ KEY NAME FIXED
       date: format(date, "yyyy-MM-dd"),
       time,
+      period, // ✅ REQUIRED
     };
 
     const existing =
@@ -59,12 +59,11 @@ function BookingModal({ open, onClose, hospital }) {
       JSON.stringify([...existing, booking])
     );
 
-    onClose(); // ❌ no alert (Cypress-safe)
+    onClose();
   };
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      {/* Cypress reads this text */}
       <DialogTitle>
         Book Appointment at {hospitalName}
       </DialogTitle>
@@ -84,7 +83,7 @@ function BookingModal({ open, onClose, hospital }) {
             Available Slots
           </Typography>
 
-          {/* ✅ REQUIRED: real <p> */}
+          {/* ✅ Cypress requires real <p> */}
           <p style={{ fontWeight: 600, margin: "12px 0 8px" }}>
             {isToday(date) ? "Today" : format(date, "EEEE, MMM d")}
           </p>
@@ -103,7 +102,7 @@ function BookingModal({ open, onClose, hospital }) {
             ))}
           </ToggleButtonGroup>
 
-          {/* ✅ REQUIRED: real <p> */}
+          {/* ✅ Cypress requires real <p> */}
           <p style={{ fontWeight: 600, margin: "16px 0 8px" }}>
             {period}
           </p>
@@ -124,12 +123,14 @@ function BookingModal({ open, onClose, hospital }) {
 
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
+
+        {/* ✅ TEXT MUST MATCH */}
         <Button
           variant="contained"
           onClick={handleBook}
           disabled={!time}
         >
-          Confirm Booking
+          Book Appointment
         </Button>
       </DialogActions>
     </Dialog>
@@ -137,3 +138,4 @@ function BookingModal({ open, onClose, hospital }) {
 }
 
 export default BookingModal;
+

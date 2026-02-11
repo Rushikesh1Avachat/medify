@@ -1,20 +1,62 @@
 // src/Home/Home.jsx
-import { Box, Container } from '@mui/material';
-import SearchBar from '../components/SearchBar/SearchBar';
-import HeroSlider from '../components/HeroSlider/HeroSlider';
-function Home() {
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+const STATES_API = "https://meddata-backend.onrender.com/states";
+const CITIES_API = (state) =>
+  `https://meddata-backend.onrender.com/cities/${state}`;
+
+ function Home() {
+  const navigate = useNavigate();
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [state, setState] = useState("");
+  const [city, setCity] = useState("");
+
+  useEffect(() => {
+    fetch(STATES_API)
+      .then((res) => res.json())
+      .then(setStates);
+  }, []);
+
+  useEffect(() => {
+    if (state) {
+      fetch(CITIES_API(state))
+        .then((res) => res.json())
+        .then(setCities);
+    }
+  }, [state]);
+
+  const handleSearch = () => {
+    if (state && city) {
+      navigate("/search", { state: { state, city } });
+    }
+  };
+
   return (
-    <Box component="main">
-      <HeroSlider />
+    <div>
+      <h1>Find Medical Centers</h1>
 
-      {/* CRITICAL: SearchBar MUST be here — tests look for #state, #city, #searchBtn on "/" */}
-      <Container maxWidth="lg" sx={{ py: { xs: 6, md: 10 } }}>
-        <SearchBar />
-      </Container>
+      <div id="state">
+        <select value={state} onChange={(e) => setState(e.target.value)}>
+          <option value="">Select State</option>
+          {states.map((s) => (
+            <option key={s} value={s}>{s}</option>
+          ))}
+        </select>
+      </div>
 
-      {/* Add other sections BELOW this line only */}
-    </Box>
+      <div id="city">
+        <select value={city} onChange={(e) => setCity(e.target.value)}>
+          <option value="">Select City</option>
+          {cities.map((c) => (
+            <option key={c} value={c}>{c}</option>
+          ))}
+        </select>
+      </div>
+
+      <button onClick={handleSearch}>Search</button>
+    </div>
   );
 }
-
 export default Home
