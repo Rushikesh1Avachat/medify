@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 
 import NavBar from "./components/NavBar/NavBar";
@@ -16,15 +16,15 @@ const theme = createTheme({
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Router>
-        <NavBar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/my-bookings" element={<MyBookings />} />
-        </Routes>
-        <Footer />
-      </Router>
+      <NavBar />
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/my-bookings" element={<MyBookings />} />
+      </Routes>
+
+      <Footer />
     </ThemeProvider>
   );
 }

@@ -1,27 +1,35 @@
-import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import axios from "axios";
 import HospitalCard from "../components/HospitalCard/HospitalCard";
-import { getHospitals } from "../api/medifyApi";
 
  function Search() {
-  const { state } = useLocation();
-  const [data, setData] = useState([]);
+  const [params] = useSearchParams();
+  const state = params.get("state");
+  const city = params.get("city");
+
+  const [hospitals, setHospitals] = useState([]);
 
   useEffect(() => {
-    getHospitals(state.state, state.city)
-      .then(res => setData(res.data));
-  }, [state]);
+    if (!state || !city) return;
+    axios
+      .get(
+        `https://meddata-backend.onrender.com/data?state=${state}&city=${city}`
+      )
+      .then(res => setHospitals(res.data));
+  }, [state, city]);
 
   return (
-    <>
+    <div>
+      {/* ✅ REQUIRED HEADING */}
       <h1>
-        {data.length} medical centers available in {state.city.toLowerCase()}
+        {hospitals.length} medical centers available in {city?.toLowerCase()}
       </h1>
 
-      {data.map((h, i) => (
-        <HospitalCard key={i} hospital={h} />
+      {hospitals.map(h => (
+        <HospitalCard key={h["Hospital Name"]} hospital={h} />
       ))}
-    </>
+    </div>
   );
 }
 export default Search

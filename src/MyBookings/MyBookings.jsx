@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
       <h1>My Bookings</h1>
 
       {bookings.map((b, i) => (
-        <h3 key={i}>{b.name.toLowerCase()}</h3>
+        <h3 key={i}>{b.name?.toLowerCase()}</h3>
       ))}
     </div>
   );
