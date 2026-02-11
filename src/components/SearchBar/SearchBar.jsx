@@ -1,112 +1,70 @@
-// src/components/SearchBar/SearchBar.jsx
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Button,
-  Paper,
-} from '@mui/material';
+import { Box, Button, MenuItem, Select } from "@mui/material";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
- function SearchBar() {
+export default function SearchBar() {
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
-  const [selectedState, setSelectedState] = useState('');
-  const [selectedCity, setSelectedCity] = useState('');
+  const [state, setState] = useState("");
+  const [city, setCity] = useState("");
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('https://meddata-backend.onrender.com/states')
-      .then(res => setStates(res.data || []))
-      .catch(err => console.error(err));
+    axios
+      .get("https://meddata-backend.onrender.com/states")
+      .then(res => setStates(res.data));
   }, []);
 
   useEffect(() => {
-    if (!selectedState) return;
-    axios.get(`https://meddata-backend.onrender.com/cities/${encodeURIComponent(selectedState)}`)
-      .then(res => setCities(res.data || []))
-      .catch(err => console.error(err));
-  }, [selectedState]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (selectedState && selectedCity) {
-      navigate(`/search?state=${encodeURIComponent(selectedState)}&city=${encodeURIComponent(selectedCity)}`);
-    }
-  };
+    if (!state) return;
+    axios
+      .get(`https://meddata-backend.onrender.com/cities/${state}`)
+      .then(res => setCities(res.data));
+  }, [state]);
 
   return (
-    <Paper
-      elevation={6}
-      sx={{
-        p: 4,
-        borderRadius: 3,
-        maxWidth: 1000,
-        mx: 'auto',
-        bgcolor: 'white',
-      }}
-      component="form"
-      onSubmit={handleSubmit}
-    >
-      <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'flex-end' }}>
-        
-        {/* State dropdown – exact id requirement */}
-        <div id="state">
-          <FormControl sx={{ minWidth: 260 }}>
-            <InputLabel>State</InputLabel>
-            <Select
-              value={selectedState}
-              label="State"
-              onChange={e => {
-                setSelectedState(e.target.value);
-                setSelectedCity('');
-              }}
-            >
-              {states.map(s => (
-                <MenuItem key={s} value={s}>{s}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </div>
-
-        {/* City dropdown – exact id requirement */}
-        <div id="city">
-          <FormControl sx={{ minWidth: 260 }} disabled={!selectedState}>
-            <InputLabel>City</InputLabel>
-            <Select
-              value={selectedCity}
-              label="City"
-              onChange={e => setSelectedCity(e.target.value)}
-            >
-              {cities.map(c => (
-                <MenuItem key={c} value={c}>{c}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </div>
-
-        {/* Search button – exact id & type */}
-        <Button
-          type="submit"
-          variant="contained"
-          size="large"
-          id="searchBtn"
-          disabled={!selectedCity}
-          sx={{
-            px: 6,
-            height: 56,
-            bgcolor: '#2AA7FF',
-          }}
+    <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", bgcolor: "white", p: 3 }}>
+      
+      {/* ✅ REQUIRED BY CYPRESS */}
+      <div id="state">
+        <Select
+          value={state}
+          onChange={(e) => setState(e.target.value)}
+          displayEmpty
         >
-          Search
-        </Button>
-      </Box>
-    </Paper>
+          <MenuItem value="">Select State</MenuItem>
+          {states.map(s => (
+            <MenuItem key={s} value={s}>{s}</MenuItem>
+          ))}
+        </Select>
+      </div>
+
+      {/* ✅ REQUIRED BY CYPRESS */}
+      <div id="city">
+        <Select
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          displayEmpty
+          disabled={!state}
+        >
+          <MenuItem value="">Select City</MenuItem>
+          {cities.map(c => (
+            <MenuItem key={c} value={c}>{c}</MenuItem>
+          ))}
+        </Select>
+      </div>
+
+      {/* ✅ REQUIRED */}
+      <Button
+        id="searchBtn"
+        type="submit"
+        variant="contained"
+        onClick={() => navigate(`/search?state=${state}&city=${city}`)}
+      >
+        Search
+      </Button>
+    </Box>
   );
 }
-export default SearchBar

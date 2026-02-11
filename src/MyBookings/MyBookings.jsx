@@ -1,20 +1,22 @@
-import { getBookings } from "../utils/bookingStorage";
+import { useEffect, useState } from "react";
 
  function MyBookings() {
-  const bookings = getBookings();
+  const [bookings, setBookings] = useState([]);
+
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem("bookings")) || [];
+    setBookings(stored);
+  }, []);
 
   return (
-    <>
+    <div>
+      {/* ✅ REQUIRED */}
       <h1>My Bookings</h1>
 
       {bookings.map((b, i) => (
-        <div key={i}>
-          <h3>{b.hospital}</h3>
-          <p>{b.date}</p>
-          <p>{b.time}</p>
-        </div>
+        <h3 key={i}>{b.name.toLowerCase()}</h3>
       ))}
-    </>
+    </div>
   );
 }
 export default MyBookings

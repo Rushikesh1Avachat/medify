@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 
 import NavBar from "./components/NavBar/NavBar";
@@ -9,25 +9,23 @@ import MyBookings from "./MyBookings/MyBookings";
 
 const theme = createTheme({
   palette: { primary: { main: "#2AA7FF" } },
-  typography: { fontFamily: '"Poppins", sans-serif' },
+  typography: { fontFamily: "Poppins, sans-serif" },
 });
 
-function App() {
+ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-
-      <NavBar />
-
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="/my-bookings" element={<MyBookings />} />
-      </Routes>
-
-      <Footer />
+      <Router>
+        <NavBar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/my-bookings" element={<MyBookings />} />
+        </Routes>
+        <Footer />
+      </Router>
     </ThemeProvider>
   );
 }
-
-export default App;
+export default App
