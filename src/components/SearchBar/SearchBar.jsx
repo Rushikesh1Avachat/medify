@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Box, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material';
 
-export default function SearchBar() {
+ function SearchBar() {
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [selectedState, setSelectedState] = useState('');
@@ -14,15 +14,13 @@ export default function SearchBar() {
 
   useEffect(() => {
     axios.get('https://meddata-backend.onrender.com/states')
-      .then(res => setStates(res.data || []))
-      .catch(err => console.error("States fetch error:", err));
+      .then(res => setStates(res.data || []));
   }, []);
 
   useEffect(() => {
     if (!selectedState) return;
     axios.get(`https://meddata-backend.onrender.com/cities/${encodeURIComponent(selectedState)}`)
-      .then(res => setCities(res.data || []))
-      .catch(err => console.error("Cities fetch error:", err));
+      .then(res => setCities(res.data || []));
   }, [selectedState]);
 
   const handleSubmit = (e) => {
@@ -50,7 +48,7 @@ export default function SearchBar() {
         mx: 'auto',
       }}
     >
-      {/* Test requires exactly this: div#state */}
+      {/* Test 1–4 REQUIRE this exact ID */}
       <div id="state">
         <FormControl sx={{ minWidth: 260 }}>
           <InputLabel>State</InputLabel>
@@ -62,14 +60,12 @@ export default function SearchBar() {
               setSelectedCity('');
             }}
           >
-            {states.map(s => (
-              <MenuItem key={s} value={s}>{s}</MenuItem>
-            ))}
+            {states.map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
           </Select>
         </FormControl>
       </div>
 
-      {/* Test requires exactly this: div#city */}
+      {/* Test 1–4 REQUIRE this exact ID */}
       <div id="city">
         <FormControl sx={{ minWidth: 260 }} disabled={!selectedState}>
           <InputLabel>City</InputLabel>
@@ -78,14 +74,12 @@ export default function SearchBar() {
             label="City"
             onChange={e => setSelectedCity(e.target.value)}
           >
-            {cities.map(c => (
-              <MenuItem key={c} value={c}>{c}</MenuItem>
-            ))}
+            {cities.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
           </Select>
         </FormControl>
       </div>
 
-      {/* Test requires exactly this: button#searchBtn with type="submit" */}
+      {/* Test 1–4 REQUIRE this exact ID + type="submit" */}
       <Button
         type="submit"
         variant="contained"
@@ -95,7 +89,6 @@ export default function SearchBar() {
           px: 6,
           height: 56,
           bgcolor: '#2AA7FF',
-          fontSize: '1.1rem',
         }}
       >
         Search
@@ -103,3 +96,4 @@ export default function SearchBar() {
     </Box>
   );
 }
+export default SearchBar
