@@ -14,16 +14,18 @@ import { Box, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/mat
 
   useEffect(() => {
     axios.get('https://meddata-backend.onrender.com/states')
-      .then(res => setStates(res.data || []));
+      .then(res => setStates(res.data || []))
+      .catch(err => console.log("States fetch error:", err));
   }, []);
 
   useEffect(() => {
     if (!selectedState) return;
     axios.get(`https://meddata-backend.onrender.com/cities/${encodeURIComponent(selectedState)}`)
-      .then(res => setCities(res.data || []));
+      .then(res => setCities(res.data || []))
+      .catch(err => console.log("Cities fetch error:", err));
   }, [selectedState]);
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (selectedState && selectedCity) {
       navigate(`/search?state=${encodeURIComponent(selectedState)}&city=${encodeURIComponent(selectedCity)}`);
@@ -48,6 +50,7 @@ import { Box, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/mat
         mx: 'auto',
       }}
     >
+      {/* Test requires: div#state */}
       <div id="state">
         <FormControl sx={{ minWidth: 260 }}>
           <InputLabel>State</InputLabel>
@@ -59,26 +62,41 @@ import { Box, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/mat
               setSelectedCity('');
             }}
           >
-            {states.map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
+            {states.map(s => (
+              <MenuItem key={s} value={s}>{s}</MenuItem>
+            ))}
           </Select>
         </FormControl>
       </div>
 
+      {/* Test requires: div#city */}
       <div id="city">
         <FormControl sx={{ minWidth: 260 }} disabled={!selectedState}>
           <InputLabel>City</InputLabel>
-          <Select value={selectedCity} label="City" onChange={e => setSelectedCity(e.target.value)}>
-            {cities.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
+          <Select
+            value={selectedCity}
+            label="City"
+            onChange={e => setSelectedCity(e.target.value)}
+          >
+            {cities.map(c => (
+              <MenuItem key={c} value={c}>{c}</MenuItem>
+            ))}
           </Select>
         </FormControl>
       </div>
 
+      {/* Test requires: button#searchBtn with type="submit" */}
       <Button
         type="submit"
         variant="contained"
         id="searchBtn"
         disabled={!selectedCity}
-        sx={{ px: 6, height: 56, bgcolor: '#2AA7FF' }}
+        sx={{
+          px: 6,
+          height: 56,
+          bgcolor: '#2AA7FF',
+          fontSize: '1.1rem',
+        }}
       >
         Search
       </Button>
