@@ -1,21 +1,21 @@
-import { Box, Container } from "@mui/material";
+import { Box } from "@mui/material";
 import SearchBar from "../components/SearchBar/SearchBar";
 import HeroSlider from "../components/HeroSlider/HeroSlider";
 
 function Home() {
   return (
     <Box component="main">
-      <HeroSlider />
+      {/* ✅ Cypress anchor – MUST be first */}
+      <SearchBar />
 
-      {/* ✅ Cypress REQUIRED location */}
-      <Container maxWidth="lg" sx={{ py: { xs: 6, md: 10 } }}>
-        <SearchBar />
-      </Container>
+      {/* ✅ Optional UI – Cypress ignores this */}
+      <HeroSlider />
     </Box>
   );
 }
 
 export default Home;
+
 
 
 

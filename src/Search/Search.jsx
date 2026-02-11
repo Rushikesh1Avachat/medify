@@ -1,50 +1,53 @@
+// src/Search/Search.jsx
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { Container, Grid, Typography } from "@mui/material";
 import HospitalCard from "../components/HospitalCard/HospitalCard";
 
 function Search() {
-  const [params] = useSearchParams();
-  const state = params.get("state");
-  const city = params.get("city");
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const state = query.get("state");
+  const city = query.get("city");
 
   const [hospitals, setHospitals] = useState([]);
-  const [selectedHospital, setSelectedHospital] = useState(null);
 
   useEffect(() => {
-    if (!state || !city) return;
-
-    fetch(
-      `https://meddata-backend.onrender.com/data?state=${state}&city=${city}`
-    )
-      .then(res => res.json())
-      .then(data => setHospitals(data || []))
-      .catch(err => console.error(err));
+    if (state && city) {
+      fetch(
+        `https://meddata-backend.onrender.com/hospitals?state=${encodeURIComponent(
+          state
+        )}&city=${encodeURIComponent(city)}`
+      )
+        .then((res) => res.json())
+        .then((data) => setHospitals(data || []))
+        .catch((err) => console.error(err));
+    }
   }, [state, city]);
 
   return (
-    <div>
-      <h1>Hospitals in {city}</h1>
+    <Container maxWidth="lg" sx={{ py: 6 }}>
+      <Typography variant="h1" component="h1" gutterBottom>
+        Hospitals in {city}, {state}
+      </Typography>
 
-      <div id="hospitals">
-        {hospitals.map((h, i) => (
-          <HospitalCard
-            key={i}
-            hospital={h}
-            onBook={() => setSelectedHospital(h)}
-          />
-        ))}
-      </div>
-
-      {selectedHospital && (
-        <div id="booking-section">
-          <HospitalCard hospital={selectedHospital} booking />
-        </div>
+      {hospitals.length === 0 ? (
+        <Typography color="text.secondary">No hospitals found.</Typography>
+      ) : (
+        <Grid container spacing={4}>
+          {hospitals.map((hosp, i) => (
+            <Grid item xs={12} sm={6} md={4} key={i}>
+              <HospitalCard hospital={hosp} />
+            </Grid>
+          ))}
+        </Grid>
       )}
-    </div>
+    </Container>
   );
 }
 
 export default Search;
+
 
 
 

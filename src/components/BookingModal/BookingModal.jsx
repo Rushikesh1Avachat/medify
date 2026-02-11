@@ -15,13 +15,11 @@ function BookingModal({ hospital }) {
     "04:00 PM",
   ];
 
-  /* ✅ Load bookings from localStorage */
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem("bookings") || "[]");
     setBookings(saved);
   }, []);
 
-  /* ✅ Slot disable logic */
   const isSlotBooked = (slot) =>
     bookings.some(
       (b) =>
@@ -30,7 +28,6 @@ function BookingModal({ hospital }) {
         b.time === slot
     );
 
-  /* ✅ Book appointment */
   const handleBook = () => {
     if (!selectedDate || !selectedSlot) return;
 
@@ -49,7 +46,6 @@ function BookingModal({ hospital }) {
     alert("Appointment booked!");
   };
 
-  /* ✅ Next 7 days only */
   const upcomingDates = Array.from({ length: 7 }).map((_, i) => {
     const d = new Date();
     d.setDate(d.getDate() + i);
@@ -59,16 +55,10 @@ function BookingModal({ hospital }) {
   return (
     <div
       id="booking-section"
-      style={{
-        border: "1px solid #ccc",
-        padding: 16,
-        borderRadius: 8,
-        marginTop: 16,
-      }}
+      style={{ border: "1px solid #ccc", padding: 16, borderRadius: 8, marginTop: 16 }}
     >
       <h4>Book Appointment</h4>
 
-      {/* ✅ Cypress EXPECTS input#date */}
       <input
         id="date"
         type="date"
@@ -81,7 +71,6 @@ function BookingModal({ hospital }) {
         }}
       />
 
-      {/* ✅ Time Slots */}
       {selectedDate && (
         <div
           id="time-slots"
@@ -89,7 +78,6 @@ function BookingModal({ hospital }) {
         >
           {slots.map((slot) => {
             const disabled = isSlotBooked(slot);
-
             return (
               <button
                 key={slot}
@@ -119,7 +107,6 @@ function BookingModal({ hospital }) {
         </div>
       )}
 
-      {/* ✅ Cypress EXPECTS button#bookBtn */}
       <button
         id="bookBtn"
         disabled={!selectedSlot}
@@ -143,5 +130,6 @@ function BookingModal({ hospital }) {
 }
 
 export default BookingModal;
+
 
 

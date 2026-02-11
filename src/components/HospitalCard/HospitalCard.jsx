@@ -1,29 +1,37 @@
+// src/components/HospitalCard/HospitalCard.jsx
+import { useState } from "react";
 import { Card, CardContent, Typography, Button } from "@mui/material";
-import BookingModal from "../BookingModal/BookingModal"
-function HospitalCard({ hospital, onBook, booking }) {
+import BookingModal from "../BookingSection/BookingSection";
+
+function HospitalCard({ hospital }) {
+  const [openBooking, setOpenBooking] = useState(false);
+
   return (
-    <Card sx={{ mb: 3 }}>
+    <Card sx={{ minHeight: 250, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
       <CardContent>
-        <Typography variant="h3" component="h3">
+        {/* ✅ Cypress looks for h3 */}
+        <Typography variant="h3" component="h3" gutterBottom>
           {hospital["Hospital Name"]}
         </Typography>
 
-        <Typography color="text.secondary">
-          {hospital.City}, {hospital.State}
+        <Typography variant="body2" color="text.secondary">
+          {hospital.Address}, {hospital.City}, {hospital.State}
         </Typography>
 
-        {!booking && (
-          <Button
-            variant="contained"
-            sx={{ mt: 2 }}
-            onClick={onBook}
-          >
-            Book FREE Center Visit
-          </Button>
-        )}
-
-        {booking && <BookingModal hospital={hospital} />}
+        <Typography variant="body2" color="text.secondary">
+          Contact: {hospital.Contact || "N/A"}
+        </Typography>
       </CardContent>
+
+      <Button
+        variant="contained"
+        onClick={() => setOpenBooking((prev) => !prev)}
+        sx={{ m: 2 }}
+      >
+        {openBooking ? "Close Booking" : "Book Appointment"}
+      </Button>
+
+      {openBooking && <BookingModal hospital={hospital} />}
     </Card>
   );
 }
