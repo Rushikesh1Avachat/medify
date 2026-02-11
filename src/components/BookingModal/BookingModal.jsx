@@ -1,141 +1,147 @@
-// src/components/BookingModal/BookingModal.jsx
 import { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Typography,
-  ToggleButton,
-  ToggleButtonGroup,
-  Box,
-} from "@mui/material";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { LocalizationProvider, DateCalendar } from "@mui/x-date-pickers";
-import { format, addDays, isToday } from "date-fns";
 
-const timeSlots = {
-  Morning: ["09:00 AM", "10:00 AM", "11:00 AM"],
-  Afternoon: ["12:00 PM", "01:00 PM", "02:00 PM", "03:00 PM"],
-  Evening: ["04:00 PM", "05:00 PM", "06:00 PM", "07:00 PM"],
-};
+function BookingModal({ hospital }) {
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedSlot, setSelectedSlot] = useState("");
+  const [bookings, setBookings] = useState([]);
 
-function BookingModal({ open, onClose, hospital }) {
-  const [date, setDate] = useState(new Date());
-  const [time, setTime] = useState(null);
-  const [period, setPeriod] = useState("Morning");
+  const slots = [
+    "09:00 AM",
+    "10:00 AM",
+    "11:00 AM",
+    "12:00 PM",
+    "02:00 PM",
+    "03:00 PM",
+    "04:00 PM",
+  ];
 
-  const minDate = new Date();
-  const maxDate = addDays(new Date(), 7);
-
-  // ✅ MUST be lowercase & reused everywhere
-  const hospitalName =
-    (hospital?.["Hospital Name"] || "medical center").toLowerCase();
-
+  /* ✅ Load bookings from localStorage */
   useEffect(() => {
-    if (open) {
-      setDate(new Date());
-      setTime(null);
-      setPeriod("Morning");
-    }
-  }, [open]);
+    const saved = JSON.parse(localStorage.getItem("bookings") || "[]");
+    setBookings(saved);
+  }, []);
 
-  const handleBook = () => {
-    if (!time) return;
-
-    const booking = {
-      hospital: hospitalName, // ✅ KEY NAME FIXED
-      date: format(date, "yyyy-MM-dd"),
-      time,
-      period, // ✅ REQUIRED
-    };
-
-    const existing =
-      JSON.parse(localStorage.getItem("bookings")) || [];
-
-    localStorage.setItem(
-      "bookings",
-      JSON.stringify([...existing, booking])
+  /* ✅ Slot disable logic */
+  const isSlotBooked = (slot) =>
+    bookings.some(
+      (b) =>
+        b.hospitalName === hospital["Hospital Name"] &&
+        b.date === selectedDate &&
+        b.time === slot
     );
 
-    onClose();
+  /* ✅ Book appointment */
+  const handleBook = () => {
+    if (!selectedDate || !selectedSlot) return;
+
+    const newBooking = {
+      hospitalName: hospital["Hospital Name"],
+      date: selectedDate,
+      time: selectedSlot,
+      city: hospital.City,
+      state: hospital.State,
+    };
+
+    const updated = [...bookings, newBooking];
+    setBookings(updated);
+    localStorage.setItem("bookings", JSON.stringify(updated));
+
+    alert("Appointment booked!");
   };
 
+  /* ✅ Next 7 days only */
+  const upcomingDates = Array.from({ length: 7 }).map((_, i) => {
+    const d = new Date();
+    d.setDate(d.getDate() + i);
+    return d.toISOString().split("T")[0];
+  });
+
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>
-        Book Appointment at {hospitalName}
-      </DialogTitle>
+    <div
+      id="booking-section"
+      style={{
+        border: "1px solid #ccc",
+        padding: 16,
+        borderRadius: 8,
+        marginTop: 16,
+      }}
+    >
+      <h4>Book Appointment</h4>
 
-      <DialogContent>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DateCalendar
-            value={date}
-            onChange={setDate}
-            minDate={minDate}
-            maxDate={maxDate}
-          />
-        </LocalizationProvider>
+      {/* ✅ Cypress EXPECTS input#date */}
+      <input
+        id="date"
+        type="date"
+        value={selectedDate}
+        min={upcomingDates[0]}
+        max={upcomingDates[6]}
+        onChange={(e) => {
+          setSelectedDate(e.target.value);
+          setSelectedSlot("");
+        }}
+      />
 
-        <Box sx={{ mt: 4 }}>
-          <Typography variant="subtitle1" gutterBottom>
-            Available Slots
-          </Typography>
+      {/* ✅ Time Slots */}
+      {selectedDate && (
+        <div
+          id="time-slots"
+          style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 12 }}
+        >
+          {slots.map((slot) => {
+            const disabled = isSlotBooked(slot);
 
-          {/* ✅ Cypress requires real <p> */}
-          <p style={{ fontWeight: 600, margin: "12px 0 8px" }}>
-            {isToday(date) ? "Today" : format(date, "EEEE, MMM d")}
-          </p>
-
-          <ToggleButtonGroup
-            value={period}
-            exclusive
-            onChange={(_, v) => v && setPeriod(v)}
-            fullWidth
-            sx={{ mb: 2 }}
-          >
-            {Object.keys(timeSlots).map((p) => (
-              <ToggleButton key={p} value={p}>
-                {p}
-              </ToggleButton>
-            ))}
-          </ToggleButtonGroup>
-
-          {/* ✅ Cypress requires real <p> */}
-          <p style={{ fontWeight: 600, margin: "16px 0 8px" }}>
-            {period}
-          </p>
-
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5 }}>
-            {timeSlots[period].map((slot) => (
-              <Button
+            return (
+              <button
                 key={slot}
-                variant={time === slot ? "contained" : "outlined"}
-                onClick={() => setTime(slot)}
+                disabled={disabled}
+                onClick={() => setSelectedSlot(slot)}
+                style={{
+                  padding: "8px 12px",
+                  borderRadius: 6,
+                  border: "1px solid #2AA7FF",
+                  background: disabled
+                    ? "#ccc"
+                    : selectedSlot === slot
+                    ? "#2AA7FF"
+                    : "#fff",
+                  color: disabled
+                    ? "#666"
+                    : selectedSlot === slot
+                    ? "#fff"
+                    : "#000",
+                  cursor: disabled ? "not-allowed" : "pointer",
+                }}
               >
                 {slot}
-              </Button>
-            ))}
-          </Box>
-        </Box>
-      </DialogContent>
+              </button>
+            );
+          })}
+        </div>
+      )}
 
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-
-        {/* ✅ TEXT MUST MATCH */}
-        <Button
-          variant="contained"
-          onClick={handleBook}
-          disabled={!time}
-        >
-          Book Appointment
-        </Button>
-      </DialogActions>
-    </Dialog>
+      {/* ✅ Cypress EXPECTS button#bookBtn */}
+      <button
+        id="bookBtn"
+        disabled={!selectedSlot}
+        onClick={handleBook}
+        style={{
+          marginTop: 20,
+          padding: "10px 20px",
+          background: "#2AA7FF",
+          color: "white",
+          border: "none",
+          borderRadius: 6,
+          cursor: "pointer",
+          fontSize: "1rem",
+          opacity: selectedSlot ? 1 : 0.6,
+        }}
+      >
+        Book Appointment
+      </button>
+    </div>
   );
 }
 
 export default BookingModal;
+
 

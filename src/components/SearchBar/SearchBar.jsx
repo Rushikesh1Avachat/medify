@@ -1,106 +1,86 @@
 // src/components/SearchBar/SearchBar.jsx
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { Box, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material';
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button,
+} from "@mui/material";
 
- function SearchBar() {
+function SearchBar() {
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
-  const [selectedState, setSelectedState] = useState('');
-  const [selectedCity, setSelectedCity] = useState('');
+  const [selectedState, setSelectedState] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('https://meddata-backend.onrender.com/states')
-      .then(res => setStates(res.data || []))
-      .catch(err => console.error("States fetch error:", err));
+    axios
+      .get("https://meddata-backend.onrender.com/states")
+      .then((res) => setStates(res.data || []));
   }, []);
 
   useEffect(() => {
     if (!selectedState) return;
-    axios.get(`https://meddata-backend.onrender.com/cities/${encodeURIComponent(selectedState)}`)
-      .then(res => setCities(res.data || []))
-      .catch(err => console.error("Cities fetch error:", err));
+    axios
+      .get(
+        `https://meddata-backend.onrender.com/cities/${encodeURIComponent(
+          selectedState
+        )}`
+      )
+      .then((res) => setCities(res.data || []));
   }, [selectedState]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (selectedState && selectedCity) {
-      navigate(`/search?state=${encodeURIComponent(selectedState)}&city=${encodeURIComponent(selectedCity)}`);
-    }
+    navigate(`/search?state=${selectedState}&city=${selectedCity}`);
   };
 
   return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit}
-      sx={{
-        display: 'flex',
-        gap: 3,
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-        alignItems: 'flex-end',
-        background: 'white',
-        p: 4,
-        borderRadius: 3,
-        boxShadow: 6,
-        maxWidth: 1000,
-        mx: 'auto',
-      }}
-    >
-      {/* Test 1–4 REQUIRE this exact wrapper */}
+    <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", gap: 2 }}>
       <div id="state">
-        <FormControl sx={{ minWidth: 260 }}>
+        <FormControl>
           <InputLabel>State</InputLabel>
           <Select
             value={selectedState}
             label="State"
-            onChange={e => {
+            onChange={(e) => {
               setSelectedState(e.target.value);
-              setSelectedCity('');
+              setSelectedCity("");
             }}
           >
-            {states.map(s => (
+            {states.map((s) => (
               <MenuItem key={s} value={s}>{s}</MenuItem>
             ))}
           </Select>
         </FormControl>
       </div>
 
-      {/* Test 1–4 REQUIRE this exact wrapper */}
       <div id="city">
-        <FormControl sx={{ minWidth: 260 }} disabled={!selectedState}>
+        <FormControl disabled={!selectedState}>
           <InputLabel>City</InputLabel>
           <Select
             value={selectedCity}
             label="City"
-            onChange={e => setSelectedCity(e.target.value)}
+            onChange={(e) => setSelectedCity(e.target.value)}
           >
-            {cities.map(c => (
+            {cities.map((c) => (
               <MenuItem key={c} value={c}>{c}</MenuItem>
             ))}
           </Select>
         </FormControl>
       </div>
 
-      {/* Test 1–4 REQUIRE this exact button */}
-      <Button
-        type="submit"
-        variant="contained"
-        id="searchBtn"
-        disabled={!selectedCity}
-        sx={{
-          px: 6,
-          height: 56,
-          bgcolor: '#2AA7FF',
-          fontSize: '1.1rem',
-        }}
-      >
+      <Button id="searchBtn" type="submit" disabled={!selectedCity}>
         Search
       </Button>
     </Box>
   );
 }
-export default SearchBar
+
+export default SearchBar;
