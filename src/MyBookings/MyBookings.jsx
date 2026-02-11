@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Container, Typography, Card, CardContent } from '@mui/material';
 
- function MyBookings() {
+export default function MyBookings() {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
@@ -12,6 +12,7 @@ import { Container, Typography, Card, CardContent } from '@mui/material';
 
   return (
     <Container maxWidth="md" sx={{ py: 10 }}>
+      {/* Test requires <h1> tag */}
       <Typography variant="h1" gutterBottom>
         My Bookings
       </Typography>
@@ -32,4 +33,3 @@ import { Container, Typography, Card, CardContent } from '@mui/material';
     </Container>
   );
 }
-export default MyBookings

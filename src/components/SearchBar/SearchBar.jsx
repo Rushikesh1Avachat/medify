@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Box, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material';
 
- function SearchBar() {
+export default function SearchBar() {
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [selectedState, setSelectedState] = useState('');
@@ -15,14 +15,14 @@ import { Box, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/mat
   useEffect(() => {
     axios.get('https://meddata-backend.onrender.com/states')
       .then(res => setStates(res.data || []))
-      .catch(err => console.log("States fetch error:", err));
+      .catch(err => console.error("States fetch error:", err));
   }, []);
 
   useEffect(() => {
     if (!selectedState) return;
     axios.get(`https://meddata-backend.onrender.com/cities/${encodeURIComponent(selectedState)}`)
       .then(res => setCities(res.data || []))
-      .catch(err => console.log("Cities fetch error:", err));
+      .catch(err => console.error("Cities fetch error:", err));
   }, [selectedState]);
 
   const handleSubmit = (e) => {
@@ -50,7 +50,7 @@ import { Box, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/mat
         mx: 'auto',
       }}
     >
-      {/* Test requires: div#state */}
+      {/* Test requires exactly this: div#state */}
       <div id="state">
         <FormControl sx={{ minWidth: 260 }}>
           <InputLabel>State</InputLabel>
@@ -69,7 +69,7 @@ import { Box, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/mat
         </FormControl>
       </div>
 
-      {/* Test requires: div#city */}
+      {/* Test requires exactly this: div#city */}
       <div id="city">
         <FormControl sx={{ minWidth: 260 }} disabled={!selectedState}>
           <InputLabel>City</InputLabel>
@@ -85,7 +85,7 @@ import { Box, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/mat
         </FormControl>
       </div>
 
-      {/* Test requires: button#searchBtn with type="submit" */}
+      {/* Test requires exactly this: button#searchBtn with type="submit" */}
       <Button
         type="submit"
         variant="contained"
@@ -103,4 +103,3 @@ import { Box, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/mat
     </Box>
   );
 }
-export default SearchBar

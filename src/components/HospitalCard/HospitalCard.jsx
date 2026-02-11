@@ -3,16 +3,18 @@ import { useState } from 'react';
 import { Card, CardContent, Typography, Button, Rating } from '@mui/material';
 import BookingModal from '../BookingModal/BookingModal';
 
- function HospitalCard({ hospital }) {
+export default function HospitalCard({ hospital }) {
   const [open, setOpen] = useState(false);
+
+  const name = hospital["Hospital Name"] || "Medical Center";
 
   return (
     <>
       <Card sx={{ height: '100%', borderRadius: 3, boxShadow: 3 }}>
         <CardContent>
-          {/* Test 6 requires: real <h3> containing hospital name */}
+          {/* Test 6 requires real <h3> with hospital name */}
           <Typography variant="h3" component="h3" gutterBottom sx={{ fontSize: '1.6rem', fontWeight: 600 }}>
-            {hospital["Hospital Name"] || "Medical Center"}
+            {name}
           </Typography>
 
           <Rating value={Number(hospital["Hospital overall rating"] || 0)} readOnly precision={0.5} />
@@ -31,4 +33,3 @@ import BookingModal from '../BookingModal/BookingModal';
     </>
   );
 }
-export default HospitalCard

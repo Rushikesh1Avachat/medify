@@ -21,7 +21,7 @@ const timeSlots = {
   Evening: ['04:00 PM', '05:00 PM', '06:00 PM', '07:00 PM'],
 };
 
- function BookingModal({ open, onClose, hospital }) {
+export default function BookingModal({ open, onClose, hospital }) {
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState(null);
   const [period, setPeriod] = useState('Morning');
@@ -58,6 +58,7 @@ const timeSlots = {
         <Box sx={{ mt: 4 }}>
           <Typography variant="subtitle1" gutterBottom>Available Slots</Typography>
 
+          {/* Test requires real <p> tag */}
           <p style={{ fontWeight: 600, margin: '12px 0 8px' }}>
             {isToday(date) ? 'Today' : format(date, 'EEEE, MMM d')}
           </p>
@@ -66,6 +67,7 @@ const timeSlots = {
             {Object.keys(timeSlots).map(p => <ToggleButton key={p} value={p}>{p}</ToggleButton>)}
           </ToggleButtonGroup>
 
+          {/* Test requires real <p> tag */}
           <p style={{ fontWeight: 600, margin: '16px 0 8px' }}>{period}</p>
 
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
@@ -86,4 +88,3 @@ const timeSlots = {
     </Dialog>
   );
 }
-export default BookingModal
