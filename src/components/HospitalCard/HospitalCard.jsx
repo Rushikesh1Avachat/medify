@@ -1,6 +1,5 @@
 import { Card, CardContent, Typography, Button } from "@mui/material";
-import BookingSection from "../BookingSection/BookingSection";
-
+import BookingModal from "../BookingModal/BookingModal"
 function HospitalCard({ hospital, onBook, booking }) {
   return (
     <Card sx={{ mb: 3 }}>
@@ -23,7 +22,7 @@ function HospitalCard({ hospital, onBook, booking }) {
           </Button>
         )}
 
-        {booking && <BookingSection hospital={hospital} />}
+        {booking && <BookingModal hospital={hospital} />}
       </CardContent>
     </Card>
   );
