@@ -6,32 +6,47 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-const Accordion = () => {
+function Accordion() {
   return (
     <>
       <MuiAccordion>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography>How do I book an appointment?</Typography>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="faq-booking-content"
+          id="faq-booking-header"
+        >
+          {/* Use semantic heading */}
+          <Typography component="h3" variant="h6">
+            How do I book an appointment?
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
-            Select state, city and choose a medical center.
+          <Typography component="p">
+            Select state and city, then choose a medical center and book an
+            available slot.
           </Typography>
         </AccordionDetails>
       </MuiAccordion>
 
       <MuiAccordion>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography>Is booking free?</Typography>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="faq-free-content"
+          id="faq-free-header"
+        >
+          <Typography component="h3" variant="h6">
+            Is booking free?
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
-            Yes, booking a center visit is completely free.
+          <Typography component="p">
+            Yes, booking a medical center visit is completely free.
           </Typography>
         </AccordionDetails>
       </MuiAccordion>
     </>
   );
-};
+}
 
-export default Accordion;   // ✅ REQUIRED
+export default Accordion;
+   // ✅ REQUIRED

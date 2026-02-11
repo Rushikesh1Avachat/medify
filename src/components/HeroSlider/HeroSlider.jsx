@@ -6,7 +6,7 @@ import styles from './HeroSlider.module.css';
 // Use your own image
 import heroImg from '../../assets/hero_doctors.jpg';
 
-export default function HeroSlider() {
+ function HeroSlider() {
   return (
     <Box className={styles.hero}>
       <Box className={styles.overlay} />
@@ -39,3 +39,4 @@ export default function HeroSlider() {
     </Box>
   );
 }
+export default HeroSlider
