@@ -2,19 +2,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Button,
-  InputAdornment,
-  OutlinedInput,
-} from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import { Box, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material';
 
- function SearchBar() {
+function SearchBar() {
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [selectedState, setSelectedState] = useState('');
@@ -22,23 +12,17 @@ import SearchIcon from '@mui/icons-material/Search';
 
   const navigate = useNavigate();
 
-  // Fetch all states on mount
   useEffect(() => {
     axios.get('https://meddata-backend.onrender.com/states')
       .then(res => setStates(res.data || []))
-      .catch(err => console.log("States fetch error:", err));
+      .catch(err => console.error("States fetch error:", err));
   }, []);
 
-  // Fetch cities when state changes
   useEffect(() => {
-    if (!selectedState) {
-      setCities([]);
-      return;
-    }
-
+    if (!selectedState) return;
     axios.get(`https://meddata-backend.onrender.com/cities/${encodeURIComponent(selectedState)}`)
       .then(res => setCities(res.data || []))
-      .catch(err => console.log("Cities fetch error:", err));
+      .catch(err => console.error("Cities fetch error:", err));
   }, [selectedState]);
 
   const handleSubmit = (e) => {
@@ -54,107 +38,64 @@ import SearchIcon from '@mui/icons-material/Search';
       onSubmit={handleSubmit}
       sx={{
         display: 'flex',
-        alignItems: 'center',
-        gap: 2,
+        gap: 3,
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        alignItems: 'flex-end',
         background: 'white',
-        p: 2,
+        p: 4,
         borderRadius: 3,
-        boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-        maxWidth: 850,
+        boxShadow: 6,
+        maxWidth: 1000,
         mx: 'auto',
-        border: '1px solid #e0e0e0',
       }}
     >
-      {/* State field with search icon */}
-      <FormControl sx={{ flex: 1, minWidth: 220 }}>
-        <InputLabel htmlFor="state-input">State</InputLabel>
-        <Select
-          id="state"
-          value={selectedState}
-          label="State"
-          onChange={(e) => {
-            setSelectedState(e.target.value);
-            setSelectedCity(''); // reset city when state changes
-          }}
-          input={
-            <OutlinedInput
-              id="state-input"
-              startAdornment={
-                <InputAdornment position="start">
-                  <SearchIcon color="action" />
-                </InputAdornment>
-              }
-              sx={{
-                borderRadius: 2,
-                '& fieldset': { borderColor: '#2AA7FF' },
-                '&:hover fieldset': { borderColor: '#1e90e6' },
-                '&.Mui-focused fieldset': { borderColor: '#2AA7FF', borderWidth: 2 },
-              }}
-            />
-          }
-        >
-          {states.map((state) => (
-            <MenuItem key={state} value={state}>
-              {state}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      {/* Test requires exactly this: div#state */}
+      <div id="state">
+        <FormControl sx={{ minWidth: 260 }}>
+          <InputLabel>State</InputLabel>
+          <Select
+            value={selectedState}
+            label="State"
+            onChange={e => {
+              setSelectedState(e.target.value);
+              setSelectedCity('');
+            }}
+          >
+            {states.map(s => (
+              <MenuItem key={s} value={s}>{s}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
 
-      {/* City field with search icon */}
-      <FormControl sx={{ flex: 1, minWidth: 220 }}>
-        <InputLabel htmlFor="city-input">City</InputLabel>
-        <Select
-          id="city"
-          value={selectedCity}
-          label="City"
-          onChange={(e) => setSelectedCity(e.target.value)}
-          disabled={!selectedState}
-          input={
-            <OutlinedInput
-              id="city-input"
-              startAdornment={
-                <InputAdornment position="start">
-                  <SearchIcon color="action" />
-                </InputAdornment>
-              }
-              sx={{
-                borderRadius: 2,
-                '& fieldset': { borderColor: '#2AA7FF' },
-                '&:hover fieldset': { borderColor: '#1e90e6' },
-                '&.Mui-focused fieldset': { borderColor: '#2AA7FF', borderWidth: 2 },
-              }}
-            />
-          }
-        >
-          {cities.map((city) => (
-            <MenuItem key={city} value={city}>
-              {city}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      {/* Test requires exactly this: div#city */}
+      <div id="city">
+        <FormControl sx={{ minWidth: 260 }} disabled={!selectedState}>
+          <InputLabel>City</InputLabel>
+          <Select
+            value={selectedCity}
+            label="City"
+            onChange={e => setSelectedCity(e.target.value)}
+          >
+            {cities.map(c => (
+              <MenuItem key={c} value={c}>{c}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
 
-      {/* Search button */}
+      {/* Test requires exactly this: button#searchBtn with type="submit" */}
       <Button
         type="submit"
         variant="contained"
         id="searchBtn"
         disabled={!selectedCity}
         sx={{
-          px: 5,
-          py: 1.8,
-          fontSize: '1.1rem',
+          px: 6,
+          height: 56,
           bgcolor: '#2AA7FF',
-          borderRadius: 2,
-          textTransform: 'none',
-          fontWeight: 600,
-          minWidth: 140,
-          boxShadow: '0 4px 12px rgba(42,167,255,0.3)',
-          '&:hover': {
-            bgcolor: '#1e90e6',
-            boxShadow: '0 6px 20px rgba(42,167,255,0.4)',
-          },
+          fontSize: '1.1rem',
         }}
       >
         Search
@@ -162,4 +103,4 @@ import SearchIcon from '@mui/icons-material/Search';
     </Box>
   );
 }
-export default SearchBar
+export default  SearchBar

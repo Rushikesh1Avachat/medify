@@ -1,8 +1,7 @@
 // src/MyBookings/MyBookings.jsx
 import { useState, useEffect } from 'react';
 import { Container, Typography, Card, CardContent } from '@mui/material';
-
-export default function MyBookings() {
+ function MyBookings() {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
@@ -12,7 +11,7 @@ export default function MyBookings() {
 
   return (
     <Container maxWidth="md" sx={{ py: 10 }}>
-      {/* Test requires <h1> tag */}
+      {/* Test requires <h1> */}
       <Typography variant="h1" gutterBottom>
         My Bookings
       </Typography>
@@ -33,3 +32,5 @@ export default function MyBookings() {
     </Container>
   );
 }
+
+export default MyBookings
