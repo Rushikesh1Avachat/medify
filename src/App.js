@@ -1,24 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route } from "react-router-dom";
+import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+
+import NavBar from "./components/NavBar/NavBar";
+import Footer from "./components/Footer/Footer";
+import Home from "./Home/Home";
+import Search from "./Search/Search";
+import MyBookings from "./MyBookings/MyBookings";
+
+const theme = createTheme({
+  palette: { primary: { main: "#2AA7FF" } },
+  typography: { fontFamily: '"Poppins", sans-serif' },
+});
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+
+      <NavBar />
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/my-bookings" element={<MyBookings />} />
+      </Routes>
+
+      <Footer />
+    </ThemeProvider>
   );
 }
 
