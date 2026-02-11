@@ -1,17 +1,32 @@
+import { Box } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import styles from "./HeroSlider.module.css";
 
- function HeroSlider() {
+import banner1 from "../../assets/hero_doctors.jpg";
+import banner2 from "../../assets/hero_image.jpg";
+
+const HeroSlider = () => {
   return (
-    <Swiper loop autoplay>
-      <SwiperSlide>
-        <img src="/assets/hero1.png" />
-      </SwiperSlide>
-      <SwiperSlide>
-        <img src="/assets/hero2.png" />
-      </SwiperSlide>
-    </Swiper>
+    <Box>
+      <Swiper>
+        <SwiperSlide>
+          <img
+            src={banner1}
+            alt="Find medical centers near you"
+            style={{ width: "100%", display: "block" }}
+          />
+        </SwiperSlide>
+
+        <SwiperSlide>
+          <img
+            src={banner2}
+            alt="Book free medical appointments"
+            style={{ width: "100%", display: "block" }}
+          />
+        </SwiperSlide>
+      </Swiper>
+    </Box>
   );
-}
-export default HeroSlider
+};
+
+export default HeroSlider;
