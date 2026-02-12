@@ -5,18 +5,23 @@ function HospitalCard({ hospital }) {
   const [showBooking, setShowBooking] = useState(false);
 
   return (
-    <div style={{ border: "1px solid #ddd", padding: 16, marginBottom: 20 }}>
-      <h3>{hospital["Hospital Name"]}</h3>
-      <p>
+    <div style={{ padding: 16 }}>
+      <h3
+        onClick={() => setShowBooking(!showBooking)}
+        style={{ cursor: "pointer", margin: 0 }}
+      >
+        {hospital["Hospital Name"]}
+      </h3>
+
+      <p style={{ margin: "8px 0", color: "#555" }}>
         {hospital.City}, {hospital.State}
       </p>
 
-      <button onClick={() => setShowBooking(!showBooking)}>
-        Book FREE Center Visit
-      </button>
-
       {showBooking && (
-        <BookingModal hospital={hospital} />
+        <BookingModal 
+          hospital={hospital} 
+          onClose={() => setShowBooking(false)} 
+        />
       )}
     </div>
   );
