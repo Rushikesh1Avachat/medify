@@ -2,41 +2,32 @@ import { useState } from "react";
 
 function BookingModal({ hospital, onClose }) {
   const [date, setDate] = useState("");
-  const [slot, setSlot] = useState("");
+  const [time, setTime] = useState("");
 
-  const slots = ["Morning", "Afternoon", "Evening"];
-
-  const handleBook = () => {
-    if (!date || !slot || !hospital) return;
-
+  const handleBooking = () => {
     const booking = {
-      "Hospital Name": hospital["Hospital Name"]?.toLowerCase(),
-      "City": hospital.City,
-      "State": hospital.State,
-      bookingDate: date,
-      bookingTime: slot,
+      hospital: hospital["Hospital Name"],
+      city: hospital.City,
+      state: hospital.State,
+      date,
+      time,
     };
 
-    const current =
+    const existingBookings =
       JSON.parse(localStorage.getItem("bookings")) || [];
 
     localStorage.setItem(
       "bookings",
-      JSON.stringify([...current, booking])
+      JSON.stringify([...existingBookings, booking])
     );
 
-    // ✅ SAFE CLOSE (NO CRASH EVER)
-    if (typeof onClose === "function") {
-      onClose();
-    }
+    alert("Booking Confirmed");
+    onClose();
   };
 
   return (
-    <div style={{ marginTop: 16 }}>
-      <p>Today</p>
-      <p>Morning</p>
-      <p>Afternoon</p>
-      <p>Evening</p>
+    <div style={{ border: "2px solid black", padding: 20 }}>
+      <h3>Book Appointment</h3>
 
       <input
         type="date"
@@ -44,20 +35,30 @@ function BookingModal({ hospital, onClose }) {
         onChange={(e) => setDate(e.target.value)}
       />
 
-      {slots.map((s) => (
-        <button key={s} onClick={() => setSlot(s)}>
-          {s}
-        </button>
-      ))}
+      <select
+        value={time}
+        onChange={(e) => setTime(e.target.value)}
+      >
+        <option value="">Select Time</option>
+        <option value="10:00 AM">10:00 AM</option>
+        <option value="12:00 PM">12:00 PM</option>
+        <option value="2:00 PM">2:00 PM</option>
+      </select>
 
-      <button onClick={handleBook}>
+      <button onClick={handleBooking}>
         Confirm Booking
+      </button>
+
+      <button onClick={onClose}>
+        Close
       </button>
     </div>
   );
 }
 
 export default BookingModal;
+
+
 
 
 
