@@ -2,17 +2,15 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import HospitalCard from "../components/HospitalCard/HospitalCard";
+import { List, ListItem, Typography, Box } from "@mui/material";
 
 function Search() {
   const location = useLocation();
-
-  // Support both location.state and URL query params
   const params = new URLSearchParams(location.search);
   const paramState = params.get("state");
   const paramCity = params.get("city");
 
-  const { stateName: stateFromState, cityName: cityFromState } =
-    location.state || {};
+  const { stateName: stateFromState, cityName: cityFromState } = location.state || {};
 
   const stateName = paramState || stateFromState;
   const cityName = paramCity || cityFromState;
@@ -23,12 +21,9 @@ function Search() {
   useEffect(() => {
     if (stateName && cityName) {
       setLoading(true);
-
       axios
         .get(
-          `https://meddata-backend.onrender.com/data?state=${encodeURIComponent(
-            stateName
-          )}&city=${encodeURIComponent(cityName)}`
+          `https://meddata-backend.onrender.com/data?state=${encodeURIComponent(stateName)}&city=${encodeURIComponent(cityName)}`
         )
         .then((res) => {
           setHospitals(res.data || []);
@@ -36,27 +31,39 @@ function Search() {
         .catch(() => setHospitals([]))
         .finally(() => setLoading(false));
     } else {
-      // If no search params, clear
       setHospitals([]);
       setLoading(false);
     }
   }, [stateName, cityName]);
 
-  if (loading) return <h2>Loading medical centers...</h2>;
+  if (loading) {
+    return <Typography variant="h5">Loading medical centers...</Typography>;
+  }
 
   return (
-    <div>
-      <h1>
-        {hospitals.length} medical centers available in {cityName?.toLowerCase()}
-      </h1>
+    <Box sx={{ maxWidth: 1100, mx: "auto", px: 3, py: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        {hospitals.length} medical centers available in {cityName}
+      </Typography>
 
-      {hospitals.map((hospital) => (
-        <HospitalCard key={hospital["Provider ID"]} hospital={hospital} />
-      ))}
-    </div>
+      {hospitals.length === 0 ? (
+        <Typography color="text.secondary">No hospitals found</Typography>
+      ) : (
+        <List disablePadding>
+          {hospitals.map((hospital) => (
+            <ListItem 
+              key={hospital["Provider ID"] || hospital["Hospital Name"]}
+              divider
+              sx={{ py: 2.5 }}
+            >
+              <HospitalCard hospital={hospital} />
+            </ListItem>
+          ))}
+        </List>
+      )}
+    </Box>
   );
 }
 
 export default Search;
-
 
