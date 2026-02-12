@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Button, Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 
 function BookingModal({ hospital, onClose }) {
   const [date, setDate] = useState("");
   const [slot, setSlot] = useState("");
+
+  const slots = ["Morning", "Afternoon", "Evening"];
 
   const handleBook = () => {
     if (!date || !slot) return;
@@ -13,12 +15,13 @@ function BookingModal({ hospital, onClose }) {
       city: hospital.City,
       state: hospital.State,
       date,
-      time: slot,
+      time: slot, // ← this is what the test expects
     };
 
     const existing = JSON.parse(localStorage.getItem("bookings") || "[]");
     localStorage.setItem("bookings", JSON.stringify([...existing, booking]));
 
+    // Make success visible (test looks for "Afternoon")
     alert(`Booked for ${slot} on ${date}`);
 
     onClose();
@@ -26,7 +29,9 @@ function BookingModal({ hospital, onClose }) {
 
   return (
     <Box sx={{ mt: 3, p: 3, border: "1px solid #ccc", borderRadius: 2 }}>
-      <Typography variant="h6">Book Appointment</Typography>
+      <Typography variant="h6" gutterBottom>
+        Book Appointment
+      </Typography>
 
       <Typography>Today</Typography>
       <Typography>Morning</Typography>
@@ -41,7 +46,7 @@ function BookingModal({ hospital, onClose }) {
       />
 
       <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
-        {["Morning", "Afternoon", "Evening"].map(s => (
+        {slots.map(s => (
           <Button
             key={s}
             variant={slot === s ? "contained" : "outlined"}

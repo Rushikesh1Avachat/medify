@@ -32,7 +32,11 @@ function Search() {
       ) : (
         <List disablePadding>
           {hospitals.map((hospital, index) => (
-            <ListItem key={index} divider sx={{ py: 3 }}>
+            <ListItem 
+              key={index} 
+              divider 
+              sx={{ py: 3 }}
+            >
               <HospitalCard hospital={hospital} />
             </ListItem>
           ))}

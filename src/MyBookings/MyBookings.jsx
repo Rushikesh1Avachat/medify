@@ -1,19 +1,18 @@
-// src/MyBookings/MyBookings.jsx
 import { useEffect, useState } from "react";
-import { Box, Typography, Divider, Paper } from "@mui/material";
+import { Box, Typography, Divider } from "@mui/material";
 
 function MyBookings() {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem("bookings");
-      if (stored) {
-        const parsed = JSON.parse(stored);
+      const saved = localStorage.getItem("bookings");
+      if (saved) {
+        const parsed = JSON.parse(saved);
         setBookings(Array.isArray(parsed) ? parsed : []);
       }
-    } catch (error) {
-      console.error("Failed to load bookings from localStorage:", error);
+    } catch (err) {
+      console.error("Failed to load bookings:", err);
       setBookings([]);
     }
   }, []);
@@ -21,11 +20,8 @@ function MyBookings() {
   if (bookings.length === 0) {
     return (
       <Box sx={{ textAlign: "center", py: 10 }}>
-        <Typography variant="h5" color="text.secondary" gutterBottom>
+        <Typography variant="h5" color="text.secondary">
           No Bookings Found
-        </Typography>
-        <Typography color="text.secondary">
-          You haven't made any appointments yet.
         </Typography>
       </Box>
     );
@@ -33,22 +29,16 @@ function MyBookings() {
 
   return (
     <Box sx={{ maxWidth: 900, mx: "auto", px: 3, py: 6 }}>
-      <Typography 
-        variant="h4" 
-        component="h1" 
-        gutterBottom 
-        sx={{ mb: 5, fontWeight: 600 }}
-      >
+      <Typography variant="h4" gutterBottom>
         My Bookings
       </Typography>
 
       {bookings.map((booking, index) => {
-        // Handle different possible key names from booking flow
-        const hospitalName = 
-          booking.hospitalName || 
-          booking["Hospital Name"] || 
-          booking.hospital || 
-          "Unknown Hospital";
+        const hospitalName =
+          booking.hospitalName ||
+          booking["Hospital Name"] ||
+          booking.hospital ||
+          "Unknown";
 
         const city = booking.city || booking.City || "";
         const state = booking.state || booking.State || "";
@@ -57,27 +47,18 @@ function MyBookings() {
         const time = booking.time || booking.bookingTime || "—";
 
         return (
-          <Paper
+          <Box
             key={index}
-            elevation={2}
             sx={{
+              border: "1px solid #e0e0e0",
+              borderRadius: 2,
               p: 3,
               mb: 3,
-              borderRadius: 2,
-              border: "1px solid #e0e0e0",
+              bgcolor: "white",
             }}
           >
-            <Typography 
-              variant="h3" 
-              component="h3" 
-              gutterBottom
-              sx={{ 
-                fontSize: { xs: "1.6rem", sm: "1.9rem", md: "2.2rem" },
-                fontWeight: 600,
-                textTransform: "capitalize",
-              }}
-            >
-              {hospitalName.toLowerCase()} {/* ← critical: lowercase for test */}
+            <Typography variant="h3" gutterBottom>
+              {hospitalName.toLowerCase()}
             </Typography>
 
             <Typography variant="body1" color="text.secondary" gutterBottom>
@@ -86,15 +67,13 @@ function MyBookings() {
 
             <Divider sx={{ my: 2 }} />
 
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-              <Typography variant="body1">
-                <strong>Date:</strong> {date}
-              </Typography>
-              <Typography variant="body1">
-                <strong>Time:</strong> {time}
-              </Typography>
-            </Box>
-          </Paper>
+            <Typography>
+              <strong>Date:</strong> {date}
+            </Typography>
+            <Typography>
+              <strong>Time:</strong> {time}
+            </Typography>
+          </Box>
         );
       })}
     </Box>

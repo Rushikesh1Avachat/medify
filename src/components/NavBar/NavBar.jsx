@@ -19,10 +19,7 @@ function NavBar() {
           <Button color="inherit">Find Doctors</Button>
           <Button color="inherit">Hospitals</Button>
           <Button color="inherit">Medicines</Button>
-          <Button
-            color="inherit"
-            onClick={() => navigate("/my-bookings")}
-          >
+          <Button color="inherit" onClick={() => navigate("/my-bookings")}>
             My Bookings
           </Button>
         </Box>

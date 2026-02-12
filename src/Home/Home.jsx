@@ -17,11 +17,10 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    if (selectedState) {
-      fetch(`https://meddata-backend.onrender.com/cities/${selectedState}`)
-        .then(res => res.json())
-        .then(data => setCities(data || []));
-    }
+    if (!selectedState) return;
+    fetch(`https://meddata-backend.onrender.com/cities/${selectedState}`)
+      .then(res => res.json())
+      .then(data => setCities(data || []));
   }, [selectedState]);
 
   const handleSearch = () => {
@@ -37,6 +36,7 @@ function Home() {
       </Typography>
 
       <Box sx={{ display: "flex", gap: 3, mb: 4, flexWrap: "wrap" }}>
+        {/* Test 1 needs these exact IDs */}
         <div id="state">
           <select
             value={selectedState}
