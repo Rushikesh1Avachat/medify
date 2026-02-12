@@ -1,59 +1,43 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import BookingModal from "../components/BookingModal/BookingModal";
+import { List, ListItem, Typography, Box } from "@mui/material";
+import HospitalCard from "../components/HospitalCard/HospitalCard";
 
 function Search() {
   const [hospitals, setHospitals] = useState([]);
-  const [selectedHospital, setSelectedHospital] = useState(null);
 
   const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-
-  const state = queryParams.get("state");
-  const city = queryParams.get("city");
+  const params = new URLSearchParams(location.search);
+  const state = params.get("state");
+  const city = params.get("city");
 
   useEffect(() => {
     if (state && city) {
-      fetch(
-        `https://meddata-backend.onrender.com/data?state=${state}&city=${city}`
-      )
+      fetch(`https://meddata-backend.onrender.com/data?state=${encodeURIComponent(state)}&city=${encodeURIComponent(city)}`)
         .then(res => res.json())
-        .then(data => setHospitals(data));
+        .then(data => setHospitals(data || []));
     }
   }, [state, city]);
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Search Results</h2>
+    <Box sx={{ maxWidth: 1100, mx: "auto", p: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        Medical Centers in {city || "selected location"}
+      </Typography>
 
-      {hospitals.map((hospital, index) => (
-        <div
-          key={index}
-          style={{
-            border: "1px solid #ccc",
-            padding: 16,
-            marginBottom: 16,
-          }}
-        >
-          <h3>{hospital["Hospital Name"]}</h3>
-          <p>{hospital.City}, {hospital.State}</p>
-
-          <button onClick={() => setSelectedHospital(hospital)}>
-            Book Appointment
-          </button>
-        </div>
-      ))}
-
-      {selectedHospital && (
-        <BookingModal
-          hospital={selectedHospital}
-          onClose={() => setSelectedHospital(null)}
-        />
+      {hospitals.length === 0 ? (
+        <Typography color="text.secondary">No hospitals found</Typography>
+      ) : (
+        <List disablePadding>
+          {hospitals.map((h, i) => (
+            <ListItem key={i} divider sx={{ py: 3 }}>
+              <HospitalCard hospital={h} />
+            </ListItem>
+          ))}
+        </List>
       )}
-    </div>
+    </Box>
   );
 }
 
 export default Search;
-
-

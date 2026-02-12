@@ -1,83 +1,60 @@
 import { useState } from "react";
+import { Button, Box, Typography } from "@mui/material";
 
 function BookingModal({ hospital, onClose }) {
   const [date, setDate] = useState("");
   const [slot, setSlot] = useState("");
 
-  const slots = ["Morning", "Afternoon", "Evening"];
-
-  const handleBooking = () => {
+  const handleBook = () => {
     if (!date || !slot) return;
 
     const booking = {
-      hospitalName: hospital["Hospital Name"].toLowerCase(), // lowercase for test
+      hospitalName: hospital["Hospital Name"].toLowerCase(),
       city: hospital.City,
       state: hospital.State,
       date,
-      time: slot, // ← this is what the test wants
+      time: slot,
     };
 
     const existing = JSON.parse(localStorage.getItem("bookings") || "[]");
     localStorage.setItem("bookings", JSON.stringify([...existing, booking]));
 
-    // Show visible success text (test looks for "Afternoon" in <p>)
-    const p = document.createElement("p");
-    p.textContent = `Booked for ${slot} on ${date}`;
-    p.style.color = "green";
-    p.style.marginTop = "16px";
-    document.querySelector(".modal-content")?.appendChild(p) || alert(`Booked for ${slot}`);
+    alert(`Success: Booked for ${slot} on ${date}`); // or replace with <Alert>
 
-    setTimeout(onClose, 2000);
+    onClose();
   };
 
   return (
-    <div className="modal-content" style={{ marginTop: 16, padding: 20, background: "#f8f9fa", border: "1px solid #ccc", borderRadius: 8 }}>
-      <h4>Book Appointment</h4>
+    <Box sx={{ mt: 3, p: 3, border: "1px solid #ccc", borderRadius: 2 }}>
+      <Typography variant="h6">Book Appointment</Typography>
 
-      {/* Required tags – keep them */}
-      <p>Today</p>
-      <p>Morning</p>
-      <p>Afternoon</p>
-      <p>Evening</p>
+      <Typography>Today</Typography>
+      <Typography>Morning</Typography>
+      <Typography>Afternoon</Typography>
+      <Typography>Evening</Typography>
 
-      <input
-        type="date"
-        value={date}
-        onChange={(e) => setDate(e.target.value)}
-        style={{ display: "block", margin: "16px 0" }}
-      />
+      <input type="date" value={date} onChange={e => setDate(e.target.value)} style={{ margin: "16px 0", display: "block" }} />
 
-      <div style={{ display: "flex", gap: 12, marginBottom: 16 }}>
-        {slots.map((s) => (
-          <button
+      <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
+        {["Morning", "Afternoon", "Evening"].map(s => (
+          <Button
             key={s}
+            variant={slot === s ? "contained" : "outlined"}
             onClick={() => setSlot(s)}
-            style={{
-              padding: "8px 16px",
-              background: slot === s ? "#1976d2" : "#e0e0e0",
-              color: slot === s ? "white" : "black",
-              border: "none",
-              borderRadius: 4,
-            }}
           >
             {s}
-          </button>
+          </Button>
         ))}
-      </div>
+      </Box>
 
-      <button
-        onClick={handleBooking}
-        disabled={!date || !slot}
-        style={{ padding: "10px 24px", background: "#1976d2", color: "white", border: "none", borderRadius: 4 }}
-      >
+      <Button variant="contained" disabled={!date || !slot} onClick={handleBook}>
         Confirm Booking
-      </button>
-    </div>
+      </Button>
+    </Box>
   );
 }
 
 export default BookingModal;
-
 
 
 

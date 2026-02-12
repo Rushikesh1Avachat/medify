@@ -1,29 +1,25 @@
 import { useState } from "react";
-import BookingModal from "../BookingModal/BookingModal";
-
+import BookingModal from "../BookingModal/BookingModal"
+import { Box, Typography } from "@mui/material";
 function HospitalCard({ hospital }) {
-  const [showBooking, setShowBooking] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
-    <div style={{ padding: 16 }}>
-      <h3
-        onClick={() => setShowBooking(!showBooking)}
-        style={{ cursor: "pointer", margin: 0 }}
+    <Box sx={{ width: "100%" }}>
+      <Typography
+        variant="h5"
+        sx={{ cursor: "pointer", fontWeight: 600 }}
+        onClick={() => setOpen(true)}
       >
         {hospital["Hospital Name"]}
-      </h3>
+      </Typography>
 
-      <p style={{ margin: "8px 0", color: "#555" }}>
+      <Typography variant="body2" color="text.secondary">
         {hospital.City}, {hospital.State}
-      </p>
+      </Typography>
 
-      {showBooking && (
-        <BookingModal 
-          hospital={hospital} 
-          onClose={() => setShowBooking(false)} 
-        />
-      )}
-    </div>
+      {open && <BookingModal hospital={hospital} onClose={() => setOpen(false)} />}
+    </Box>
   );
 }
 

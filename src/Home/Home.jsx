@@ -1,118 +1,74 @@
 import { useEffect, useState } from "react";
-import { List, ListItem, Typography } from "@mui/material";
-import HospitalCard from "../components/HospitalCard/HospitalCard";
+import { useNavigate } from "react-router-dom";
+import { Box, Typography, Button } from "@mui/material";
 
 function Home() {
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
-  const [hospitals, setHospitals] = useState([]); // ← this was missing!
 
-
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("https://meddata-backend.onrender.com/states")
-      .then((res) => res.json())
-      .then((data) => setStates(data || []))
-      .catch((err) => console.error("Failed to fetch states:", err));
+      .then(res => res.json())
+      .then(data => setStates(data || []));
   }, []);
 
   useEffect(() => {
     if (!selectedState) return;
-
     fetch(`https://meddata-backend.onrender.com/cities/${selectedState}`)
-      .then((res) => res.json())
-      .then((data) => setCities(data || []))
-      .catch((err) => console.error("Failed to fetch cities:", err));
+      .then(res => res.json())
+      .then(data => setCities(data || []));
   }, [selectedState]);
 
   const handleSearch = () => {
-    if (!selectedState || !selectedCity) return;
-
-    fetch(
-      `https://meddata-backend.onrender.com/data?state=${encodeURIComponent(selectedState)}&city=${encodeURIComponent(selectedCity)}`
-    )
-      .then((res) => res.json())
-      .then((data) => setHospitals(data || []))
-      .catch((err) => {
-        console.error("Failed to fetch hospitals:", err);
-        setHospitals([]);
-      });
+    if (selectedState && selectedCity) {
+      navigate(`/search?state=${selectedState}&city=${selectedCity}`);
+    }
   };
 
   return (
-    <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 16px" }}>
+    <Box sx={{ maxWidth: 900, mx: "auto", p: 4 }}>
       <Typography variant="h4" gutterBottom>
-        Find Medical Centers
+        Find Hospitals
       </Typography>
 
-      {/* Cypress required IDs */}
-      <div id="state" style={{ marginBottom: 16 }}>
-        <select
-          value={selectedState}
-          onChange={(e) => setSelectedState(e.target.value)}
-          style={{ padding: 8, fontSize: 16 }}
+      <Box sx={{ display: "flex", gap: 3, mb: 4, flexWrap: "wrap" }}>
+        <div id="state">
+          <select
+            value={selectedState}
+            onChange={e => setSelectedState(e.target.value)}
+            style={{ padding: 10, minWidth: 220 }}
+          >
+            <option value="">Select State</option>
+            {states.map(s => <option key={s} value={s}>{s}</option>)}
+          </select>
+        </div>
+
+        <div id="city">
+          <select
+            value={selectedCity}
+            onChange={e => setSelectedCity(e.target.value)}
+            disabled={!selectedState}
+            style={{ padding: 10, minWidth: 220 }}
+          >
+            <option value="">Select City</option>
+            {cities.map(c => <option key={c} value={c}>{c}</option>)}
+          </select>
+        </div>
+
+        <Button
+          variant="contained"
+          disabled={!selectedState || !selectedCity}
+          onClick={handleSearch}
         >
-          <option value="">Select State</option>
-          {states.map((state) => (
-            <option key={state} value={state}>
-              {state}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div id="city" style={{ marginBottom: 16 }}>
-        <select
-          value={selectedCity}
-          onChange={(e) => setSelectedCity(e.target.value)}
-          disabled={!selectedState}
-          style={{ padding: 8, fontSize: 16 }}
-        >
-          <option value="">Select City</option>
-          {cities.map((city) => (
-            <option key={city} value={city}>
-              {city}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <button
-        onClick={handleSearch}
-        disabled={!selectedState || !selectedCity}
-        style={{
-          padding: "10px 20px",
-          background: selectedState && selectedCity ? "#1976d2" : "#ccc",
-          color: "white",
-          border: "none",
-          borderRadius: 4,
-          cursor: selectedState && selectedCity ? "pointer" : "not-allowed",
-        }}
-      >
-        Search
-      </button>
-
-      {/* Hospital list – now with <li> */}
-      {hospitals.length > 0 && (
-        <List sx={{ marginTop: 5 }}>
-          {hospitals.map((hospital, index) => (
-            <ListItem key={index} divider sx={{ py: 3 }}>
-              <HospitalCard hospital={hospital} />
-            </ListItem>
-          ))}
-        </List>
-      )}
-
-      {hospitals.length === 0 && selectedState && selectedCity && (
-        <Typography color="text.secondary" sx={{ mt: 4 }}>
-          No hospitals found in {selectedCity}, {selectedState}
-        </Typography>
-      )}
-    </div>
+          Search
+        </Button>
+      </Box>
+    </Box>
   );
 }
 
 export default Home;
-
