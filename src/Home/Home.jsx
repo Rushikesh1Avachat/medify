@@ -1,64 +1,38 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
+// Example: Home.jsx (or wherever Search is used)
+import Search from '../Search/Search';  // adjust path
+import HospitalCard from '../components/HospitalCard/HospitalCard';
+import { useState } from 'react';
 function Home() {
-  const navigate = useNavigate();
-  const [states, setStates] = useState([]);
-  const [cities, setCities] = useState([]);
-  const [selectedState, setSelectedState] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
+  const [hospitals, setHospitals] = useState([]);
+  const [searchCity, setSearchCity] = useState('');
 
-  useEffect(() => {
-    fetch("https://meddata-backend.onrender.com/states")
-      .then(res => res.json())
-      .then(data => setStates(data))
-      .catch(() => setStates([]));
-  }, []);
-
-  useEffect(() => {
-    if (selectedState) {
-      fetch(`https://meddata-backend.onrender.com/cities/${selectedState}`)
-        .then(res => res.json())
-        .then(data => setCities(data))
-        .catch(() => setCities([]));
-    }
-  }, [selectedState]);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (selectedState && selectedCity) {
-      navigate("/search", { state: { stateName: selectedState, cityName: selectedCity } });
-    }
+  const handleHospitalsLoad = (fetchedHospitals, city) => {
+    setHospitals(fetchedHospitals);
+    setSearchCity(city);
+    console.log('Hospitals loaded:', fetchedHospitals.length, 'in', city);
   };
 
   return (
     <div>
-      <div id="state">
-        <select value={selectedState} onChange={e => setSelectedState(e.target.value)}>
-          <option value="">Select State</option>
-          {states.map((state, idx) => (
-            <option key={idx} value={state}>{state}</option>
-          ))}
-        </select>
-      </div>
+      {/* Hero / other sections */}
+      
+      <Search onHospitalsLoad={handleHospitalsLoad} />
 
-      <div id="city">
-        <select value={selectedCity} onChange={e => setSelectedCity(e.target.value)}>
-          <option value="">Select City</option>
-          {cities.map((city, idx) => (
-            <option key={idx} value={city}>{city}</option>
-          ))}
-        </select>
-      </div>
+      {hospitals.length > 0 && (
+        <h1>
+          {hospitals.length} medical centers available in {searchCity.toLowerCase()}
+        </h1>
+      )}
 
-      <button type="submit" id="searchBtn" onClick={handleSearch}>
-        Search
-      </button>
+      {/* Render hospital list / cards */}
+      <div className="hospital-list">
+        {hospitals.map((hosp, i) => (
+          <HospitalCard key={i} hospital={hosp} />
+        ))}
+      </div>
     </div>
   );
 }
-
-export default Home;
-
+export default Home
 
 

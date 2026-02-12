@@ -1,22 +1,33 @@
-import React, { createContext, useState, useContext } from "react";
-import BookingModal from "../components/BookingModal/BookingModal";
+// context/BookingContext.jsx (must exist and be wrapped around <App />)
+import { createContext, useState, useEffect } from 'react';
 
-const BookingContext = createContext();
+export const BookingContext = createContext();
 
-export function BookingProvider({ children }) {
-  const [hospital, setHospital] = useState(null);
+export const BookingProvider = ({ children }) => {
+  const [bookings, setBookings] = useState([]);
 
-  const openBooking = (hospitalData) => setHospital(hospitalData);
-  const closeBooking = () => setHospital(null);
+  useEffect(() => {
+    const stored = localStorage.getItem('bookings');
+    if (stored) {
+      try {
+        setBookings(JSON.parse(stored));
+      } catch (e) {
+        console.error('Invalid bookings data in localStorage', e);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('bookings', JSON.stringify(bookings));
+  }, [bookings]);
+
+  const addBooking = (booking) => {
+    setBookings(prev => [...prev, booking]);
+  };
 
   return (
-    <BookingContext.Provider value={{ openBooking }}>
+    <BookingContext.Provider value={{ bookings, addBooking }}>
       {children}
-      {hospital && <BookingModal hospital={hospital} onClose={closeBooking} />}
     </BookingContext.Provider>
   );
-}
-
-export function useBooking() {
-  return useContext(BookingContext);
-}
+};

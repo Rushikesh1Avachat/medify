@@ -1,19 +1,8 @@
-export const fetchStates = async () => {
-  const res = await fetch("https://meddata-backend.onrender.com/states");
-  return res.json();
-};
+import axios from 'axios';
 
-export const fetchCities = async (state) => {
-  const res = await fetch(
-    `https://meddata-backend.onrender.com/cities/${state}`
-  );
-  return res.json();
-};
+const API = axios.create({ baseURL: 'https://meddata-backend.onrender.com' });
 
-export const fetchHospitals = async (state, city) => {
-  const res = await fetch(
-    `https://meddata-backend.onrender.com/data?state=${state}&city=${city}`
-  );
-  return res.json();
-};
-
+export const getStates = () => API.get('/states');
+export const getCities = (state) => API.get(`/cities/${encodeURIComponent(state)}`);
+export const getHospitals = (state, city) =>
+  API.get(`/data?state=${encodeURIComponent(state)}&city=${encodeURIComponent(city)}`);
