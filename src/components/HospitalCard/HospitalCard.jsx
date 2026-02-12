@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Typography } from "@mui/material";
 
 function HospitalCard({ hospital }) {
   const [showBooking, setShowBooking] = useState(false);
@@ -7,37 +8,35 @@ function HospitalCard({ hospital }) {
   const handleBooking = (time) => {
     if (!selectedDate) return;
 
-    const oldBookings =
+    const old =
       JSON.parse(localStorage.getItem("bookings")) || [];
 
     const newBooking = {
-      hospitalName: hospital["Hospital Name"],
+      hospitalName: hospital["Hospital Name"].toLowerCase(), // IMPORTANT
       state: hospital.State,
       city: hospital.City,
       date: selectedDate,
       time: time,
     };
 
-    const updatedBookings = [...oldBookings, newBooking];
+    const updated = [...old, newBooking];
 
-    localStorage.setItem(
-      "bookings",
-      JSON.stringify(updatedBookings)
-    );
+    localStorage.setItem("bookings", JSON.stringify(updated));
   };
 
   return (
     <div
       style={{
         border: "1px solid #ccc",
+        padding: "20px",
         margin: "20px",
-        padding: "15px",
         cursor: "pointer",
       }}
       onClick={() => setShowBooking(true)}
     >
-      {/* Hospital name MUST be h3 */}
-      <h3>{hospital["Hospital Name"]}</h3>
+      <Typography variant="h3">
+        {hospital["Hospital Name"].toLowerCase()}
+      </Typography>
 
       <p>
         {hospital.City}, {hospital.State}
@@ -45,14 +44,12 @@ function HospitalCard({ hospital }) {
 
       {showBooking && (
         <div onClick={(e) => e.stopPropagation()}>
-          {/* Date Picker */}
           <input
             type="date"
             onChange={(e) => setSelectedDate(e.target.value)}
           />
 
-          {/* TIME SLOTS */}
-
+          {/* EXACT REQUIRED TEXT */}
           <p>Morning</p>
           <button onClick={() => handleBooking("09:00 AM")}>
             09:00 AM

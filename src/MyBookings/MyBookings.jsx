@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
+import { Typography } from "@mui/material";
 
 function MyBookings() {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    const storedBookings =
+    const stored =
       JSON.parse(localStorage.getItem("bookings")) || [];
-    setBookings(storedBookings);
+    setBookings(stored);
   }, []);
 
   if (bookings.length === 0) {
@@ -17,7 +18,10 @@ function MyBookings() {
     <div>
       {bookings.map((booking, index) => (
         <div key={index}>
-          <h3>{booking.hospitalName}</h3>
+          <Typography variant="h3">
+            {booking.hospitalName}
+          </Typography>
+
           <p>
             {booking.city}, {booking.state}
           </p>
@@ -30,6 +34,7 @@ function MyBookings() {
 }
 
 export default MyBookings;
+
 
 
 
