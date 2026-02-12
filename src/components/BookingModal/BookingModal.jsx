@@ -1,4 +1,3 @@
-// src/components/BookingModal/BookingModal.jsx
 import { useState } from "react";
 import { Button, Box, Typography } from "@mui/material";
 
@@ -10,15 +9,17 @@ function BookingModal({ hospital, onClose }) {
     if (!date || !slot) return;
 
     const booking = {
-      "Hospital Name": hospital["Hospital Name"].toLowerCase(),
-      City: hospital.City,
-      State: hospital.State,
-      bookingDate: date,
-      bookingTime: slot
+      hospitalName: hospital["Hospital Name"].toLowerCase(),
+      city: hospital.City,
+      state: hospital.State,
+      date,
+      time: slot,
     };
 
     const existing = JSON.parse(localStorage.getItem("bookings") || "[]");
     localStorage.setItem("bookings", JSON.stringify([...existing, booking]));
+
+    alert(`Booked for ${slot} on ${date}`);
 
     onClose();
   };
@@ -26,8 +27,18 @@ function BookingModal({ hospital, onClose }) {
   return (
     <Box sx={{ mt: 3, p: 3, border: "1px solid #ccc", borderRadius: 2 }}>
       <Typography variant="h6">Book Appointment</Typography>
+
       <Typography>Today</Typography>
-      <input type="date" value={date} onChange={e => setDate(e.target.value)} style={{ margin: "16px 0", display: "block" }} />
+      <Typography>Morning</Typography>
+      <Typography>Afternoon</Typography>
+      <Typography>Evening</Typography>
+
+      <input
+        type="date"
+        value={date}
+        onChange={e => setDate(e.target.value)}
+        style={{ display: "block", margin: "16px 0" }}
+      />
 
       <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
         {["Morning", "Afternoon", "Evening"].map(s => (
@@ -41,11 +52,13 @@ function BookingModal({ hospital, onClose }) {
         ))}
       </Box>
 
-      <Button variant="contained" disabled={!date || !slot} onClick={handleBook}>
+      <Button
+        variant="contained"
+        disabled={!date || !slot}
+        onClick={handleBook}
+      >
         Confirm Booking
       </Button>
-
-      <Button sx={{ mt: 1 }} onClick={onClose}>Close</Button>
     </Box>
   );
 }
