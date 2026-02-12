@@ -1,36 +1,19 @@
-.booking {
-  margin-top: 20px;
-  padding: 15px;
-  border: 1px solid #ddd;
-}
-
-.dates {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-}
-
-.dates button {
-  padding: 6px 10px;
-  border: 1px solid #ccc;
+/* BookingModal.module.css */
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background: white;
-  cursor: pointer;
-}
-
-.active {
-  background: #2aa7ff;
-  color: white;
-}
-
-.slots {
+  padding: 30px;
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 15px;
+  border-radius: 10px;
+  max-width: 400px;
+  width: 90%;
 }
 
-.slots button {
-  border: 1px solid #2aa7ff;
-  background: white;
-  padding: 6px 10px;
-  cursor: pointer;
+.modal div button {
+  margin: 5px 5px 0 0;
 }

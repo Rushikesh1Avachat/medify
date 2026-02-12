@@ -1,20 +1,35 @@
-// src/components/Header.jsx
-import React from "react";
-import { AppBar, Toolbar, Typography, Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
-const NavBar = () => {
+function NavBar() {
+  const navigate = useNavigate();
+
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ backgroundColor: "#2AA7FF" }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography variant="h6">Medify</Typography>
-        <div>
-          <Button color="inherit" component={Link} to="/">Home</Button>
-          <Button color="inherit" component={Link} to="/my-bookings">My Bookings</Button>
-        </div>
+        <Typography
+          variant="h6"
+          sx={{ cursor: "pointer", fontWeight: "bold" }}
+          onClick={() => navigate("/")}
+        >
+          Medify
+        </Typography>
+
+        <Box>
+          <Button color="inherit">Find Doctors</Button>
+          <Button color="inherit">Hospitals</Button>
+          <Button color="inherit">Medicines</Button>
+          <Button
+            color="inherit"
+            onClick={() => navigate("/my-bookings")}
+          >
+            My Bookings
+          </Button>
+        </Box>
       </Toolbar>
     </AppBar>
   );
-};
+}
 
 export default NavBar;
+

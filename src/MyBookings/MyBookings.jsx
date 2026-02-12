@@ -1,34 +1,33 @@
-import { useState, useEffect } from "react";
-import { Container, Typography, Card, CardContent } from "@mui/material";
+import { useEffect, useState } from "react";
 
 function MyBookings() {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("bookings") || "[]");
-    setBookings(saved);
+    const stored =
+      JSON.parse(localStorage.getItem("bookings")) || [];
+    setBookings(stored);
   }, []);
 
-  return (
-    <Container sx={{ py: 10 }}>
-      <Typography variant="h1" component="h1" gutterBottom>My Bookings</Typography>
+  if (bookings.length === 0) {
+    return <p>No Bookings Found</p>;
+  }
 
-      {bookings.length === 0 ? (
-        <Typography>No appointments booked yet.</Typography>
-      ) : (
-        bookings.map((b, i) => (
-          <Card key={i} sx={{ mb: 3 }}>
-            <CardContent>
-              <Typography variant="h3">{b.hospitalName}</Typography>
-              <Typography>Date: {b.date}</Typography>
-              <Typography>Time: {b.time}</Typography>
-            </CardContent>
-          </Card>
-        ))
-      )}
-    </Container>
+  return (
+    <div>
+      {bookings.map((booking, index) => (
+        <div key={index} className="booking-card">
+          <h3>{booking.hospitalName}</h3>
+          <p>{booking.city}, {booking.state}</p>
+          <p>Date: {booking.date}</p>
+          <p>Time: {booking.time}</p>
+        </div>
+      ))}
+    </div>
   );
 }
 
 export default MyBookings;
+
+
 

@@ -1,108 +1,51 @@
-// src/components/Footer/Footer.jsx
-import { Box, Typography, Grid, Link } from '@mui/material';
-import styles from './Footer.module.css';
+import { Box, Container, Typography, Grid } from "@mui/material";
 
-import facebook from '../../assets/fb.jpg';       // ← your downloaded FB icon
-import twitter from '../../assets/twitter.jpg';         // ← your downloaded Twitter/X icon
-import youtube from '../../assets/yt.jpg';         // ← your downloaded YouTube icon
-import pinterest from '../../assets/pinterest.jpg';     // ← your downloaded Pinterest icon
-
- function Footer() {
+function Footer() {
   return (
-    <Box component="footer" className={styles.footer}>
-      <Box className={styles.container}>
+    <Box sx={{ backgroundColor: "#1B3C74", color: "white", py: 4, mt: 6 }}>
+      <Container>
         <Grid container spacing={4}>
-          {/* Brand column */}
           <Grid item xs={12} md={4}>
-            <Typography variant="h5" className={styles.brandTitle}>
+            <Typography variant="h6" gutterBottom>
               Medify
             </Typography>
-            <Typography variant="body2" className={styles.brandDesc}>
-              Medify is a trusted platform to find medical centers and book
-              appointments easily across the USA.
+            <Typography variant="body2">
+              Trusted platform for booking medical appointments.
             </Typography>
           </Grid>
 
-          {/* About */}
-          <Grid item xs={6} sm={3} md={2}>
-            <Typography variant="subtitle1" className={styles.columnTitle}>
-              About
+          <Grid item xs={12} md={4}>
+            <Typography variant="subtitle1" gutterBottom>
+              Quick Links
             </Typography>
-            <Link href="#" underline="hover" className={styles.link}>
-              About Us
-            </Link>
-            <Link href="#" underline="hover" className={styles.link}>
-              Careers
-            </Link>
-            <Link href="#" underline="hover" className={styles.link}>
-              Blog
-            </Link>
+            <Typography variant="body2">Find Doctors</Typography>
+            <Typography variant="body2">Hospitals</Typography>
+            <Typography variant="body2">Medicines</Typography>
           </Grid>
 
-          {/* Services */}
-          <Grid item xs={6} sm={3} md={2}>
-            <Typography variant="subtitle1" className={styles.columnTitle}>
-              Services
+          <Grid item xs={12} md={4}>
+            <Typography variant="subtitle1" gutterBottom>
+              Contact
             </Typography>
-            <Link href="#" underline="hover" className={styles.link}>
-              Hospitals
-            </Link>
-            <Link href="#" underline="hover" className={styles.link}>
-              Doctors
-            </Link>
-            <Link href="#" underline="hover" className={styles.link}>
-              Medicines
-            </Link>
-          </Grid>
-
-          {/* Support */}
-          <Grid item xs={6} sm={3} md={2}>
-            <Typography variant="subtitle1" className={styles.columnTitle}>
-              Support
+            <Typography variant="body2">
+              support@medify.com
             </Typography>
-            <Link href="#" underline="hover" className={styles.link}>
-              Help Center
-            </Link>
-            <Link href="#" underline="hover" className={styles.link}>
-              Contact Us
-            </Link>
-            <Link href="#" underline="hover" className={styles.link}>
-              Privacy Policy
-            </Link>
+            <Typography variant="body2">
+              +1 234 567 890
+            </Typography>
           </Grid>
+        </Grid>
 
-      
-        
-
-            {/* Social Icons – placed below app badges */}
-            <Box sx={{ mt: 4 }}>
-              <Typography variant="subtitle2" sx={{ mb: 1.5, opacity: 0.9 }}>
-                Follow Us
-              </Typography>
-              <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
-                <Link href="#" underline="none">
-                  <img src={facebook} alt="Facebook" className={styles.socialIcon} />
-                </Link>
-                <Link href="#" underline="none">
-                  <img src={twitter} alt="Twitter" className={styles.socialIcon} />
-                </Link>
-                <Link href="#" underline="none">
-                  <img src={youtube} alt="YouTube" className={styles.socialIcon} />
-                </Link>
-                <Link href="#" underline="none">
-                  <img src={pinterest} alt="Pinterest" className={styles.socialIcon} />
-                </Link>
-              </Box>
-            </Box>
-          </Grid>
-   
-
-        {/* Copyright */}
-        <Box className={styles.copyright}>
+        <Typography
+          variant="body2"
+          align="center"
+          sx={{ mt: 4 }}
+        >
           © 2026 Medify. All rights reserved.
-        </Box>
-      </Box>
+        </Typography>
+      </Container>
     </Box>
   );
 }
-export default Footer
+
+export default Footer;

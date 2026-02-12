@@ -1,0 +1,29 @@
+/* Home.module.css */
+.container {
+  max-width: 600px;
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 15px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media (min-width: 600px) {
+  .form {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+  #state, #city {
+    flex: 1;
+  }
+  #searchBtn {
+    align-self: flex-start;
+    margin-left: 10px;
+  }
+}
