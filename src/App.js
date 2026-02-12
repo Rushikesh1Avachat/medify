@@ -1,32 +1,24 @@
+// src/App.jsx
+import React from "react";
+import { Routes, Route } from "react-router-dom"; // ← no BrowserRouter here
 
-import { Routes, Route } from "react-router-dom";
-import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 
-import NavBar from "./components/NavBar/NavBar";
-import Footer from "./components/Footer/Footer";
 import Home from "./Home/Home";
 import Search from "./Search/Search";
 import MyBookings from "./MyBookings/MyBookings";
-
-const theme = createTheme({
-  palette: { primary: { main: "#2AA7FF" } },
-  typography: { fontFamily: "Poppins, sans-serif" },
-});
-
+import NavBar from "./components/NavBar/NavBar";
+import Footer from "./components/Footer/Footer"
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <>
       <NavBar />
-
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
         <Route path="/my-bookings" element={<MyBookings />} />
       </Routes>
-
       <Footer />
-    </ThemeProvider>
+    </>
   );
 }
 
