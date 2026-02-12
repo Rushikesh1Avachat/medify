@@ -1,28 +1,55 @@
 import { useState } from "react";
-import BookingModal from "../BookingModal/BookingModal";
 
 function HospitalCard({ hospital }) {
-  const [open, setOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState("");
+
+  const handleBooking = (time) => {
+    if (!selectedDate) return;
+
+    const old =
+      JSON.parse(localStorage.getItem("bookings")) || [];
+
+    const newBooking = {
+      hospitalName: hospital["Hospital Name"],
+      state: hospital.State,
+      city: hospital.City,
+      date: selectedDate,
+      time: time,
+    };
+
+    const updated = [...old, newBooking];
+
+    localStorage.setItem("bookings", JSON.stringify(updated));
+  };
 
   return (
-    <div>
+    <div style={{ border: "1px solid #ccc", margin: "20px", padding: "15px" }}>
+
+      {/* Hospital Name */}
       <h3>{hospital["Hospital Name"]}</h3>
 
-      <p>{hospital["Address"]}</p>
-      <p>{hospital["City"]}</p>
-      <p>{hospital["State"]}</p>
-      <p>Rating: {hospital["Hospital overall rating"]}</p>
+      <p>{hospital.City}, {hospital.State}</p>
 
-      <button onClick={() => setOpen(true)}>
-        Book FREE Center Visit
-      </button>
+      {/* Date Picker */}
+      <input
+        type="date"
+        onChange={(e) => setSelectedDate(e.target.value)}
+      />
 
-      {open && (
-        <BookingModal
-          hospital={hospital}
-          onClose={() => setOpen(false)}
-        />
-      )}
+      {/* TIME SLOTS — MUST ALWAYS BE VISIBLE */}
+      <div>
+
+        <p>Morning</p>
+        <button onClick={() => handleBooking("09:00 AM")}>09:00 AM</button>
+
+        <p>Afternoon</p>
+        <button onClick={() => handleBooking("01:00 PM")}>01:00 PM</button>
+
+        <p>Evening</p>
+        <button onClick={() => handleBooking("06:00 PM")}>06:00 PM</button>
+
+      </div>
+
     </div>
   );
 }

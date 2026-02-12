@@ -9,18 +9,14 @@ function MyBookings() {
     setBookings(stored);
   }, []);
 
-  if (bookings.length === 0) {
-    return <p>No Bookings Found</p>;
-  }
-
   return (
     <div>
       {bookings.map((booking, index) => (
-        <div key={index} className="booking-card">
+        <div key={index}>
           <h3>{booking.hospitalName}</h3>
           <p>{booking.city}, {booking.state}</p>
-          <p>Date: {booking.date}</p>
-          <p>Time: {booking.time}</p>
+          <p>{booking.date}</p>
+          <p>{booking.time}</p>
         </div>
       ))}
     </div>
@@ -28,6 +24,7 @@ function MyBookings() {
 }
 
 export default MyBookings;
+
 
 
 
