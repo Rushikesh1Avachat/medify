@@ -5,9 +5,9 @@ function MyBookings() {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    const stored =
+    const storedBookings =
       JSON.parse(localStorage.getItem("bookings")) || [];
-    setBookings(stored);
+    setBookings(storedBookings);
   }, []);
 
   if (bookings.length === 0) {
@@ -25,6 +25,7 @@ function MyBookings() {
           <p>
             {booking.city}, {booking.state}
           </p>
+
           <p>{booking.date}</p>
           <p>{booking.time}</p>
         </div>
@@ -34,6 +35,7 @@ function MyBookings() {
 }
 
 export default MyBookings;
+
 
 
 

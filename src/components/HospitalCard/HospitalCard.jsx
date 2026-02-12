@@ -1,5 +1,5 @@
-import { Typography } from "@mui/material";
 import { useState } from "react";
+import { Typography } from "@mui/material";
 
 function HospitalCard({ hospital }) {
   const [showBooking, setShowBooking] = useState(false);
@@ -8,7 +8,8 @@ function HospitalCard({ hospital }) {
   const handleBooking = (time) => {
     if (!selectedDate) return;
 
-    const old = JSON.parse(localStorage.getItem("bookings")) || [];
+    const oldBookings =
+      JSON.parse(localStorage.getItem("bookings")) || [];
 
     const newBooking = {
       hospitalName: hospital["Hospital Name"].toLowerCase(),
@@ -18,9 +19,12 @@ function HospitalCard({ hospital }) {
       time: time,
     };
 
-    const updated = [...old, newBooking];
+    const updatedBookings = [...oldBookings, newBooking];
 
-    localStorage.setItem("bookings", JSON.stringify(updated));
+    localStorage.setItem(
+      "bookings",
+      JSON.stringify(updatedBookings)
+    );
   };
 
   return (
@@ -43,11 +47,13 @@ function HospitalCard({ hospital }) {
 
       {showBooking && (
         <div onClick={(e) => e.stopPropagation()}>
+          {/* Date */}
           <input
             type="date"
             onChange={(e) => setSelectedDate(e.target.value)}
           />
 
+          {/* REQUIRED TEXT — MUST MATCH EXACTLY */}
           <p>Morning</p>
           <button onClick={() => handleBooking("09:00 AM")}>
             09:00 AM
