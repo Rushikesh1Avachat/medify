@@ -1,7 +1,3 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { fetchStates, fetchCities } from "../../api";
-
 function SearchBar() {
   const navigate = useNavigate();
   const [states, setStates] = useState([]);
@@ -24,32 +20,34 @@ function SearchBar() {
 
   return (
     <div>
-      <div id="state">
-        <select value={state} onChange={(e) => setState(e.target.value)}>
-          <option value="">Select State</option>
-          {states.map((s) => (
-            <option key={s} value={s}>
-              {s}
-            </option>
-          ))}
-        </select>
-      </div>
+      <select
+        id="state"
+        value={state}
+        onChange={(e) => setState(e.target.value)}
+      >
+        <option value="">Select State</option>
+        {states.map((s) => (
+          <option key={s} value={s}>
+            {s}
+          </option>
+        ))}
+      </select>
 
-      <div id="city">
-        <select value={city} onChange={(e) => setCity(e.target.value)}>
-          <option value="">Select City</option>
-          {cities.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
-      </div>
+      <select
+        id="city"
+        value={city}
+        onChange={(e) => setCity(e.target.value)}
+      >
+        <option value="">Select City</option>
+        {cities.map((c) => (
+          <option key={c} value={c}>
+            {c}
+          </option>
+        ))}
+      </select>
 
       <button onClick={handleSearch}>Search</button>
     </div>
   );
 }
-
-export default SearchBar;
-
+export default SearchBar
