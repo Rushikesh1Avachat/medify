@@ -1,42 +1,43 @@
-import { useEffect, useState } from "react";
+// src/Search/Search.jsx
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { List, ListItem, Typography, Box } from "@mui/material";
-import HospitalCard from "../components/HospitalCard/HospitalCard";
+import BookingModal from "../components/BookingModal/BookingModal";
 
 function Search() {
-  const [hospitals, setHospitals] = useState([]);
-
   const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const state = params.get("state");
-  const city = params.get("city");
+  const { stateName, cityName } = location.state || {};
+  const [hospitals, setHospitals] = useState([]);
+  const [selectedHospital, setSelectedHospital] = useState(null);
 
   useEffect(() => {
-    if (state && city) {
-      fetch(`https://meddata-backend.onrender.com/data?state=${encodeURIComponent(state)}&city=${encodeURIComponent(city)}`)
+    if (stateName && cityName) {
+      fetch(`https://meddata-backend.onrender.com/data?state=${stateName}&city=${cityName}`)
         .then(res => res.json())
-        .then(data => setHospitals(data || []));
+        .then(setHospitals)
+        .catch(() => setHospitals([]));
     }
-  }, [state, city]);
+  }, [stateName, cityName]);
 
   return (
-    <Box sx={{ maxWidth: 1100, mx: "auto", p: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Medical Centers in {city || "selected location"}
-      </Typography>
+    <div>
+      <h1>{hospitals.length} medical centers available in {cityName?.toLowerCase()}</h1>
 
-      {hospitals.length === 0 ? (
-        <Typography color="text.secondary">No hospitals found</Typography>
-      ) : (
-        <List disablePadding>
-          {hospitals.map((h, i) => (
-            <ListItem key={i} divider sx={{ py: 3 }}>
-              <HospitalCard hospital={h} />
-            </ListItem>
-          ))}
-        </List>
+      {hospitals.map((hospital, idx) => (
+        <div key={idx}>
+          <h3>{hospital["Hospital Name"]}</h3>
+          <button onClick={() => setSelectedHospital(hospital)}>
+            Book FREE Center Visit
+          </button>
+        </div>
+      ))}
+
+      {selectedHospital && (
+        <BookingModal
+          hospital={selectedHospital}
+          onClose={() => setSelectedHospital(null)}
+        />
       )}
-    </Box>
+    </div>
   );
 }
 
