@@ -5,25 +5,26 @@ function HospitalCard({ hospital }) {
   const [showBooking, setShowBooking] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
 
+  const hospitalName =
+    hospital["Hospital Name"].toLowerCase();
+
   const handleBooking = (time) => {
     if (!selectedDate) return;
 
-    const oldBookings =
+    const old =
       JSON.parse(localStorage.getItem("bookings")) || [];
 
     const newBooking = {
-      hospitalName: hospital["Hospital Name"].toLowerCase(),
+      hospitalName,
       state: hospital.State,
       city: hospital.City,
       date: selectedDate,
-      time: time,
+      time,
     };
-
-    const updatedBookings = [...oldBookings, newBooking];
 
     localStorage.setItem(
       "bookings",
-      JSON.stringify(updatedBookings)
+      JSON.stringify([...old, newBooking])
     );
   };
 
@@ -33,12 +34,15 @@ function HospitalCard({ hospital }) {
         border: "1px solid #ccc",
         padding: "20px",
         margin: "20px",
-        cursor: "pointer",
       }}
-      onClick={() => setShowBooking(true)}
     >
-      <Typography variant="h3">
-        {hospital["Hospital Name"].toLowerCase()}
+      {/* MAKE ONLY TITLE CLICKABLE */}
+      <Typography
+        variant="h3"
+        onClick={() => setShowBooking(true)}
+        style={{ cursor: "pointer" }}
+      >
+        {hospitalName}
       </Typography>
 
       <p>
@@ -46,14 +50,12 @@ function HospitalCard({ hospital }) {
       </p>
 
       {showBooking && (
-        <div onClick={(e) => e.stopPropagation()}>
-          {/* Date */}
+        <div>
           <input
             type="date"
             onChange={(e) => setSelectedDate(e.target.value)}
           />
 
-          {/* REQUIRED TEXT — MUST MATCH EXACTLY */}
           <p>Morning</p>
           <button onClick={() => handleBooking("09:00 AM")}>
             09:00 AM
@@ -75,6 +77,8 @@ function HospitalCard({ hospital }) {
 }
 
 export default HospitalCard;
+
+
 
 
 
