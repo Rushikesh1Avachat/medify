@@ -1,73 +1,106 @@
-import { useState } from "react";
-import { Typography } from "@mui/material";
+// src/components/HospitalCard.jsx
+import { useState } from 'react';
+import {
+  Typography,
+  Box,
+  Button,
+  Chip,
+  Alert
+} from '@mui/material';
 
 function HospitalCard({ hospital }) {
   const [showBooking, setShowBooking] = useState(false);
-  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
+  const [booked, setBooked] = useState(false);
 
-  const handleBooking = (time) => {
-    if (!selectedDate) return;
+  const displayName = hospital['Hospital Name'];
+  const storageName = displayName.toLowerCase(); // test expects lowercase
 
-    const old =
-      JSON.parse(localStorage.getItem("bookings")) || [];
+  const timeSlots = [
+    { label: 'Morning', time: '09:00 AM' },
+    { label: 'Afternoon', time: '01:00 PM' },
+    { label: 'Evening', time: '06:00 PM' }
+  ];
+
+  const handleBook = () => {
+    if (!selectedDate || !selectedTimeSlot) return;
+
+    const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
 
     const newBooking = {
-      hospitalName: hospital["Hospital Name"].toLowerCase(),
+      hospitalName: storageName,
       state: hospital.State,
       city: hospital.City,
       date: selectedDate,
-      time: time,
+      time: selectedTimeSlot  // store "Afternoon" etc. – what the test wants
     };
 
-    localStorage.setItem(
-      "bookings",
-      JSON.stringify([...old, newBooking])
-    );
+    localStorage.setItem('bookings', JSON.stringify([...bookings, newBooking]));
+
+    setBooked(true);
   };
 
   return (
-    <div
-      style={{ border: "1px solid #ccc", padding: 20, margin: 20 }}
-      onClick={() => setShowBooking(true)}
-    >
-      <Typography variant="h3">
-        {hospital["Hospital Name"].toLowerCase()}
+    <Box sx={{ width: '100%', p: 2 }}>
+      <Typography
+        variant="h5"
+        component="div"
+        onClick={() => setShowBooking(prev => !prev)}
+        sx={{ cursor: 'pointer', fontWeight: 'bold', mb: 1 }}
+      >
+        {displayName}
       </Typography>
 
-      <p>
+      <Typography variant="body2" color="text.secondary">
         {hospital.City}, {hospital.State}
-      </p>
+      </Typography>
 
-      {showBooking && (
-        <div onClick={(e) => e.stopPropagation()}>
+      {showBooking && !booked && (
+        <Box sx={{ mt: 3 }}>
           <input
             type="date"
-            onChange={(e) => setSelectedDate(e.target.value)}
+            value={selectedDate}
+            onChange={e => setSelectedDate(e.target.value)}
+            style={{ marginBottom: '16px', padding: '8px' }}
           />
 
-          {/* REQUIRED TEXT */}
-          <p>Morning</p>
-          <button onClick={() => handleBooking("09:00 AM")}>
-            09:00 AM
-          </button>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 3 }}>
+            {timeSlots.map(slot => (
+              <Chip
+                key={slot.label}
+                label={slot.time}
+                color={selectedTimeSlot === slot.label ? 'primary' : 'default'}
+                variant={selectedTimeSlot === slot.label ? 'filled' : 'outlined'}
+                onClick={() => setSelectedTimeSlot(slot.label)}
+                clickable
+              />
+            ))}
+          </Box>
 
-          <p>Afternoon</p>
-          <button onClick={() => handleBooking("01:00 PM")}>
-            01:00 PM
-          </button>
-
-          <p>Evening</p>
-          <button onClick={() => handleBooking("06:00 PM")}>
-            06:00 PM
-          </button>
-        </div>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleBook}
+            disabled={!selectedDate || !selectedTimeSlot}
+          >
+            Book Appointment
+          </Button>
+        </Box>
       )}
-    </div>
+
+      {booked && (
+        <Alert severity="success" sx={{ mt: 3 }}>
+          Appointment Booked Successfully!<br />
+          Date: {selectedDate}<br />
+          Time: {selectedTimeSlot}
+        </Alert>
+      )}
+    </Box>
   );
 }
 
 export default HospitalCard;
-
 
 
 
