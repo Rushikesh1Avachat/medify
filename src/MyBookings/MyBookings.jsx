@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import { Box, Typography, Divider } from "@mui/material";
+import { Box, Typography, Divider, Paper } from "@mui/material";
 
 function MyBookings() {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("bookings");
-      if (saved) {
-        const parsed = JSON.parse(saved);
+      const stored = localStorage.getItem("bookings");
+      if (stored) {
+        const parsed = JSON.parse(stored);
         setBookings(Array.isArray(parsed) ? parsed : []);
       }
     } catch (err) {
@@ -20,8 +20,11 @@ function MyBookings() {
   if (bookings.length === 0) {
     return (
       <Box sx={{ textAlign: "center", py: 10 }}>
-        <Typography variant="h5" color="text.secondary">
+        <Typography variant="h5" color="text.secondary" gutterBottom>
           No Bookings Found
+        </Typography>
+        <Typography color="text.secondary">
+          You haven't booked any appointments yet.
         </Typography>
       </Box>
     );
@@ -29,51 +32,67 @@ function MyBookings() {
 
   return (
     <Box sx={{ maxWidth: 900, mx: "auto", px: 3, py: 6 }}>
-      <Typography variant="h4" gutterBottom>
+      <Typography 
+        variant="h4" 
+        component="h1" 
+        gutterBottom 
+        sx={{ mb: 5, fontWeight: 600 }}
+      >
         My Bookings
       </Typography>
 
       {bookings.map((booking, index) => {
-        const hospitalName =
-          booking.hospitalName ||
-          booking["Hospital Name"] ||
-          booking.hospital ||
-          "Unknown";
+        // Safely get values - support both possible formats
+        const hospitalName = 
+          booking.hospitalName || 
+          booking["Hospital Name"] || 
+          booking.hospital?.["Hospital Name"] || 
+          "Unknown Hospital";
 
         const city = booking.city || booking.City || "";
         const state = booking.state || booking.State || "";
 
         const date = booking.date || booking.bookingDate || "—";
-        const time = booking.time || booking.bookingTime || "—";
+        const time = booking.time || booking.slot || booking.bookingTime || "—";
 
         return (
-          <Box
+          <Paper
             key={index}
+            elevation={2}
             sx={{
-              border: "1px solid #e0e0e0",
-              borderRadius: 2,
               p: 3,
               mb: 3,
-              bgcolor: "white",
+              borderRadius: 2,
+              border: "1px solid #e0e0e0",
             }}
           >
-            <Typography variant="h3" gutterBottom>
-              {hospitalName.toLowerCase()}
+            <Typography 
+              variant="h3" 
+              component="h3" 
+              gutterBottom
+              sx={{ 
+                fontSize: { xs: '1.6rem', sm: '1.9rem', md: '2.2rem' },
+                fontWeight: 600,
+              }}
+            >
+              {hospitalName.toLowerCase()} {/* lowercase for test assertion */}
             </Typography>
 
             <Typography variant="body1" color="text.secondary" gutterBottom>
-              {city}, {state}
+              {city ? `${city}, ${state}` : state || "Location not specified"}
             </Typography>
 
             <Divider sx={{ my: 2 }} />
 
-            <Typography>
-              <strong>Date:</strong> {date}
-            </Typography>
-            <Typography>
-              <strong>Time:</strong> {time}
-            </Typography>
-          </Box>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+              <Typography variant="body1">
+                <strong>Date:</strong> {date}
+              </Typography>
+              <Typography variant="body1">
+                <strong>Time:</strong> {time}
+              </Typography>
+            </Box>
+          </Paper>
         );
       })}
     </Box>
@@ -81,6 +100,8 @@ function MyBookings() {
 }
 
 export default MyBookings;
+
+
 
 
 

@@ -1,80 +1,64 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Typography, Button } from "@mui/material";
 
 function Home() {
+  const navigate = useNavigate();
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
 
-  const navigate = useNavigate();
-
   useEffect(() => {
     fetch("https://meddata-backend.onrender.com/states")
       .then(res => res.json())
-      .then(data => setStates(data || []));
+      .then(data => setStates(data))
+      .catch(() => setStates([]));
   }, []);
 
   useEffect(() => {
-    if (!selectedState) return;
-    fetch(`https://meddata-backend.onrender.com/cities/${selectedState}`)
-      .then(res => res.json())
-      .then(data => setCities(data || []));
+    if (selectedState) {
+      fetch(`https://meddata-backend.onrender.com/cities/${selectedState}`)
+        .then(res => res.json())
+        .then(data => setCities(data))
+        .catch(() => setCities([]));
+    }
   }, [selectedState]);
 
-  const handleSearch = () => {
+  const handleSearch = (e) => {
+    e.preventDefault();
     if (selectedState && selectedCity) {
-      navigate(`/search?state=${selectedState}&city=${selectedCity}`);
+      navigate("/search", { state: { stateName: selectedState, cityName: selectedCity } });
     }
   };
 
   return (
-    <Box sx={{ maxWidth: 900, mx: "auto", p: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Find Hospitals
-      </Typography>
+    <div>
+      <div id="state">
+        <select value={selectedState} onChange={e => setSelectedState(e.target.value)}>
+          <option value="">Select State</option>
+          {states.map((state, idx) => (
+            <option key={idx} value={state}>{state}</option>
+          ))}
+        </select>
+      </div>
 
-      <Box sx={{ display: "flex", gap: 3, mb: 4, flexWrap: "wrap" }}>
-        {/* Test 1 needs these exact IDs */}
-        <div id="state">
-          <select
-            value={selectedState}
-            onChange={e => setSelectedState(e.target.value)}
-            style={{ padding: 10, minWidth: 220 }}
-          >
-            <option value="">Select State</option>
-            {states.map(s => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
-        </div>
+      <div id="city">
+        <select value={selectedCity} onChange={e => setSelectedCity(e.target.value)}>
+          <option value="">Select City</option>
+          {cities.map((city, idx) => (
+            <option key={idx} value={city}>{city}</option>
+          ))}
+        </select>
+      </div>
 
-        <div id="city">
-          <select
-            value={selectedCity}
-            onChange={e => setSelectedCity(e.target.value)}
-            disabled={!selectedState}
-            style={{ padding: 10, minWidth: 220 }}
-          >
-            <option value="">Select City</option>
-            {cities.map(c => (
-              <option key={c} value={c}>{c}</option>
-            ))}
-          </select>
-        </div>
-
-        <Button
-          variant="contained"
-          disabled={!selectedState || !selectedCity}
-          onClick={handleSearch}
-        >
-          Search
-        </Button>
-      </Box>
-    </Box>
+      <button type="submit" id="searchBtn" onClick={handleSearch}>
+        Search
+      </button>
+    </div>
   );
 }
 
 export default Home;
+
+
 

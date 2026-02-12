@@ -6,10 +6,11 @@ import Footer from "./components/Footer/Footer";
 import Home from "./Home/Home";
 import Search from "./Search/Search";
 import MyBookings from "./MyBookings/MyBookings";
+import { BookingProvider } from "./context/BookingContext"; // new
 
 function App() {
   return (
-    <>
+    <BookingProvider>
       <NavBar />
 
       <Routes>
@@ -19,9 +20,10 @@ function App() {
       </Routes>
 
       <Footer />
-    </>
+    </BookingProvider>
   );
 }
 
 export default App;
+
 
