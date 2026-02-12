@@ -10,7 +10,7 @@ function Home() {
   const [selectedCity, setSelectedCity] = useState("");
   const [hospitals, setHospitals] = useState([]); // ← this was missing!
 
-  const navigate = useNavigate();
+
 
   useEffect(() => {
     fetch("https://meddata-backend.onrender.com/states")
