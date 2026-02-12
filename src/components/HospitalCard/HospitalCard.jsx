@@ -1,37 +1,34 @@
-// HospitalCard.jsx (simplified version)
+// HospitalCard.jsx
 
 import { useState } from "react";
-import { Typography, Box } from "@mui/material";
 import BookingModal from "../BookingModal/BookingModal";
 
 function HospitalCard({ hospital }) {
-  const [openModal, setOpenModal] = useState(false);
+  const [showBooking, setShowBooking] = useState(false);
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Typography
-        variant="h5"
-        sx={{ cursor: "pointer", fontWeight: "medium" }}
-        onClick={() => setOpenModal(true)}
+    <div style={{ padding: "16px", border: "1px solid #ddd", borderRadius: 8 }}>
+      <h3
+        style={{ cursor: "pointer", margin: 0, color: showBooking ? "#1976d2" : "inherit" }}
+        onClick={() => setShowBooking(!showBooking)}
       >
         {hospital["Hospital Name"]}
-      </Typography>
+      </h3>
 
-      <Typography variant="body2" color="text.secondary">
+      <p style={{ margin: "8px 0 16px 0", color: "#666" }}>
         {hospital.City}, {hospital.State}
-      </Typography>
+      </p>
 
-      {openModal && (
+      {showBooking && (
         <BookingModal
           hospital={hospital} 
-          onClose={() => setOpenModal(false)} 
+          onClose={() => setShowBooking(false)} 
         />
       )}
-    </Box>
+    </div>
   );
 }
 
 export default HospitalCard;
-
 
 

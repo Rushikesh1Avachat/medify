@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import HospitalCard from "../components/HospitalCard/HospitalCard";
+import { List, ListItem } from "@mui/material";
 
 function Home() {
   const [states, setStates] = useState([]);
@@ -17,9 +18,7 @@ function Home() {
   useEffect(() => {
     if (!selectedState) return;
 
-    fetch(
-      `https://meddata-backend.onrender.com/cities/${selectedState}`
-    )
+    fetch(`https://meddata-backend.onrender.com/cities/${selectedState}`)
       .then((res) => res.json())
       .then((data) => setCities(data));
   }, [selectedState]);
@@ -31,44 +30,60 @@ function Home() {
       `https://meddata-backend.onrender.com/data?state=${selectedState}&city=${selectedCity}`
     )
       .then((res) => res.json())
-      .then((data) => setHospitals(data));
+      .then((data) => setHospitals(data || []));
   };
 
   return (
-    <div>
-      {/* IMPORTANT IDs REQUIRED BY CYPRESS */}
-      <select
-        id="state"
-        value={selectedState}
-        onChange={(e) => setSelectedState(e.target.value)}
-      >
-        <option value="">Select State</option>
-        {states.map((state) => (
-          <option key={state} value={state}>
-            {state}
-          </option>
-        ))}
-      </select>
+    <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 16px" }}>
+      {/* IMPORTANT – IDs required by Cypress */}
+      <div id="state">
+        <select
+          id="state-select"
+          value={selectedState}
+          onChange={(e) => setSelectedState(e.target.value)}
+        >
+          <option value="">Select State</option>
+          {states.map((state) => (
+            <option key={state} value={state}>
+              {state}
+            </option>
+          ))}
+        </select>
+      </div>
 
-      <select
-        id="city"
-        value={selectedCity}
-        onChange={(e) => setSelectedCity(e.target.value)}
-      >
-        <option value="">Select City</option>
-        {cities.map((city) => (
-          <option key={city} value={city}>
-            {city}
-          </option>
-        ))}
-      </select>
+      <div id="city">
+        <select
+          id="city-select"
+          value={selectedCity}
+          onChange={(e) => setSelectedCity(e.target.value)}
+          disabled={!selectedState}
+        >
+          <option value="">Select City</option>
+          {cities.map((city) => (
+            <option key={city} value={city}>
+              {city}
+            </option>
+          ))}
+        </select>
+      </div>
 
-      <button onClick={handleSearch}>Search</button>
+      <button onClick={handleSearch} style={{ marginLeft: 12 }}>
+        Search
+      </button>
 
-      {/* Render hospitals */}
-      {hospitals.map((hospital, index) => (
-        <HospitalCard key={index} hospital={hospital} />
-      ))}
+      {hospitals.length > 0 && (
+        <List sx={{ marginTop: 4 }}>
+          {hospitals.map((hospital, index) => (
+            <ListItem 
+              key={index} 
+              divider 
+              sx={{ padding: "16px 0" }}
+            >
+              <HospitalCard hospital={hospital} />
+            </ListItem>
+          ))}
+        </List>
+      )}
     </div>
   );
 }
