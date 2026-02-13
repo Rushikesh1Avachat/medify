@@ -1,185 +1,97 @@
-import React, { useContext, useState } from 'react';
-import { BookingContext } from '../../context/BookingContext'; // adjust path if needed
-import { format, addDays } from 'date-fns'; // npm install date-fns
+// src/components/BookingModal.jsx
+import { useState } from 'react';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Box, Grid } from '@mui/material';
+import { format, addDays } from 'date-fns';
 
-function BookingModal({ hospital, onClose }) {
-  const { addBooking } = useContext(BookingContext);
-  const [selectedDate, setSelectedDate] = useState(new Date()); // default today
-  const [selectedTime, setSelectedTime] = useState('');
+export default function BookingModal({ open, onClose, hospital }) {
+  const [dateIndex, setDateIndex] = useState(null);
+  const [selectedSlot, setSelectedSlot] = useState(null);
 
-  const handleTimeClick = (period, time) => {
-    setSelectedTime(`${period} ${time}`);
-  };
+  const today = new Date();
+  const dates = Array.from({ length: 7 }, (_, i) => addDays(today, i));
 
-  const handleConfirm = () => {
-    if (!selectedTime) {
-      alert('Please select a time slot');
-      return;
-    }
+  const timePeriods = [
+    { name: 'Morning', times: ['09:00 AM', '10:00 AM', '11:00 AM'] },
+    { name: 'Afternoon', times: ['12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM'] },
+    { name: 'Evening', times: ['04:00 PM', '05:00 PM', '06:00 PM'] },
+  ];
 
+  const handleBook = () => {
+    if (dateIndex === null || selectedSlot === null) return;
+
+    const dateObj = dates[dateIndex];
     const booking = {
-      hospitalName: hospital['Hospital Name'] || 'Unknown Hospital',
-      address: hospital.Address || '',
-      city: hospital.City || '',
-      state: hospital.State || '',
-      zip: hospital['ZIP Code'] || '',
-      rating: hospital['Hospital overall rating'] || 'N/A',
-      date: format(selectedDate, 'yyyy-MM-dd'),
-      time: selectedTime,
-      bookedAt: new Date().toISOString(),
+      hospitalName: hospital["Hospital Name"],
+      address: hospital.Address,
+      city: hospital.City,
+      date: format(dateObj, 'dd MMM yyyy'),
+      timeOfDay: selectedSlot.period,
+      time: selectedSlot.time,
     };
 
-    addBooking(booking); // save via context → auto-saves to localStorage
+    const prev = JSON.parse(localStorage.getItem('bookings') || '[]');
+    localStorage.setItem('bookings', JSON.stringify([...prev, booking]));
 
-    alert('Appointment booked successfully!');
     onClose();
   };
 
-  // Simple date selector (today + next 6 days)
-  const dates = Array.from({ length: 7 }, (_, i) => addDays(new Date(), i));
-
   return (
-    <div
-      className="modal-overlay"
-      style={{
-        position: 'fixed',
-        inset: 0,
-        background: 'rgba(0,0,0,0.5)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 1000,
-      }}
-    >
-      <div
-        className="modal-content"
-        style={{
-          background: 'white',
-          borderRadius: '12px',
-          padding: '24px',
-          maxWidth: '500px',
-          width: '90%',
-          maxHeight: '90vh',
-          overflowY: 'auto',
-          position: 'relative',
-          boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
-        }}
-      >
-        <button
-          onClick={onClose}
-          style={{
-            position: 'absolute',
-            top: '12px',
-            right: '16px',
-            background: 'none',
-            border: 'none',
-            fontSize: '28px',
-            cursor: 'pointer',
-            color: '#666',
-          }}
-        >
-          ×
-        </button>
-
-        <h3 style={{ margin: '0 0 16px', color: '#1e40af' }}>
-          {hospital['Hospital Name'] || 'Hospital Booking'}
-        </h3>
-
-        <p style={{ fontWeight: 'bold', marginBottom: '8px' }}>Select Date</p>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
-          {dates.map((d, i) => {
-            const isSelected = selectedDate && format(selectedDate, 'yyyy-MM-dd') === format(d, 'yyyy-MM-dd');
-            return (
-              <button
-                key={i}
-                onClick={() => setSelectedDate(d)}
-                style={{
-                  padding: '8px 12px',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '6px',
-                  background: isSelected ? '#2563eb' : 'white',
-                  color: isSelected ? 'white' : '#000',
-                  cursor: 'pointer',
-                  minWidth: '80px',
-                }}
+    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+      <DialogTitle>Book Appointment at {hospital["Hospital Name"]}</DialogTitle>
+      <DialogContent dividers>
+        <Typography variant="subtitle1" gutterBottom>Select Date</Typography>
+        <Grid container spacing={1}>
+          {dates.map((d, i) => (
+            <Grid item key={i}>
+              <Button
+                variant={dateIndex === i ? "contained" : "outlined"}
+                size="small"
+                onClick={() => setDateIndex(i)}
               >
-                {isToday(d) ? 'Today' : format(d, 'EEE dd')}
-              </button>
-            );
-          })}
-        </div>
+                {i === 0 ? 'Today' : format(d, 'dd MMM')}
+              </Button>
+            </Grid>
+          ))}
+        </Grid>
 
-        <p style={{ fontWeight: 'bold', marginBottom: '8px' }}>Available Slots</p>
-
-        {/* Today label */}
-        <p style={{ fontWeight: 600, margin: '16px 0 8px' }}>Today</p>
-
-        {/* Morning */}
-        <p
-          onClick={() => handleTimeClick('Morning', '09:00 AM')}
-          style={{
-            padding: '10px',
-            margin: '4px 0',
-            background: selectedTime === 'Morning 09:00 AM' ? '#dbeafe' : '#f8fafc',
-            borderRadius: '6px',
-            cursor: 'pointer',
-          }}
-        >
-          Morning
-        </p>
-
-        {/* Afternoon */}
-        <p
-          onClick={() => handleTimeClick('Afternoon', '02:00 PM')}
-          style={{
-            padding: '10px',
-            margin: '4px 0',
-            background: selectedTime === 'Afternoon 02:00 PM' ? '#dbeafe' : '#f8fafc',
-            borderRadius: '6px',
-            cursor: 'pointer',
-          }}
-        >
-          Afternoon
-        </p>
-
-        {/* Evening */}
-        <p
-          onClick={() => handleTimeClick('Evening', '06:00 PM')}
-          style={{
-            padding: '10px',
-            margin: '4px 0',
-            background: selectedTime === 'Evening 06:00 PM' ? '#dbeafe' : '#f8fafc',
-            borderRadius: '6px',
-            cursor: 'pointer',
-          }}
-        >
-          Evening
-        </p>
-
-        <button
-          onClick={handleConfirm}
-          disabled={!selectedTime}
-          style={{
-            marginTop: '24px',
-            width: '100%',
-            padding: '14px',
-            background: selectedTime ? '#10b981' : '#d1d5db',
-            color: 'white',
-            border: 'none',
-            borderRadius: '8px',
-            fontSize: '16px',
-            cursor: selectedTime ? 'pointer' : 'not-allowed',
-          }}
+        {dateIndex !== null && (
+          <Box mt={4}>
+            {timePeriods.map((p) => (
+              <Box key={p.name} mb={3}>
+                <Typography component="p" fontWeight="medium" gutterBottom>
+                  {p.name}
+                </Typography>
+                <Grid container spacing={1}>
+                  {p.times.map(t => (
+                    <Grid item key={t}>
+                      <Button
+                        variant={selectedSlot?.time === t ? "contained" : "outlined"}
+                        size="small"
+                        onClick={() => setSelectedSlot({ period: p.name, time: t })}
+                      >
+                        {t}
+                      </Button>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>
+            ))}
+          </Box>
+        )}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>Cancel</Button>
+        <Button
+          variant="contained"
+          disabled={dateIndex === null || selectedSlot === null}
+          onClick={handleBook}
         >
           Confirm Booking
-        </button>
-      </div>
-    </div>
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
-
-export default BookingModal;
-
 
 
 

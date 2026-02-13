@@ -1,60 +1,89 @@
 // src/components/HeroSlider/HeroSlider.jsx
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper/modules';
 
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination } from "swiper/modules";
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/effect-fade';
 
-import "swiper/css";
-import "swiper/css/pagination";
+import styles from './HeroSlider.module.css';
 
-import "./HeroSlider.css";
+// Replace these paths with your actual images
+import slideDoctor from '../../assets/hero.jpg';     // left side doctor image
+import slideBg from '../../assets/div.swiper-pagination.jpg';          // subtle background
 
-function HeroSlider() {
+const slides = [
+  {
+    title: "Skip the travel! Find Online",
+    highlight: "Medical Centers",
+    description:
+      "Connect instantly with a 24x7 specialist or choose to video visit a particular doctor.",
+    buttonText: "Find Centers",
+    image: slideDoctor,
+  },
+  // You can add more slides if needed
+  // {
+  //   title: "Instant Appointments",
+  //   highlight: "With Top Doctors",
+  //   description: "Book in seconds – no waiting, no hassle.",
+  //   buttonText: "Book Now",
+  //   image: anotherImage,
+  // },
+];
+
+export default function HeroSlider() {
   return (
-    <div className="hero-container">
+    <section className={styles.heroSection}>
       <Swiper
-        modules={[Autoplay, Pagination]}
+        modules={[Navigation, Pagination, Autoplay, EffectFade]}
         spaceBetween={0}
         slidesPerView={1}
-        loop={true}
-        autoplay={{
-          delay: 3000,
-          disableOnInteraction: false,
-        }}
+        navigation
         pagination={{ clickable: true }}
+        autoplay={{ delay: 6000, disableOnInteraction: false }}
+        effect="fade"
+        fadeEffect={{ crossFade: true }}
+        loop={true}
+        speed={800}
+        className={styles.swiper}
       >
-        {/* Slide 1 */}
-        <SwiperSlide>
-          <div className="hero-slide slide-1">
-            <div className="hero-content">
-              <h1>
-                Skip the travel! <br />
-                Take Online Doctor Consultation
-              </h1>
-              <p>
-                Connect instantly with a 24x7 specialist or choose to video
-                visit a particular doctor.
-              </p>
-              <button>Find Doctors</button>
-            </div>
-          </div>
-        </SwiperSlide>
+        {slides.map((slide, index) => (
+          <SwiperSlide key={index}>
+            <div className={styles.slide}>
+              {/* Background image */}
+              <div
+                className={styles.bgImage}
+                style={{ backgroundImage: `url(${slideBg})` }}
+              />
 
-        {/* Slide 2 */}
-        <SwiperSlide>
-          <div className="hero-slide slide-2">
-            <div className="hero-content">
-              <h1>Consult Top Doctors Anytime, Anywhere</h1>
-              <p>
-                Get medical advice from trusted healthcare professionals at
-                your convenience.
-              </p>
-              <button>Book Appointment</button>
+              <div className={styles.contentContainer}>
+                <div className={styles.textContent}>
+                  <h1 className={styles.title}>
+                    {slide.title}
+                    <span className={styles.highlight}>{slide.highlight}</span>
+                  </h1>
+
+                  <p className={styles.description}>{slide.description}</p>
+
+                  <button className={styles.ctaButton}>
+                    {slide.buttonText}
+                  </button>
+                </div>
+
+                {/* Right side doctor image */}
+                <div className={styles.imageContainer}>
+                  <img
+                    src={slide.image}
+                    alt="Medical Professional"
+                    className={styles.doctorImage}
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-        </SwiperSlide>
+          </SwiperSlide>
+        ))}
       </Swiper>
-    </div>
+    </section>
   );
 }
-
-export default HeroSlider;

@@ -1,90 +1,49 @@
-import React from 'react';
+import { Box, Container, Stack, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
+import styles from './NavBar.module.css';
+import logo from '../../assets/logo.jpg'; 
 
-function NavBar() {
+export default function NavBar() {
   return (
-    <header
-      style={{
-        background: '#2563eb',
-        color: 'white',
-        padding: '16px 32px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        position: 'sticky',
-        top: 0,
-        zIndex: 1000,
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-      }}
-    >
-      <h1 style={{ margin: 0, fontSize: '1.8rem', fontWeight: 'bold' }}>Medify</h1>
+    <header className={styles.header}>
+      {/* Blue Top Bar */}
+      <Box className={styles.topBar}>
+        <Typography variant="body2" className={styles.topBarText}>
+          The health and well-being of our patients and their health care team will always be our priority, so we follow the best practices for cleanliness.
+        </Typography>
+      </Box>
 
-      <nav>
-        <ul
-          style={{
-            display: 'flex',
-            gap: '32px',
-            listStyle: 'none',
-            margin: 0,
-            padding: 0,
-          }}
-        >
-          <li>
-            <Link
-              to="/find-doctors"
-              style={{
-                color: 'white',
-                textDecoration: 'none',
-                fontSize: '1.1rem',
-                fontWeight: 500,
-              }}
-            >
-              FIND DOCTORS
+      {/* Main Navbar */}
+      <nav className={styles.nav}>
+        <Container maxWidth="xl">
+          <Stack 
+            direction="row" 
+            spacing={2} 
+            alignItems="center" 
+            justifyContent="space-between"
+            py={1.5}
+          >
+            {/* Logo */}
+            <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
+              <img src={logo} alt="Medify" height={27} />
             </Link>
-          </li>
-          <li>
-            <Link
-              to="/hospitals"
-              style={{
-                color: 'white',
-                textDecoration: 'none',
-                fontSize: '1.1rem',
-                fontWeight: 500,
-              }}
-            >
-              HOSPITALS
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/medicines"
-              style={{
-                color: 'white',
-                textDecoration: 'none',
-                fontSize: '1.1rem',
-                fontWeight: 500,
-              }}
-            >
-              MEDICINES
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/my-bookings"
-              style={{
-                color: 'white',
-                textDecoration: 'none',
-                fontSize: '1.1rem',
-                fontWeight: 'bold',
-              }}
-            >
-              MY BOOKINGS
-            </Link>
-          </li>
-        </ul>
+
+            {/* Navigation Links and Booking Button */}
+            <Stack direction="row" spacing={3} alignItems="center">
+              <Link to="/find-doctors" className={styles.navLink}>Find Doctors</Link>
+              <Link to="/hospitals" className={styles.navLink}>Hospitals</Link>
+              <Link to="/medicines" className={styles.navLink}>Medicines</Link>
+              <Link to="/surgeries" className={styles.navLink}>Surgeries</Link>
+              <Link to="/software" className={styles.navLink}>Software for Provider</Link>
+              <Link to="/facilities" className={styles.navLink}>Facilities</Link>
+              
+              <Link to="/my-bookings" style={{ textDecoration: 'none' }}>
+                <button className={styles.bookingBtn}>My Bookings</button>
+              </Link>
+            </Stack>
+          </Stack>
+        </Container>
       </nav>
     </header>
   );
 }
-
-export default NavBar;

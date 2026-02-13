@@ -1,41 +1,45 @@
-import { useContext } from 'react'
-import { BookingContext } from '../context/BookingContext'
+// src/pages/MyBookings/MyBookings.jsx
+import { useState, useEffect } from 'react';
+import { Container, Typography, Card, CardContent, Box } from '@mui/material';
 
- function MyBookings() {
-  const { bookings } = useContext(BookingContext)
+export default function MyBookings() {
+  const [bookings, setBookings] = useState([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('bookings');
+    if (saved) {
+      setBookings(JSON.parse(saved));
+    }
+  }, []);
 
   return (
-    <div style={{ padding: '40px 16px', maxWidth: '1100px', margin: '0 auto' }}>
-      <h1 style={{ textAlign: 'center', marginBottom: '32px' }}>My Bookings</h1>
+    <Container maxWidth="md" sx={{ py: 8 }}>
+      <Typography variant="h1" gutterBottom>
+        My Bookings
+      </Typography>
 
       {bookings.length === 0 ? (
-        <p style={{ textAlign: 'center', color: '#666' }}>No bookings yet.</p>
+        <Typography align="center" color="text.secondary" mt={6}>
+          No bookings yet.
+        </Typography>
       ) : (
-        <div style={{ display: 'grid', gap: '24px' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
           {bookings.map((b, i) => (
-            <div
-              key={i}
-              style={{
-                border: '1px solid #e5e7eb',
-                borderRadius: '12px',
-                padding: '20px',
-                background: '#fff',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-              }}
-            >
-              <h3 style={{ margin: '0 0 12px' }}>{b.hospitalName}</h3>
-              <p style={{ margin: '4px 0' }}>
-                <strong>Date:</strong> {b.date} <strong>Time:</strong> {b.time}
-              </p>
-              <p style={{ margin: '4px 0', color: '#4b5563' }}>
-                {b.address}, {b.city}, {b.state} {b.zip}
-              </p>
-              {b.rating && <p style={{ margin: '4px 0' }}>Rating: {b.rating}</p>}
-            </div>
+            <Card key={i} variant="outlined">
+              <CardContent>
+                <Typography variant="h6">{b.hospitalName}</Typography>
+                <Typography color="text.secondary">{b.address || ''}</Typography>
+                <Box mt={2}>
+                  <Typography><strong>Date:</strong> {b.date}</Typography>
+                  <Typography component="p">
+                    <strong>Time:</strong> {b.timeOfDay} – {b.time}
+                  </Typography>
+                </Box>
+              </CardContent>
+            </Card>
           ))}
-        </div>
+        </Box>
       )}
-    </div>
-  )
+    </Container>
+  );
 }
-export default MyBookings

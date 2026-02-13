@@ -1,0 +1,59 @@
+.header {
+    width: 100%;
+}
+
+.topBar {
+    background-color: #2aa7ff;
+    color: #ffffff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.topBarText {
+    font-size: 14px !important;
+    font-weight: 400;
+}
+
+.nav {
+    background-color: #ffffff; /* White background as shown in image */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Slight shadow for depth */
+}
+
+.navLink {
+    text-decoration: none;
+    color: #102851; /* Dark Navy Blue text color */
+    font-size: 14px;
+    font-weight: 500; /* Slightly bolder for readability */
+    transition: color 0.2s;
+}
+
+.navLink:hover {
+    color: #2aa7ff;
+}
+
+.bookingBtn {
+    background-color: #2aa7ff;
+    color: white;
+    border: none;
+    padding: 10px 24px; /* Matches the proportions in screenshot */
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.bookingBtn:hover {
+    background-color: #1a86d4;
+}
+
+.bookingBtn:active {
+    transform: scale(0.98);
+}
+
+/* Ensure mobile responsiveness */
+@media (max-width: 900px) {
+    .navLink {
+        display: none; /* Usually hidden in mobile for a hamburger menu */
+    }
+}

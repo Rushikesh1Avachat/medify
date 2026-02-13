@@ -1,81 +1,158 @@
-/* src/components/Footer/Footer.module.css */
-
 .footer {
-  background-color: #0b2f4e; /* exact Figma dark blue */
-  color: white;
-  padding: 60px 0 30px;
+  background-color: #1B3C74; /* Exact navy blue from your image */
+  color: #ffffff;
+  padding: 60px 0 20px 0;
+  font-family: 'Poppins', sans-serif;
 }
 
 .container {
-  max-width: 1440px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 40px;
+  padding: 0 20px;
 }
 
-.brandTitle {
-  font-size: 1.8rem !important;
-  font-weight: 700 !important;
-  margin-bottom: 16px !important;
+.topSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 40px;
+  padding-bottom: 40px;
 }
 
-.brandDesc {
-  font-size: 0.95rem !important;
-  opacity: 0.85;
-  line-height: 1.6;
+/* Brand Section (Logo + Socials) */
+.brandColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
 }
 
-.columnTitle {
-  font-size: 1.1rem !important;
-  font-weight: 600 !important;
-  margin-bottom: 16px !important;
-  color: white;
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.link {
-  display: block !important;
-  color: #d1d5db !important;
-  font-size: 0.95rem !important;
-  margin-bottom: 10px !important;
-  text-decoration: none !important;
-  transition: color 0.2s;
+.logoImg {
+  height: 35px;
+  width: auto;
 }
 
-.link:hover {
-  color: #2AA7FF !important;
+.logoText {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2AA7FF; /* The Medify Cyan/Blue */
 }
 
-.appBadge {
-  width: 135px;
-  height: auto;
-  margin-bottom: 8px;
-  display: block;
+/* Social Icons Containers */
+.socialIcons {
+  display: flex;
+  gap: 15px;
 }
 
-.socialIcon {
-  width: 32px;
-  height: 32px;
-  transition: transform 0.2s;
+.socialCircle {
+  width: 36px;
+  height: 36px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: transform 0.2s ease;
 }
 
-.socialIcon:hover {
-  transform: scale(1.15);
+.socialCircle img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 8px; /* This ensures the icon isn't too large for the circle */
 }
 
-.copyright {
-  text-align: center;
-  margin-top: 60px;
-  padding-top: 30px;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  font-size: 0.9rem;
-  opacity: 0.7;
+.socialCircle:hover {
+  transform: translateY(-3px);
 }
 
-@media (max-width: 960px) {
-  .container {
-    padding: 0 20px;
+/* Links Grid Layout */
+.linksGrid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 800px;
+}
+
+.linkList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.linkList li {
+  margin-bottom: 15px;
+  position: relative;
+  padding-left: 25px; /* Space for the > icon */
+}
+
+/* The White Chevron (>) Icon */
+.linkList li::before {
+  content: '>';
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.linkList li a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.linkList li a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* Footer Bottom Section */
+.bottomSection {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 25px;
+  margin-top: 20px;
+}
+
+.bottomSection p {
+  font-size: 14px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .linksGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
   }
+}
 
-  .brandDesc {
-    margin-bottom: 30px;
+@media (max-width: 600px) {
+  .topSection {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .brandColumn {
+    align-items: center;
+  }
+  .linksGrid {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+  .linkList li {
+    padding-left: 0;
+  }
+  .linkList li::before {
+    display: none; /* Clean up for mobile */
   }
 }

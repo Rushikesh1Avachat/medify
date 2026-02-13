@@ -1,38 +1,37 @@
-// Example: Home.jsx (or wherever Search is used)
-import Search from '../Search/Search';  // adjust path
-import HospitalCard from '../components/HospitalCard/HospitalCard';
-import { useState } from 'react';
-function Home() {
-  const [hospitals, setHospitals] = useState([]);
-  const [searchCity, setSearchCity] = useState('');
+// src/pages/Home.jsx
 
-  const handleHospitalsLoad = (fetchedHospitals, city) => {
-    setHospitals(fetchedHospitals);
-    setSearchCity(city);
-    console.log('Hospitals loaded:', fetchedHospitals.length, 'in', city);
-  };
+import Footer from "../components/Footer/Footer";
+import SearchBar from "../components/SearchBar/SearchBar";
+import Blogs from "../Sections/Blogs/Blogs";
+import DownloadApp from "../Sections/DownloadApp/DownloadApp";
+import FAQs from "../Sections/FAQs/FAQs";
+import OurFamilies from "../Sections/OurFamilies/OurFamilies";
+import PatientCaring from "../Sections/PatientCaring/PatientCaring";
+import Specialists from "../Sections/Specialists/Specialists";
+import Specialization from "../Sections/Specialization/Specialization";
+import HeroSlider from "../components/HeroSlider/HeroSlider";   // ← new import
 
+export default function Home() {
   return (
-    <div>
-      {/* Hero / other sections */}
-      
-      <Search onHospitalsLoad={handleHospitalsLoad} />
+    <>
+      {/* Hero slider / promotional carousel – comes first */}
+      <HeroSlider />
 
-      {hospitals.length > 0 && (
-        <h1>
-          {hospitals.length} medical centers available in {searchCity.toLowerCase()}
-        </h1>
-      )}
+      {/* Main search bar – usually placed right after or overlapping hero */}
+      <SearchBar />
 
-      {/* Render hospital list / cards */}
-      <div className="hospital-list">
-        {hospitals.map((hosp, i) => (
-          <HospitalCard key={i} hospital={hosp} />
-        ))}
-      </div>
-    </div>
+      {/* Rest of the sections in the order shown in screenshots */}
+      <Specialization />
+      <Specialists />
+      <PatientCaring />
+      <OurFamilies />
+      <FAQs />
+      <DownloadApp />
+      <Blogs />
+
+      {/* Footer always last */}
+      <Footer />
+    </>
   );
 }
-export default Home
-
 
