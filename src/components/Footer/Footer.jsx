@@ -1,47 +1,44 @@
-import { Box, Container, Typography, Grid, Link } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
-
-function Footer() {
+ function Footer() {
   return (
-    <Box sx={{ backgroundColor: "#1B3C74", color: "white", py: 6, mt: "auto" }}>
-      <Container>
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={4}>
-            <Typography variant="h6" gutterBottom>
-              Medify
-            </Typography>
-            <Typography variant="body2">
-              Trusted platform for booking medical appointments.
-            </Typography>
-          </Grid>
+    <footer style={{
+      background: '#1e3a8a',
+      color: 'white',
+      padding: '48px 16px 24px',
+      marginTop: '60px',
+    }}>
+      <div style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+        gap: '32px',
+      }}>
+        <div>
+          <h3 style={{ margin: '0 0 16px' }}>Medify</h3>
+          <p>Trusted platform for booking medical appointments.</p>
+        </div>
 
-          <Grid item xs={12} md={4}>
-            <Typography variant="subtitle1" gutterBottom>
-              Quick Links
-            </Typography>
-            <Box component="ul" sx={{ listStyle: "none", p: 0, m: 0 }}>
-              <li><Link component={RouterLink} to="/" color="inherit">Find Doctors</Link></li>
-              <li><Link component={RouterLink} to="/" color="inherit">Hospitals</Link></li>
-              <li><Link component={RouterLink} to="/" color="inherit">Medicines</Link></li>
-              <li><Link component={RouterLink} to="/my-bookings" color="inherit">My Bookings</Link></li>
-            </Box>
-          </Grid>
+        <div>
+          <h4 style={{ margin: '0 0 16px' }}>Quick Links</h4>
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            <li><a href="#" style={{ color: '#dbeafe' }}>Find Doctors</a></li>
+            <li><a href="#" style={{ color: '#dbeafe' }}>Hospitals</a></li>
+            <li><a href="#" style={{ color: '#dbeafe' }}>Medicines</a></li>
+            <li><a href="/my-bookings" style={{ color: '#dbeafe' }}>My Bookings</a></li>
+          </ul>
+        </div>
 
-          <Grid item xs={12} md={4}>
-            <Typography variant="subtitle1" gutterBottom>
-              Contact
-            </Typography>
-            <Typography variant="body2">support@medify.com</Typography>
-            <Typography variant="body2">+91 98765 43210</Typography>
-          </Grid>
-        </Grid>
+        <div>
+          <h4 style={{ margin: '0 0 16px' }}>Contact</h4>
+          <p>support@medify.com</p>
+          <p>+91 98765 43210</p>
+        </div>
+      </div>
 
-        <Typography variant="body2" align="center" sx={{ mt: 5 }}>
-          © {new Date().getFullYear()} Medify. All rights reserved.
-        </Typography>
-      </Container>
-    </Box>
-  );
+      <p style={{ textAlign: 'center', marginTop: '48px', opacity: 0.8 }}>
+        © 2026 Medify. All rights reserved.
+      </p>
+    </footer>
+  )
 }
-
-export default Footer;
+export default Footer

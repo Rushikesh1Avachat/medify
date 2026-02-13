@@ -1,32 +1,38 @@
-import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Link } from 'react-router-dom'
 
-function NavBar() {
-  const navigate = useNavigate();
-
+ function NavBar() {
   return (
-    <AppBar position="static" sx={{ backgroundColor: "#2AA7FF" }}>
-      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography
-          variant="h6"
-          sx={{ cursor: "pointer", fontWeight: "bold" }}
-          onClick={() => navigate("/")}
-        >
-          Medify
-        </Typography>
-
-        <Box>
-          <Button color="inherit">Find Doctors</Button>
-          <Button color="inherit">Hospitals</Button>
-          <Button color="inherit">Medicines</Button>
-          <Button color="inherit" onClick={() => navigate("/my-bookings")}>
-            My Bookings
-          </Button>
-        </Box>
-      </Toolbar>
-    </AppBar>
-  );
+    <header style={{
+      background: '#2563eb',
+      color: 'white',
+      padding: '16px 32px',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      position: 'sticky',
+      top: 0,
+      zIndex: 1000,
+    }}>
+      <h1 style={{ margin: 0, fontSize: '1.8rem' }}>Medify</h1>
+      <nav>
+        <ul style={{
+          display: 'flex',
+          gap: '32px',
+          listStyle: 'none',
+          margin: 0,
+          padding: 0,
+        }}>
+          <li><a href="#" style={{ color: 'white', textDecoration: 'none' }}>FIND DOCTORS</a></li>
+          <li><a href="#" style={{ color: 'white', textDecoration: 'none' }}>HOSPITALS</a></li>
+          <li><a href="#" style={{ color: 'white', textDecoration: 'none' }}>MEDICINES</a></li>
+          <li>
+            <Link to="/my-bookings" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>
+              MY BOOKINGS
+            </Link>
+          </li>
+        </ul>
+      </nav>
+    </header>
+  )
 }
-
-export default NavBar;
-
+export default NavBar
