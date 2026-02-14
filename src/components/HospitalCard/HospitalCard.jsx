@@ -1,14 +1,19 @@
-// src/components/HospitalCard/HospitalCard.jsx
-import { Card, CardContent, Typography, Button, Box, Stack } from '@mui/material';
-import { useState } from 'react';
-import BookingModal from '../BookingModal/BookingModal';
-import styles from './HospitalCard.module.css';
-import hospitalIcon from '../../assets/hospitalicon.jpg'; // Ensure you have this
+import {
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  Box,
+  Stack,
+} from "@mui/material";
+import { useState } from "react";
+import BookingModal from "../BookingModal/BookingModal";
+import styles from "./HospitalCard.module.css";
+import hospitalIcon from "../../assets/hospitalicon.jpg";
 
 export default function HospitalCard({ data, booking = false }) {
   const [open, setOpen] = useState(false);
 
-  // Guard Clause: If data is missing, don't render
   if (!data) return null;
 
   return (
@@ -19,27 +24,37 @@ export default function HospitalCard({ data, booking = false }) {
         </Box>
 
         <CardContent sx={{ flexGrow: 1, p: 0 }}>
-          <Typography variant="h6" className={styles.hospitalName}>
+
+          {/* ✅ REQUIRED H3 TAG */}
+          <h3 className={styles.hospitalName}>
             {data["Hospital Name"]}
-          </Typography>
+          </h3>
+
           <Typography variant="body2" className={styles.locationText}>
             {data.City}, {data.State}
           </Typography>
-          <Typography variant="body2" sx={{ color: '#414146', mb: 1 }}>
+
+          <Typography
+            variant="body2"
+            sx={{ color: "#414146", mb: 1 }}
+          >
             Smilessence Center for Advanced Dentistry + 1 more
           </Typography>
-          
+
           <Stack direction="row" spacing={1} alignItems="center">
             <Typography className={styles.freeTag}>FREE</Typography>
-            <Typography variant="body2" sx={{ color: '#787887', textDecoration: 'line-through' }}>
+            <Typography
+              variant="body2"
+              sx={{ color: "#787887", textDecoration: "line-through" }}
+            >
               ₹500
             </Typography>
-            <Typography variant="body2" sx={{ color: '#414146' }}>
+            <Typography variant="body2" sx={{ color: "#414146" }}>
               Consultation fee at clinic
             </Typography>
           </Stack>
 
-          {/* Booking badges if on My Bookings page */}
+          {/* ✅ Show booking details ONLY on My Bookings page */}
           {booking && (
             <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
               <Box className={styles.timeBadge}>{data.time}</Box>
@@ -48,19 +63,32 @@ export default function HospitalCard({ data, booking = false }) {
           )}
         </CardContent>
 
-        <Box className={styles.actionSection}>
-          <Typography className={styles.availableText}>Available Today</Typography>
-          <Button
-            variant="contained"
-            onClick={() => setOpen(true)}
-            className={styles.bookButton}
-          >
-            Book FREE Center Visit
-          </Button>
-        </Box>
+        {/* ✅ Hide button on My Bookings page */}
+        {!booking && (
+          <Box className={styles.actionSection}>
+            <Typography className={styles.availableText}>
+              Available Today
+            </Typography>
+
+            <Button
+              variant="contained"
+              onClick={() => setOpen(true)}
+              className={styles.bookButton}
+            >
+              Book FREE Center Visit
+            </Button>
+          </Box>
+        )}
       </Card>
 
-      <BookingModal open={open} onClose={() => setOpen(false)} hospital={data} />
+      {/* Only allow modal when not in My Bookings */}
+      {!booking && (
+        <BookingModal
+          open={open}
+          onClose={() => setOpen(false)}
+          hospital={data}
+        />
+      )}
     </>
   );
 }

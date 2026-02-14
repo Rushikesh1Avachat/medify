@@ -46,7 +46,7 @@ export default function MyBookings() {
 
   return (
     <Box className={styles.pageWrapper}>
-      {/* ===== HERO ===== */}
+      {/* HERO */}
       <Box className={styles.blueHero}>
         <Container maxWidth="lg" className={styles.heroContainer}>
           <Typography variant="h4" className={styles.heroTitle}>
@@ -82,11 +82,11 @@ export default function MyBookings() {
         </Container>
       </Box>
 
-      {/* ===== MAIN CONTENT (ONE ROW FLEX) ===== */}
+      {/* CONTENT */}
       <Container maxWidth="lg" className={styles.contentWrapper}>
         <Box className={styles.rowLayout}>
           
-          {/* LEFT: Booking Cards */}
+          {/* LEFT SIDE */}
           <Box className={styles.leftSection}>
             {filteredBookings.length > 0 ? (
               <Stack spacing={3}>
@@ -94,7 +94,7 @@ export default function MyBookings() {
                   <HospitalCard
                     key={index}
                     data={booking}
-                    isBooking={true}
+                    booking={true}
                   />
                 ))}
               </Stack>
@@ -107,7 +107,7 @@ export default function MyBookings() {
             )}
           </Box>
 
-          {/* RIGHT: Single CTA */}
+          {/* RIGHT SIDE */}
           {filteredBookings.length > 0 && (
             <Box className={styles.rightSection}>
               <img

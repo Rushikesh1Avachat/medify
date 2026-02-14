@@ -1,4 +1,3 @@
-// src/pages/Search/SearchResults.jsx
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
@@ -17,22 +16,31 @@ export default function Search() {
   const [hospitals, setHospitals] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!state || !city) return;
-    setLoading(true);
+useEffect(() => {
+  if (!state || !city) {
+    setHospitals([]);
+    setLoading(false);
+    return;
+  }
 
-    axios
-      .get(
-        `https://meddata-backend.onrender.com/data?state=${encodeURIComponent(
-          state
-        )}&city=${encodeURIComponent(city)}`
-      )
-      .then((res) => {
-        setHospitals(res.data || []);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, [state, city]);
+  setLoading(true);
+
+  axios
+    .get(
+      `https://meddata-backend.onrender.com/data?state=${encodeURIComponent(
+        state
+      )}&city=${encodeURIComponent(city)}`
+    )
+    .then((res) => {
+      setHospitals(res.data || []);
+      setLoading(false);
+    })
+    .catch(() => {
+      setHospitals([]);
+      setLoading(false);
+    });
+}, [state, city]);
+
 
   return (
     <Box className={styles.pageWrapper}>
@@ -52,10 +60,10 @@ export default function Search() {
           </Typography>
         ) : (
           <>
-            {/* Result Header */}
-            <Typography className={styles.resultsCount}>
-              {hospitals.length} medical centers available in {state}
-            </Typography>
+            {/* ✅ REQUIRED H1 HEADING */}
+            <h1 className={styles.resultsCount}>
+              {hospitals.length} medical centers available in {city}
+            </h1>
 
             <Box className={styles.subInfo}>
               <img src={checkmarkIcon} alt="verified" width="22" />
@@ -65,7 +73,6 @@ export default function Search() {
               </Typography>
             </Box>
 
-            {/* Side by Side Rows */}
             <Stack spacing={4} sx={{ mt: 4 }}>
               {hospitals.map((hospital, index) => (
                 <Box key={index} className={styles.resultRow}>
