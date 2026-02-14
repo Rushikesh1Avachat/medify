@@ -28,13 +28,10 @@ export default function SearchBar() {
     { title: "Ambulance", icon: ambulanceIcon },
   ];
 
-  // Fetch states
   useEffect(() => {
     const fetchStates = async () => {
       try {
-        const res = await axios.get(
-          "https://meddata-backend.onrender.com/states"
-        );
+        const res = await axios.get("https://meddata-backend.onrender.com/states");
         setStates(res.data || []);
       } catch {
         setStates([]);
@@ -43,15 +40,12 @@ export default function SearchBar() {
     fetchStates();
   }, []);
 
-  // Fetch cities when state changes
   useEffect(() => {
     if (!selectedState) return setCities([]);
     const fetchCities = async () => {
       try {
         const res = await axios.get(
-          `https://meddata-backend.onrender.com/cities/${encodeURIComponent(
-            selectedState
-          )}`
+          `https://meddata-backend.onrender.com/cities/${encodeURIComponent(selectedState)}`
         );
         setCities(res.data || []);
       } catch {
@@ -64,7 +58,6 @@ export default function SearchBar() {
   const handleSearch = (e) => {
     e.preventDefault();
     if (!selectedState || !selectedCity) return;
-
     navigate({
       pathname: "/search",
       search: createSearchParams({
@@ -76,33 +69,23 @@ export default function SearchBar() {
 
   return (
     <Box className={styles.searchCardWrapper}>
-      {/* Card container */}
       <Box className={styles.searchCard}>
         <form onSubmit={handleSearch} className={styles.searchForm}>
           {/* STATE SELECT */}
-          <Box className={styles.selectWrapper}>
+          <Box className={styles.selectWrapper} id="state">
             <SearchIcon className={styles.icon} />
             <select
               value={selectedState}
-              onChange={(e) => {
-                setSelectedState(e.target.value);
-                setSelectedCity("");
-              }}
+              onChange={(e) => { setSelectedState(e.target.value); setSelectedCity(""); }}
               required
             >
-              <option value="" disabled>
-                Select State
-              </option>
-              {states.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
+              <option value="" disabled>Select State</option>
+              {states.map((s) => <option key={s} value={s}>{s}</option>)}
             </select>
           </Box>
 
           {/* CITY SELECT */}
-          <Box className={styles.selectWrapper}>
+          <Box className={styles.selectWrapper} id="city">
             <SearchIcon className={styles.icon} />
             <select
               value={selectedCity}
@@ -110,18 +93,11 @@ export default function SearchBar() {
               disabled={!selectedState}
               required
             >
-              <option value="" disabled>
-                Select City
-              </option>
-              {cities.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
+              <option value="" disabled>Select City</option>
+              {cities.map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
           </Box>
 
-          {/* SEARCH BUTTON */}
           <Button
             type="submit"
             variant="contained"
@@ -137,15 +113,10 @@ export default function SearchBar() {
           <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 500 }}>
             You may be looking for
           </Typography>
-
           <Grid container spacing={2} justifyContent="center">
             {services.map((service) => (
               <Grid item key={service.title} xs={6} sm={4} md={2.2}>
-                <IconCard
-                  img={service.icon}
-                  title={service.title}
-                  active={service.active}
-                />
+                <IconCard img={service.icon} title={service.title} active={service.active}/>
               </Grid>
             ))}
           </Grid>

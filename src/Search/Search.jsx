@@ -16,47 +16,29 @@ export default function Search() {
   const [hospitals, setHospitals] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Fetch hospitals based on state + city
   useEffect(() => {
-    if (!state || !city) {
-      setHospitals([]);
-      return;
-    }
-
+    if (!state || !city) return setHospitals([]);
     setLoading(true);
-
     axios
-      .get(
-        `https://meddata-backend.onrender.com/data?state=${encodeURIComponent(
-          state
-        )}&city=${encodeURIComponent(city)}`
-      )
-      .then((res) => setHospitals(res.data || []))
+      .get(`https://meddata-backend.onrender.com/data?state=${encodeURIComponent(state)}&city=${encodeURIComponent(city)}`)
+      .then(res => setHospitals(res.data || []))
       .catch(() => setHospitals([]))
       .finally(() => setLoading(false));
   }, [state, city]);
 
   return (
     <Box className={styles.pageWrapper}>
-      {/* HERO SECTION */}
       <Box className={styles.blueHero}>
         <Container maxWidth="lg">
-          {/* Figma-style Search Card */}
           <Box className={styles.searchCardWrapper}>
             <SearchBar />
           </Box>
         </Container>
       </Box>
 
-      {/* SEARCH RESULTS */}
       <Container maxWidth="lg" sx={{ mt: 12, pb: 8 }}>
         {loading ? (
-          <Typography
-            variant="h5"
-            sx={{ py: 10, textAlign: "center", color: "#555" }}
-          >
-            Finding medical centers...
-          </Typography>
+          <Typography variant="h5" sx={{ py: 10, textAlign: "center" }}>Finding medical centers...</Typography>
         ) : (
           <>
             <h1 className={styles.resultsCount}>
@@ -65,22 +47,16 @@ export default function Search() {
 
             <Box className={styles.subInfo}>
               <img src={checkmarkIcon} alt="verified" width="22" />
-              <Typography>
-                Book appointments with minimum wait-time & verified doctor details
-              </Typography>
+              <Typography>Book appointments with minimum wait-time & verified doctor details</Typography>
             </Box>
 
             <Stack spacing={4} sx={{ mt: 4 }}>
               {hospitals.length > 0 ? (
-                hospitals.map((hospital) => (
+                hospitals.map(hospital => (
                   <Box key={hospital["Hospital Name"]} className={styles.resultRow}>
                     <HospitalCard data={hospital} />
                     <Box className={styles.bannerWrapper}>
-                      <img
-                        src={offerBanner}
-                        alt="Offer Banner"
-                        className={styles.adImage}
-                      />
+                      <img src={offerBanner} alt="Offer Banner" className={styles.adImage} />
                     </Box>
                   </Box>
                 ))
@@ -96,3 +72,4 @@ export default function Search() {
     </Box>
   );
 }
+

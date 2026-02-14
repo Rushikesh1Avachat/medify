@@ -6,7 +6,6 @@ import hospitalIcon from "../../assets/hospitalicon.jpg";
 
 export default function HospitalCard({ data, booking = false }) {
   const [open, setOpen] = useState(false);
-
   if (!data) return null;
 
   return (
@@ -22,15 +21,9 @@ export default function HospitalCard({ data, booking = false }) {
             {data.City}, {data.State}
           </Typography>
 
-          <Typography variant="body2" sx={{ mb: 1 }}>
-            Smilessence Center for Advanced Dentistry + 1 more
-          </Typography>
-
           <Stack direction="row" spacing={1} alignItems="center">
             <Typography className={styles.freeTag}>FREE</Typography>
-            <Typography variant="body2" sx={{ textDecoration: "line-through" }}>
-              ₹500
-            </Typography>
+            <Typography variant="body2" sx={{ textDecoration: "line-through" }}>₹500</Typography>
             <Typography variant="body2">Consultation fee at clinic</Typography>
           </Stack>
 
@@ -45,20 +38,14 @@ export default function HospitalCard({ data, booking = false }) {
         {!booking && (
           <Box className={styles.actionSection}>
             <Typography className={styles.availableText}>Available Today</Typography>
-            <Button
-              variant="contained"
-              onClick={() => setOpen(true)}
-              className={styles.bookButton}
-            >
+            <Button variant="contained" onClick={() => setOpen(true)} className={styles.bookButton}>
               Book FREE Center Visit
             </Button>
           </Box>
         )}
       </Card>
 
-      {!booking && (
-        <BookingModal open={open} onClose={() => setOpen(false)} hospital={data} />
-      )}
+      {!booking && <BookingModal open={open} onClose={() => setOpen(false)} hospital={data} />}
     </>
   );
 }

@@ -31,14 +31,12 @@ export default function BookingModal({ open, onClose, hospital }) {
 
     setDateIndex(null);
     setSelectedSlot(null);
-
     onClose();
   };
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>Book Appointment at {hospital["Hospital Name"]}</DialogTitle>
-
       <DialogContent dividers>
         <Typography component="p" fontWeight="medium" gutterBottom>Select Date</Typography>
         <Grid container spacing={1}>
@@ -78,22 +76,15 @@ export default function BookingModal({ open, onClose, hospital }) {
           </Box>
         )}
       </DialogContent>
-
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button
-          variant="contained"
-          disabled={dateIndex === null || selectedSlot === null}
-          onClick={handleBook}
-        >
+        <Button variant="contained" disabled={dateIndex === null || selectedSlot === null} onClick={handleBook}>
           Confirm Booking
         </Button>
       </DialogActions>
     </Dialog>
   );
 }
-
-
 
 
 

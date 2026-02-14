@@ -1,64 +1,61 @@
-/* src/components/HospitalCard/HospitalCard.module.css */
 .card {
-    display: flex;
-    flex-direction: row;
-    padding: 24px;
-    border-radius: 15px !important;
-    gap: 24px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.05) !important;
-    margin-bottom: 20px;
-    position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  position: relative;
 }
 
 .iconContainer {
-    background: #8CCFFF;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
 }
 
 .hospitalName {
-    color: #14BEF0; /* Bright blue for hospital name */
-    font-weight: 600 !important;
-    text-transform: capitalize;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 4px 0;
 }
 
 .locationText {
-    font-weight: 700 !important;
-    color: #414146;
+  color: #555;
+  margin-bottom: 12px;
 }
 
 .freeTag {
-    color: #01A400;
-    font-weight: 700;
-    background: #DBF3E0;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 12px;
+  background-color: #e0f7fa;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #00796b;
 }
 
 .actionSection {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 10px;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
 }
 
 .availableText {
-    color: #01A400;
-    font-weight: 500;
-    font-size: 14px;
+  font-weight: 500;
+  color: #4caf50;
 }
 
 .bookButton {
-    background-color: #2AA7FF !important;
-    text-transform: none !important;
-    font-weight: 500 !important;
-    padding: 10px 20px !important;
-    border-radius: 6px !important;
+  width: 100%;
+  border-radius: 8px;
+  text-transform: none;
+}
+
+.timeBadge, .dateBadge {
+  background-color: #f0f0f0;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.875rem;
 }
