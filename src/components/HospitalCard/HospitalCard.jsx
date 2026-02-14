@@ -1,5 +1,6 @@
-import { Card, CardContent, Typography, Button, Box, Stack } from "@mui/material";
+// src/components/HospitalCard/HospitalCard.jsx
 import { useState } from "react";
+import { Card, CardContent, Typography, Button, Box, Stack } from "@mui/material";
 import BookingModal from "../BookingModal/BookingModal";
 import styles from "./HospitalCard.module.css";
 import hospitalIcon from "../../assets/hospitalicon.jpg";
@@ -9,7 +10,6 @@ export default function HospitalCard({ data, booking = false }) {
 
   if (!data) return null;
 
-  // Handle booking confirmation
   const handleBookingConfirm = (date, time) => {
     const bookingData = {
       hospitalName: data["Hospital Name"],
@@ -41,14 +41,16 @@ export default function HospitalCard({ data, booking = false }) {
 
           <Stack direction="row" spacing={1} alignItems="center">
             <Typography className={styles.freeTag}>FREE</Typography>
-            <Typography variant="body2" sx={{ textDecoration: "line-through" }}>₹500</Typography>
+            <Typography variant="body2" sx={{ textDecoration: "line-through" }}>
+              ₹500
+            </Typography>
             <Typography variant="body2">Consultation fee at clinic</Typography>
           </Stack>
 
           {booking && (
-            <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
-              <Box className={styles.timeBadge}>{data.time}</Box>
-              <Box className={styles.dateBadge}>{data.date}</Box>
+            <Stack direction="column" spacing={0.5} sx={{ mt: 2 }}>
+              <Typography variant="body2">Date: {data.date}</Typography>
+              <Typography variant="body2">Time: {data.time}</Typography>
             </Stack>
           )}
         </CardContent>

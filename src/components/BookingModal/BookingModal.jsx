@@ -1,5 +1,15 @@
+// src/components/BookingModal/BookingModal.jsx
 import { useState } from "react";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Box, Grid } from "@mui/material";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  Typography,
+  Box,
+  Grid,
+} from "@mui/material";
 import { format, addDays } from "date-fns";
 
 export default function BookingModal({ open, onClose, hospital, onConfirm }) {
@@ -17,16 +27,25 @@ export default function BookingModal({ open, onClose, hospital, onConfirm }) {
 
   const handleBook = () => {
     if (dateIndex === null || selectedSlot === null) return;
-    onConfirm(format(dates[dateIndex], "dd MMM yyyy"), selectedSlot.time);
+
+    const selectedDate = format(dates[dateIndex], "yyyy-MM-dd");
+    const selectedTime = selectedSlot.time;
+
+    onConfirm(selectedDate, selectedTime);
+
     setDateIndex(null);
     setSelectedSlot(null);
+    onClose();
   };
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Book Appointment at {hospital["Hospital Name"]}</DialogTitle>
+      <DialogTitle>Book Appointment at {hospital?.["Hospital Name"]}</DialogTitle>
+
       <DialogContent dividers>
-        <Typography component="p" fontWeight="medium" gutterBottom>Select Date</Typography>
+        <Typography component="p" fontWeight="medium" gutterBottom>
+          Select Date
+        </Typography>
         <Grid container spacing={1}>
           {dates.map((d, i) => (
             <Grid item key={i}>
@@ -45,7 +64,9 @@ export default function BookingModal({ open, onClose, hospital, onConfirm }) {
           <Box mt={4}>
             {timePeriods.map((p) => (
               <Box key={p.name} mb={3}>
-                <Typography component="p" fontWeight="medium" gutterBottom>{p.name}</Typography>
+                <Typography component="p" fontWeight="medium" gutterBottom>
+                  {p.name}
+                </Typography>
                 <Grid container spacing={1}>
                   {p.times.map((t) => (
                     <Grid item key={t}>
@@ -64,6 +85,7 @@ export default function BookingModal({ open, onClose, hospital, onConfirm }) {
           </Box>
         )}
       </DialogContent>
+
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
         <Button
@@ -77,9 +99,6 @@ export default function BookingModal({ open, onClose, hospital, onConfirm }) {
     </Dialog>
   );
 }
-
-
-
 
 
 
