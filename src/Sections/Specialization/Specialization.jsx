@@ -1,66 +1,57 @@
-// src/sections/Specialization.jsx
-import { Container, Typography, Grid, Card, CardContent, CardMedia } from '@mui/material';
+import { Container, Typography, Box, Button } from "@mui/material";
+import styles from "./Specialization.module.css";
 
-// Replace paths with your actual image files
-import cardiology from '../../assets/cardiology.jpg';
-import capsule   from '../../assets/Capsule.jpg';
-// ... add more imports as needed
+import drugStore from "../../assets/Drugstore.jpg";
+import primaryCare from "../../assets/primary-care.jpg";
+import cardiology from "../../assets/cardiology.jpg";
+import mri from "../../assets/mri.jpg";
+import bloodTest from "../../assets/blood-test.jpg";
+import psychologist from "../../assets/piscologist.jpg";
+import laboratory from "../../assets/Hospital.jpg";
+import xray from "../../assets/X-Ray.jpg";
 
 const items = [
-  { title: "Dentistry",         img: capsule },
-  { title: "Internal Medicine", img: cardiology },
-  { title: "Cardiology",        img: cardiology },
-  { title: "ENT Specialist",    img: capsule },
-  { title: "Bone specialists",  img: cardiology },
-  { title: "General physician", img: capsule },
-  { title: "Diagnostics",       img: cardiology },
-  { title: "Ayurveda",          img: capsule },
+  { title: "Dentistry", img: drugStore },
+  { title: "Primary Care", img: primaryCare },
+  { title: "Cardiology", img: cardiology },
+  { title: "MRI Resonance", img: mri },
+  { title: "Blood Test", img: bloodTest },
+  { title: "Psychologist", img: psychologist },
+  { title: "Laboratory", img: laboratory },
+  { title: "X-Ray", img: xray },
 ];
 
 export default function Specialization() {
   return (
-    <Container maxWidth="lg" sx={{ py: { xs: 6, md: 10 } }}>
-      <Typography
-        variant="h4"
-        align="center"
-        fontWeight="bold"
-        gutterBottom
-        sx={{ mb: 6, color: "#1a3c5a" }}
-      >
-        Find by Specialisation
-      </Typography>
+    <Box className={styles.wrapper}>
+      <Container maxWidth="lg" style={ { marginTop:'10px' , fontSize: '20px' , fontWeight:"bold"}}>
+        <Typography className={styles.sectionHeading}>
+          Find By Specialisation
+        </Typography>
 
-      <Grid container spacing={3} justifyContent="center">
-        {items.map((item, i) => (
-          <Grid item xs={6} sm={4} md={3} lg={2} key={i}>
-            <Card
-              sx={{
-                height: "100%",
-                borderRadius: 3,
-                boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-                transition: "0.25s",
-                "&:hover": {
-                  transform: "translateY(-6px)",
-                  boxShadow: "0 12px 24px rgba(0,0,0,0.12)",
-                },
-              }}
-            >
-              <CardMedia
-                component="img"
-                height="140"
-                image={item.img}
-                alt={item.title}
-                sx={{ objectFit: "contain", p: 3, bgcolor: "#f8fcff" }}
-              />
-              <CardContent sx={{ pb: 3 }}>
-                <Typography variant="subtitle1" fontWeight="600" align="center">
-                  {item.title}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </Container>
+        <div className={styles.grid}>
+          {items.map((item, index) => (
+            <div className={styles.card} key={index}>
+              <div className={styles.iconBox}>
+                <img src={item.img} alt={item.title} />
+              </div>
+              <Typography className={styles.cardTitle}>
+                {item.title}
+              </Typography>
+            </div>
+          ))}
+        </div>
+
+        <Box className={styles.buttonWrapper}>
+          <Button
+            variant="contained"
+            disableElevation
+            className={styles.viewAllBtn}
+          >
+            View All
+          </Button>
+        </Box>
+      </Container>
+    </Box>
   );
 }

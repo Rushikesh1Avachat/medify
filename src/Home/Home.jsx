@@ -10,7 +10,7 @@ import PatientCaring from "../Sections/PatientCaring/PatientCaring";
 import Specialists from "../Sections/Specialists/Specialists";
 import Specialization from "../Sections/Specialization/Specialization";
 import HeroSlider from "../components/HeroSlider/HeroSlider";   // ← new import
-
+import Offers from "../Sections/Offers/Offers"
 export default function Home() {
   return (
     <>
@@ -19,15 +19,15 @@ export default function Home() {
 
       {/* Main search bar – usually placed right after or overlapping hero */}
       <SearchBar />
-
+      <Offers/>
       {/* Rest of the sections in the order shown in screenshots */}
       <Specialization />
       <Specialists />
       <PatientCaring />
       <OurFamilies />
       <FAQs />
-      <DownloadApp />
       <Blogs />
+      <DownloadApp />
 
       {/* Footer always last */}
       <Footer />

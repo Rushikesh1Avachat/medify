@@ -1,0 +1,134 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 10%;
+    gap: 60px;
+    background-color: #fff;
+    flex-wrap: wrap;
+}
+
+/* Left side: Images and Badge */
+.imageSection {
+    position: relative;
+    flex: 1;
+    min-width: 300px;
+    max-width: 550px;
+}
+
+.imageSection img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.consultationBadge {
+    position: absolute;
+    top: 15%;
+    left: -40px;
+    background-color: #fff;
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.consultationBadge span {
+    color: #1B3C74;
+    font-weight: 700;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Add a small phone icon before 'Free Consultation' via CSS if needed */
+.consultationBadge span::before {
+    content: '📞'; 
+    font-size: 14px;
+}
+
+.consultationBadge p {
+    margin: 0;
+    font-size: 12px;
+    color: #77829D;
+}
+
+/* Right side: Text Content */
+.contentSection {
+    flex: 1;
+    min-width: 300px;
+}
+
+.subtitle {
+    color: #2AA7FF;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+}
+
+.title {
+    font-size: 48px;
+    color: #1B3C74;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.title span {
+    color: #2AA7FF;
+}
+
+.description {
+    color: #77829D;
+    line-height: 1.8;
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.list li {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 18px;
+    color: #1B3C74;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.list li img {
+    width: 22px;
+    height: 22px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .container {
+        padding: 40px 5%;
+        text-align: center;
+    }
+    
+    .imageSection {
+        order: 2;
+    }
+    
+    .contentSection {
+        order: 1;
+    }
+
+    .list li {
+        justify-content: center;
+    }
+
+    .consultationBadge {
+        left: 0;
+    }
+}

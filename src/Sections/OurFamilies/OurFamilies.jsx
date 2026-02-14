@@ -1,47 +1,76 @@
-// src/sections/OurFamilies.jsx
-import { Container, Typography, Grid, Paper } from '@mui/material';
+import React from 'react';
+import { Box, Typography, Grid, Container } from '@mui/material';
+import statsImage from "../../assets/our-families-banner.jpg";
 
-const stats = [
-  { count: "5000+", label: "Happy Customers" },
-  { count: "300+",  label: "Qualified Doctors" },
-  { count: "1000+", label: "Medical Centers" },
-  { count: "700+",  label: "Laboratories" },
-];
-
-export default function OurFamilies() {
+const OurFamilies = () => {
   return (
-    <Container maxWidth="lg" sx={{ py: { xs: 6, md: 10 }, textAlign: "center" }}>
-      <Typography
-        variant="h4"
-        fontWeight="bold"
-        gutterBottom
-        sx={{ mb: 6, color: "#1a3c5a" }}
-      >
-        Our Families
-      </Typography>
-
-      <Grid container spacing={4} justifyContent="center">
-        {stats.map((item, i) => (
-          <Grid item xs={6} sm={3} key={i}>
-            <Paper
-              elevation={4}
-              sx={{
-                p: 4,
-                borderRadius: 3,
-                transition: "transform 0.3s",
-                "&:hover": { transform: "translateY(-6px)" },
+    <Box sx={{ bgcolor: '#f4f9ff', py: { xs: 8, md: 12 } }}>
+      <Container maxWidth="lg">
+        <Grid container spacing={4} alignItems="center">
+          
+          {/* Left Side: Text Content */}
+          <Grid item xs={12} md={6}>
+            <Typography 
+              variant="subtitle2" 
+              sx={{ 
+                color: '#00a3ff', 
+                fontWeight: 700, 
+                textTransform: 'uppercase', 
+                letterSpacing: 1,
+                mb: 1 
               }}
             >
-              <Typography variant="h3" fontWeight="bold" color="#2aa7ff">
-                {item.count}
-              </Typography>
-              <Typography variant="subtitle1" color="text.secondary" mt={1}>
-                {item.label}
-              </Typography>
-            </Paper>
+              Caring for the health of you and your family.
+            </Typography>
+            
+            <Typography 
+              variant="h2" 
+              sx={{ 
+                color: '#2d4271', 
+                fontWeight: 900, 
+                mb: 3,
+                fontSize: { xs: '2.5rem', md: '3.5rem' } 
+              }}
+            >
+              Our Families
+            </Typography>
+            
+            <Typography 
+              variant="body1" 
+              sx={{ 
+                color: '#6b778d', 
+                lineHeight: 1.8, 
+                fontSize: '1.1rem',
+                maxWidth: '540px' 
+              }}
+            >
+              We will work with you to develop individualised care plans, 
+              including management of chronic diseases. If we cannot assist, 
+              we can provide referrals or advice about the type of practitioner 
+              you require. We treat all enquiries sensitively and in the strictest confidence.
+            </Typography>
           </Grid>
-        ))}
-      </Grid>
-    </Container>
+
+          {/* Right Side: The Banner Image */}
+          <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'center' }}>
+ <Box
+  component="img"
+  src={statsImage}
+  alt="Our Families Stats"
+  sx={{
+    width: "100%",
+    maxWidth: "530px",
+    height: "auto",
+    display: "block"
+  }}
+/>
+
+          </Grid>
+          
+        </Grid>
+      </Container>
+    </Box>
   );
-}
+};
+
+export default OurFamilies;

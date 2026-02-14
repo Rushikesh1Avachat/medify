@@ -1,41 +1,37 @@
-// src/sections/PatientCaring.jsx
-import { Container, Grid, Typography, Box } from '@mui/material';
-
-// Replace with your actual image
-import caringImg from '../../assets/Ambulance.jpg'; // or PatientCaring.jpg if you have it
+import React from 'react';
+import styles from './PatientCaring.module.css';
+import banner from '../../assets/patientcaring.jpg'; // Combined image from your screenshot
+import checkmark from '../../assets/tick-blue.jpg'; 
 
 export default function PatientCaring() {
-  return (
-    <Container maxWidth="lg" sx={{ py: { xs: 6, md: 10 } }}>
-      <Grid container spacing={6} alignItems="center">
-        <Grid item xs={12} md={6}>
-          <Box
-            component="img"
-            src={caringImg}
-            alt="Patient Caring"
-            sx={{
-              width: "100%",
-              borderRadius: 4,
-              boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
-            }}
-          />
-        </Grid>
+  const points = [
+    "Stay Updated About Your Health",
+    "Check Your Results Online",
+    "Manage Your Appointments"
+  ];
 
-        <Grid item xs={12} md={6}>
-          <Typography
-            variant="h4"
-            fontWeight="bold"
-            gutterBottom
-            sx={{ color: "#1a3c5a" }}
-          >
-            Patient Caring
-          </Typography>
-          <Typography variant="body1" color="text.secondary" lineHeight={1.9}>
-            We are committed to providing compassionate, high-quality care to every patient.
-            Our team works tirelessly to ensure your comfort, safety, and speedy recovery.
-          </Typography>
-        </Grid>
-      </Grid>
-    </Container>
+  return (
+    <section className={styles.container}>
+      <div className={styles.imageSection}>
+        <img src={banner} alt="Doctors and patient" />
+        <div className={styles.consultationBadge}>
+           <span>Free Consultation</span>
+           <p>Consultation with the best</p>
+        </div>
+      </div>
+      <div className={styles.contentSection}>
+        <h5 className={styles.subtitle}>HELPING PATIENTS FROM AROUND THE GLOBE!!</h5>
+        <h2 className={styles.title}>Patient <span>Caring</span></h2>
+        <p className={styles.description}>
+          Our goal is to deliver quality of care in a courteous, respectful, and compassionate manner. 
+          We hope you will allow us to care for you and strive to be the first and best choice for healthcare.
+        </p>
+        <ul className={styles.list}>
+          {points.map((text, i) => (
+            <li key={i}><img src={checkmark} alt="check" /> {text}</li>
+          ))}
+        </ul>
+      </div>
+    </section>
   );
 }

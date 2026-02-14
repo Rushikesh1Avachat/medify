@@ -1,48 +1,77 @@
-// src/sections/DownloadApp.jsx
-import { Box, Container, Typography, Button, Grid } from '@mui/material';
+import { Box, Container, Typography, Grid, Button } from "@mui/material";
+import mobileMockup from "../../assets/mobile.jpg";
+import googlePlay from "../../assets/playstore.jpg";   // should be only play icon
+import appleStore from "../../assets/apple-logo.jpg";  // should be only apple icon
+import styles from "./DownloadApp.module.css";
 
 export default function DownloadApp() {
   return (
-    <Box sx={{ bgcolor: "#eaf2ff", py: { xs: 8, md: 12 } }}>
-      <Container maxWidth="lg">
-        <Grid container spacing={6} alignItems="center">
-          <Grid item xs={12} md={6}>
-            <Typography
-              variant="h4"
-              fontWeight="bold"
-              gutterBottom
-              sx={{ color: "#1a3c5a" }}
-            >
-              Download the Medify App
-            </Typography>
-            <Typography variant="h6" color="text.secondary" mb={4}>
-              Get the link to download the app
-            </Typography>
+    <Box className={styles.sectionWrapper}>
+      <Container maxWidth="xl" className={styles.containerFix}>
+        <Grid container alignItems="center">
 
-            <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
-              <Button
-                variant="contained"
-                size="large"
-                sx={{ bgcolor: "#000", color: "white", px: 6 }}
+          {/* LEFT SIDE - MOBILE IMAGE */}
+          <Grid item xs={12} md={6} className={styles.leftGrid}>
+            <div className={styles.imageContainer}>
+              <img
+                src={mobileMockup}
+                alt="Medify App"
+                className={styles.mobileImg}
+              />
+            </div>
+          </Grid>
+
+          {/* RIGHT SIDE - CONTENT */}
+          <Grid item xs={12} md={6} className={styles.rightGrid}>
+            <Box className={styles.contentWrapper}>
+
+              <Typography className={styles.mainTitle}>
+                Download the <br />
+                <span>Medify</span> App
+              </Typography>
+
+              <Typography className={styles.description}>
+                Get the link to download the app
+              </Typography>
+
+              <form
+                className={styles.inputRow}
+                onSubmit={(e) => e.preventDefault()}
               >
-                Google Play
-              </Button>
-              <Button
-                variant="contained"
-                size="large"
-                sx={{ bgcolor: "#000", color: "white", px: 6 }}
-              >
-                App Store
-              </Button>
+                <div className={styles.phoneInputGroup}>
+                  <span className={styles.countryCode}>+91</span>
+                  <input
+                    type="tel"
+                    placeholder="Enter phone number"
+                    className={styles.inputField}
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  className={styles.sendBtn}
+                  disableElevation
+                >
+                  Send SMS
+                </Button>
+              </form>
+
+              {/* STORE BUTTONS */}
+              <div className={styles.storeLinks}>
+                <button className={styles.storeBtn}>
+                  <img src={googlePlay} alt="Google Play" />
+                  <span>Google Play</span>
+                </button>
+
+                <button className={styles.storeBtn}>
+                  <img src={appleStore} alt="App Store" />
+                  <span>App Store</span>
+                </button>
+              </div>
+
             </Box>
           </Grid>
 
-          <Grid item xs={12} md={6}>
-            {/* Replace with actual mockup images when available */}
-            <Box sx={{ textAlign: "center", color: "text.secondary" }}>
-              [Phone mockup images placeholder]
-            </Box>
-          </Grid>
         </Grid>
       </Container>
     </Box>

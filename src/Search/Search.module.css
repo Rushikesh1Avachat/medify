@@ -1,0 +1,65 @@
+.pageWrapper {
+  background: linear-gradient(
+    180deg,
+    #e7f0ff 0%,
+    rgba(232, 241, 255, 0) 100%
+  );
+  min-height: 100vh;
+}
+
+/* Result Count */
+.resultsCount {
+  font-weight: 600 !important;
+  font-size: 24px !important;
+  color: #1b3c74;
+}
+
+/* Verified text */
+.subInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  margin-bottom: 32px;
+  color: #787887;
+}
+
+/* ===== SIDE BY SIDE ROW ===== */
+.resultRow {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* Card larger than banner */
+  gap: 24px;
+  align-items: flex-start;
+}
+
+/* Banner styling */
+.bannerWrapper {
+  position: sticky;
+  top: 24px;
+}
+
+.adImage {
+  width: 100%;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+/* Empty State */
+.emptyBox {
+  padding: 60px;
+  background: #fff;
+  border-radius: 16px;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .resultRow {
+    grid-template-columns: 1fr;
+  }
+
+  .bannerWrapper {
+    position: static;
+  }
+}

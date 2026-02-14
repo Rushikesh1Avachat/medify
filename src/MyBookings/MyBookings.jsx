@@ -1,45 +1,125 @@
-// src/pages/MyBookings/MyBookings.jsx
-import { useState, useEffect } from 'react';
-import { Container, Typography, Card, CardContent, Box } from '@mui/material';
+import { useState, useEffect } from "react";
+import {
+  Container,
+  Typography,
+  Box,
+  Stack,
+  TextField,
+  Button,
+  InputAdornment,
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import HospitalCard from "../components/HospitalCard/HospitalCard";
+import offerBanner from "../assets/offer2.jpg";
+import styles from "./MyBookings.module.css";
 
 export default function MyBookings() {
   const [bookings, setBookings] = useState([]);
+  const [filteredBookings, setFilteredBookings] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    const saved = localStorage.getItem('bookings');
+    const saved = localStorage.getItem("bookings");
     if (saved) {
-      setBookings(JSON.parse(saved));
+      const parsed = JSON.parse(saved);
+      setBookings(parsed);
+      setFilteredBookings(parsed);
     }
   }, []);
 
-  return (
-    <Container maxWidth="md" sx={{ py: 8 }}>
-      <Typography variant="h1" gutterBottom>
-        My Bookings
-      </Typography>
+  const handleSearch = (e) => {
+    e.preventDefault();
 
-      {bookings.length === 0 ? (
-        <Typography align="center" color="text.secondary" mt={6}>
-          No bookings yet.
-        </Typography>
-      ) : (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-          {bookings.map((b, i) => (
-            <Card key={i} variant="outlined">
-              <CardContent>
-                <Typography variant="h6">{b.hospitalName}</Typography>
-                <Typography color="text.secondary">{b.address || ''}</Typography>
-                <Box mt={2}>
-                  <Typography><strong>Date:</strong> {b.date}</Typography>
-                  <Typography component="p">
-                    <strong>Time:</strong> {b.timeOfDay} – {b.time}
-                  </Typography>
-                </Box>
-              </CardContent>
-            </Card>
-          ))}
+    if (!searchQuery.trim()) {
+      setFilteredBookings(bookings);
+      return;
+    }
+
+    const filtered = bookings.filter((b) =>
+      b["Hospital Name"]
+        ?.toLowerCase()
+        .includes(searchQuery.toLowerCase())
+    );
+
+    setFilteredBookings(filtered);
+  };
+
+  return (
+    <Box className={styles.pageWrapper}>
+      {/* ===== HERO ===== */}
+      <Box className={styles.blueHero}>
+        <Container maxWidth="lg" className={styles.heroContainer}>
+          <Typography variant="h4" className={styles.heroTitle}>
+            My Bookings
+          </Typography>
+
+          <Box
+            component="form"
+            onSubmit={handleSearch}
+            className={styles.searchBarContainer}
+          >
+            <TextField
+              fullWidth
+              placeholder="Search by Hospital"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      startIcon={<SearchIcon />}
+                      className={styles.searchButton}
+                    >
+                      Search
+                    </Button>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Box>
+        </Container>
+      </Box>
+
+      {/* ===== MAIN CONTENT (ONE ROW FLEX) ===== */}
+      <Container maxWidth="lg" className={styles.contentWrapper}>
+        <Box className={styles.rowLayout}>
+          
+          {/* LEFT: Booking Cards */}
+          <Box className={styles.leftSection}>
+            {filteredBookings.length > 0 ? (
+              <Stack spacing={3}>
+                {filteredBookings.map((booking, index) => (
+                  <HospitalCard
+                    key={index}
+                    data={booking}
+                    isBooking={true}
+                  />
+                ))}
+              </Stack>
+            ) : (
+              <Box className={styles.emptyState}>
+                <Typography variant="h6">
+                  No bookings found.
+                </Typography>
+              </Box>
+            )}
+          </Box>
+
+          {/* RIGHT: Single CTA */}
+          {filteredBookings.length > 0 && (
+            <Box className={styles.rightSection}>
+              <img
+                src={offerBanner}
+                alt="Promotional Banner"
+                className={styles.adImage}
+              />
+            </Box>
+          )}
+
         </Box>
-      )}
-    </Container>
+      </Container>
+    </Box>
   );
 }
