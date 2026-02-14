@@ -1,78 +1,132 @@
+/* src/pages/MyBookings.module.css */
+
+/* Main wrapper - full width, light background */
 .pageWrapper {
   width: 100%;
   min-height: 100vh;
-  background-color: #F8FAFC;
+  background-color: #f8fafc; /* exact light gray from most health apps */
 }
 
+/* Blue hero section (top banner) */
 .blueHero {
-  background-color: #2563EB;
-  padding: 48px 0;
-  color: #fff;
+  background-color: #2563eb; /* primary blue - keep this */
+  color: white;
+  padding: 60px 0 80px; /* more breathing room at bottom for overlap effect */
 }
 
+/* Container inside hero */
 .heroContainer {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  align-items: center; /* center title and search bar */
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
+/* Main heading - must be prominent */
 .heroTitle {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 700;
+  margin: 0;
+  text-align: center;
+  line-height: 1.2;
 }
 
+/* Search bar wrapper */
 .searchBarContainer {
-  max-width: 600px;
+  width: 100%;
+  max-width: 600px; /* keeps it compact */
 }
 
+/* Main content area with negative margin for overlap */
 .contentWrapper {
-  margin-top: -64px;
-  padding-bottom: 64px;
+  padding: 0 24px 80px;
+  margin-top: -60px; /* overlap with blue hero - adjust if needed */
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
+/* Flex row for left (cards) + right (ad banner) */
 .rowLayout {
   display: flex;
-  gap: 24px;
   flex-wrap: wrap;
+  gap: 32px;
 }
 
+/* Left section - takes most space */
 .leftSection {
-  flex: 1 1 600px;
+  flex: 1 1 700px; /* more flexible on larger screens */
+  min-width: 0; /* prevents overflow */
 }
 
+/* Right section - fixed width banner */
 .rightSection {
-  flex: 0 0 300px;
+  flex: 0 0 340px;
 }
 
+/* Banner image */
 .adImage {
   width: 100%;
+  height: auto;
   border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* subtle shadow - common in Figma */
+  display: block;
 }
 
+/* Empty state box */
 .emptyState {
-  padding: 32px;
-  text-align: center;
-  background-color: #fff;
+  background-color: white;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 48px 24px;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
+/* Search button inside TextField - optional enhancement */
 .searchButton {
-  background-color: #2563EB;
-  color: #fff;
+  background-color: #2563eb;
+  color: white;
   text-transform: none;
   font-weight: 600;
+  padding: 10px 24px;
+  border-radius: 8px;
 }
 
 .searchButton:hover {
-  background-color: #1D4ED8;
+  background-color: #1d4ed8;
 }
 
-@media (max-width: 992px) {
+/* Responsive adjustments */
+@media (max-width: 1024px) {
   .rowLayout {
     flex-direction: column;
+    gap: 40px;
   }
+
   .rightSection {
     flex: 1 1 100%;
+    order: 2; /* banner below cards on mobile */
+  }
+
+  .leftSection {
+    order: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .heroTitle {
+    font-size: 2rem;
+  }
+
+  .blueHero {
+    padding: 48px 0 64px;
+  }
+
+  .contentWrapper {
+    margin-top: -48px;
+    padding: 0 16px 64px;
   }
 }

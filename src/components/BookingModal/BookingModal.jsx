@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  Typography,
   Box,
   Grid,
 } from "@mui/material";
@@ -43,9 +42,9 @@ export default function BookingModal({ open, onClose, hospital, onConfirm }) {
       <DialogTitle>Book Appointment at {hospital?.["Hospital Name"]}</DialogTitle>
 
       <DialogContent dividers>
-        <Typography component="p" fontWeight="medium" gutterBottom>
-          Select Date
-        </Typography>
+        {/* Changed to real <p> tag */}
+        <p style={{ fontWeight: 600, margin: "0 0 12px 0" }}>Select Date</p>
+
         <Grid container spacing={1}>
           {dates.map((d, i) => (
             <Grid item key={i}>
@@ -64,9 +63,9 @@ export default function BookingModal({ open, onClose, hospital, onConfirm }) {
           <Box mt={4}>
             {timePeriods.map((p) => (
               <Box key={p.name} mb={3}>
-                <Typography component="p" fontWeight="medium" gutterBottom>
-                  {p.name}
-                </Typography>
+                {/* Changed to real <p> tag */}
+                <p style={{ fontWeight: 600, margin: "0 0 8px 0" }}>{p.name}</p>
+
                 <Grid container spacing={1}>
                   {p.times.map((t) => (
                     <Grid item key={t}>
@@ -99,7 +98,6 @@ export default function BookingModal({ open, onClose, hospital, onConfirm }) {
     </Dialog>
   );
 }
-
 
 
 

@@ -7,7 +7,7 @@ import Search from './Search/Search';
 import MyBookings from './MyBookings/MyBookings';
 function App() {
   return (
-    <div className="app-wrapper">
+    <div >
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />

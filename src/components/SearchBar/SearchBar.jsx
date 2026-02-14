@@ -10,8 +10,9 @@ import {
   Button,
   CircularProgress,
   FormHelperText,
+  InputLabel,
 } from "@mui/material";
-import IconCard from "../IconCard/IconCard"; // adjust path if needed
+import IconCard from "../IconCard/IconCard";
 import styles from "./SearchBar.module.css";
 
 import doctorIcon from "../../assets/Doctor.jpg";
@@ -43,10 +44,11 @@ export default function SearchBar() {
     const fetchStates = async () => {
       try {
         setLoadingStates(true);
+        setError(null);
         const res = await axios.get("https://meddata-backend.onrender.com/states");
-        setStates((res.data || []).sort());
+        setStates((res.data || []).sort((a, b) => a.localeCompare(b)));
       } catch (err) {
-        setError("Failed to load states.");
+        setError("Failed to load states. Please try again.");
       } finally {
         setLoadingStates(false);
       }
@@ -64,12 +66,13 @@ export default function SearchBar() {
     const fetchCities = async () => {
       try {
         setLoadingCities(true);
+        setError(null);
         const res = await axios.get(
           `https://meddata-backend.onrender.com/cities/${encodeURIComponent(selectedState)}`
         );
-        setCities((res.data || []).sort());
+        setCities((res.data || []).sort((a, b) => a.localeCompare(b)));
       } catch (err) {
-        setError("Failed to load cities.");
+        setError("Failed to load cities for selected state.");
       } finally {
         setLoadingCities(false);
       }
@@ -82,7 +85,10 @@ export default function SearchBar() {
     if (selectedState && selectedCity) {
       navigate({
         pathname: "/search",
-        search: createSearchParams({ state: selectedState, city: selectedCity }).toString(),
+        search: createSearchParams({
+          state: selectedState,
+          city: selectedCity,
+        }).toString(),
       });
     }
   };
@@ -91,12 +97,17 @@ export default function SearchBar() {
     <Box className={styles.searchCardWrapper}>
       <Box className={styles.searchCard}>
         <form onSubmit={handleSearch} className={styles.searchForm}>
+          {/* State */}
           <Box className={styles.selectWrapper} id="state">
             <SearchIcon className={styles.icon} />
+            <InputLabel htmlFor="state-select" shrink>
+              Select State
+            </InputLabel>
             {loadingStates ? (
               <CircularProgress size={24} />
             ) : (
               <select
+                id="state-select"
                 value={selectedState}
                 onChange={(e) => {
                   setSelectedState(e.target.value);
@@ -105,28 +116,41 @@ export default function SearchBar() {
                 required
                 disabled={loadingStates || !!error}
               >
-                <option value="" disabled>Select State</option>
+                <option value="" disabled>
+                  Select State
+                </option>
                 {states.map((s) => (
-                  <option key={s} value={s}>{s}</option>
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
                 ))}
               </select>
             )}
           </Box>
 
+          {/* City */}
           <Box className={styles.selectWrapper} id="city">
             <SearchIcon className={styles.icon} />
+            <InputLabel htmlFor="city-select" shrink>
+              Select City
+            </InputLabel>
             {loadingCities ? (
               <CircularProgress size={24} />
             ) : (
               <select
+                id="city-select"
                 value={selectedCity}
                 onChange={(e) => setSelectedCity(e.target.value)}
                 disabled={!selectedState || loadingCities || cities.length === 0 || !!error}
                 required
               >
-                <option value="" disabled>Select City</option>
+                <option value="" disabled>
+                  Select City
+                </option>
                 {cities.map((c) => (
-                  <option key={c} value={c}>{c}</option>
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
                 ))}
               </select>
             )}

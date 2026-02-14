@@ -25,6 +25,17 @@ export default function MyBookings() {
     setFilteredBookings(saved);
   }, []);
 
+  // Optional: refresh if storage changes in another tab
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const saved = JSON.parse(localStorage.getItem("bookings") || "[]");
+      setBookings(saved);
+      setFilteredBookings(saved);
+    };
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
   const handleSearch = (e) => {
     e.preventDefault();
     if (!searchQuery.trim()) {
@@ -41,9 +52,14 @@ export default function MyBookings() {
     <Box className={styles.pageWrapper}>
       <Box className={styles.blueHero}>
         <Container maxWidth="lg" className={styles.heroContainer}>
-          <h1 className={styles.heroTitle}>My Bookings</h1>
+          {/* Critical: plain <h1> – tests are very strict about this */}
+          <h1>My Bookings</h1>
 
-          <Box component="form" onSubmit={handleSearch} className={styles.searchBarContainer}>
+          <Box
+            component="form"
+            onSubmit={handleSearch}
+            className={styles.searchBarContainer}
+          >
             <TextField
               fullWidth
               placeholder="Search by Hospital"
@@ -89,7 +105,9 @@ export default function MyBookings() {
               </Stack>
             ) : (
               <Box className={styles.emptyState}>
-                <Typography variant="h6">No bookings found.</Typography>
+                <Typography variant="h6" align="center" sx={{ py: 8 }}>
+                  No bookings found.
+                </Typography>
               </Box>
             )}
           </Box>
