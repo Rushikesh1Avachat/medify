@@ -1,19 +1,15 @@
-import { Routes, Route } from 'react-router-dom';
+import { Outlet } from "react-router-dom";
+import { CssBaseline } from "@mui/material";
+import Footer from "./components/Footer/Footer";
+import DownloadApp from "./components/Sections/DownloadApp/DownloadApp";
 
-import './App.css';
-import NavBar from './components/NavBar/NavBar';
-import Home from './Home/Home';
-import Search from './Search/Search';
-import MyBookings from './MyBookings/MyBookings';
 function App() {
   return (
-    <div >
-      <NavBar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="/my-bookings" element={<MyBookings />} />
-      </Routes>
+    <div>
+      <CssBaseline />
+      <Outlet />
+      <DownloadApp />
+      <Footer />
     </div>
   );
 }

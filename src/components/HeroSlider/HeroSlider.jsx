@@ -1,90 +1,33 @@
-// src/components/HeroSlider/HeroSlider.jsx
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper/modules';
-
 import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/effect-fade';
-
-import styles from './HeroSlider.module.css';
-
-// Replace with your actual asset paths
-import slideDoctor from '../../assets/hero.jpg';          // doctor / medical image on right
-import slideBg from '../../assets/div.swiper-pagination.jpg';  // subtle background pattern
-
-const slides = [
-  {
-    title: "Skip the travel! Find",
-    highlight: "Online Medical Centers",
-    description:
-      "Connect instantly with a 24x7 specialist or choose to video visit a particular doctor.",
-    buttonText: "Find Centers",
-    image: slideDoctor,
-  },
-  // Optional second slide (uncomment if needed)
-  // {
-  //   title: "Instant Appointments",
-  //   highlight: "With Top Doctors",
-  //   description: "Book in seconds – no waiting, no hassle.",
-  //   buttonText: "Book Now",
-  //   image: anotherImage,
-  // },
-];
+import img from '../../assets/home.png'
+import { Box, Stack, Typography, Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 export default function HeroSlider() {
-  return (
-    <section className={styles.heroSection}>
-      <Swiper
-        modules={[Navigation, Pagination, Autoplay, EffectFade]}
-        spaceBetween={0}
-        slidesPerView={1}
-        navigation
-        pagination={{ clickable: true }}
-        autoplay={{ delay: 5000, disableOnInteraction: false }}
-        effect="fade"
-        fadeEffect={{ crossFade: true }}
-        loop={true}
-        speed={1000}
-        className={styles.swiper}
-      >
-        {slides.map((slide, index) => (
-          <SwiperSlide key={index}>
-            <div className={styles.slide}>
-              {/* Subtle background pattern */}
-              <div
-                className={styles.bgImage}
-                style={{ backgroundImage: `url(${slideBg})` }}
-              />
-
-              <div className={styles.contentContainer}>
-                {/* Left text content */}
-                <div className={styles.textContent}>
-                  <h1 className={styles.title}>
-                    {slide.title}
-                    <span className={styles.highlight}>{slide.highlight}</span>
-                  </h1>
-
-                  <p className={styles.description}>{slide.description}</p>
-
-                  <button className={styles.ctaButton}>
-                    {slide.buttonText}
-                  </button>
-                </div>
-
-                {/* Right doctor/medical image */}
-                <div className={styles.imageContainer}>
-                  <img
-                    src={slide.image}
-                    alt="Medical Professional"
-                    className={styles.doctorImage}
-                  />
-                </div>
-              </div>
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </section>
-  );
+    return (
+        <Swiper>
+            <SwiperSlide>
+                <Stack direction={{ xs: 'column', md: "row" }} spacing={6} alignItems="center" pt={2}>
+                    <Box>
+                        <Typography variant='h3' component='h1'>Skip the travel! Find Online</Typography>
+                        <Typography variant='h1' component='h1' mb={1}>Medical <span style={{ color: '#2AA7FF' }}>Centers</span></Typography>
+                        <Typography color="#5C6169" fontSize={{ md: 20 }} mb={3}>
+                            Connect instantly with a 24x7 specialist or choose to video visit a particular doctor.
+                        </Typography>
+                        <Link to='/search'>
+                            <Button variant='contained' size="large" disableElevation>
+                                Find Centers
+                            </Button>
+                        </Link>
+                    </Box>
+                    <Box
+                        component={'img'}
+                        src={img}
+                        width={{ xs: 1, md: "50%" }}
+                    />
+                </Stack>
+            </SwiperSlide>
+        </Swiper>
+    )
 }

@@ -1,59 +1,46 @@
-.header {
-    width: 100%;
-}
+/* .navbar {
+  background-color: #007bff;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+} */
 
-.topBar {
-    background-color: #2aa7ff;
-    color: #ffffff;
-    padding: 10px 0;
-    text-align: center;
-}
+/* .navLinks {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navLinks li {
+    padding: 0 10px;
+  } */
 
-.topBarText {
-    font-size: 14px !important;
-    font-weight: 400;
-}
-
-.nav {
-    background-color: #ffffff; /* White background as shown in image */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Slight shadow for depth */
-}
-
-.navLink {
+  .navlinks a {
+    color: #102851;
     text-decoration: none;
-    color: #102851; /* Dark Navy Blue text color */
-    font-size: 14px;
-    font-weight: 500; /* Slightly bolder for readability */
-    transition: color 0.2s;
-}
-
-.navLink:hover {
-    color: #2aa7ff;
-}
-
-.bookingBtn {
-    background-color: #2aa7ff;
-    color: white;
-    border: none;
-    padding: 10px 24px; /* Matches the proportions in screenshot */
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.3s, transform 0.1s;
-}
-
-.bookingBtn:hover {
-    background-color: #1a86d4;
-}
-
-.bookingBtn:active {
-    transform: scale(0.98);
-}
-
-/* Ensure mobile responsiveness */
-@media (max-width: 900px) {
-    .navLink {
-        display: none; /* Usually hidden in mobile for a hamburger menu */
+  }
+  
+  @media (max-width: 900px) {
+    .navlinks {
+      background: #102851;
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 9999;
+      width: 90vw;
+      height: 100vh;
+      transform: translateX(100%);
+      transition: transform 400ms ease;
     }
-}
+  
+    .navlinks.active {
+      transform: translateX(0);
+    }
+  
+    .navlinks a {
+      color: #fff;
+    }
+  }
+  

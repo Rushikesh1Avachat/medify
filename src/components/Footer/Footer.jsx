@@ -1,72 +1,83 @@
-import React from 'react';
-import {Link} from 'react-router-dom';
-import styles from './Footer.module.css';
-import medifyLogo from '../../assets/logo.jpg'; 
-
-// Social icons
-import fbIcon from '../../assets/fb.jpg';
-import twitterIcon from '../../assets/twitter.jpg';
-import youtubeIcon from '../../assets/yt.jpg';
-import pinterestIcon from '../../assets/pinterest.jpg';
-
-export default function Footer() {
-  return (
-    <footer className={styles.footer}>
-      <div className={styles.container}>
-        <div className={styles.topSection}>
-          {/* Left Column: Logo & Socials */}
-          <div className={styles.brandColumn}>
-            <div className={styles.logoWrapper}>
-              <img src={medifyLogo} alt="Medify Logo" className={styles.logoImg} />
-            </div>
-
-            <div className={styles.socialIcons}>
-              <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className={styles.socialCircle}>
-                <img src={fbIcon} alt="Facebook" />
-              </a>
-              <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" className={styles.socialCircle}>
-                <img src={twitterIcon} alt="Twitter" />
-              </a>
-              <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" className={styles.socialCircle}>
-                <img src={youtubeIcon} alt="YouTube" />
-              </a>
-              <a href="https://www.pinterest.com" target="_blank" rel="noopener noreferrer" className={styles.socialCircle}>
-                <img src={pinterestIcon} alt="Pinterest" />
-              </a>
-            </div>
-          </div>
-
-          {/* Right Columns: Links */}
-          <div className={styles.linksGrid}>
-            <ul className={styles.linkList}>
-              <li><Link href="/about-us">About Us</Link></li>
-              <li><Link href="/pricing">Our Pricing</Link></li>
-              <li><Link href="/gallery">Our Gallery</Link></li>
-              <li><Link href="/appointment">Appointment</Link></li>
-              <li><Link href="/privacy-policy">Privacy Policy</Link></li>
-            </ul>
-            <ul className={styles.linkList}>
-              <li><Link href="/services/orthology">Orthology</Link></li>
-              <li><Link href="/services/neurology">Neurology</Link></li>
-              <li><Link href="/services/dental-care">Dental Care</Link></li>
-              <li><Link href="/services/ophthalmology">Ophthalmology</Link></li>
-              <li><Link href="/services/cardiology">Cardiology</Link></li>
-            </ul>
-            <ul className={styles.linkList}>
-              <li><Link href="/about-us">About Us</Link></li>
-              <li><Link href="/pricing">Our Pricing</Link></li>
-              <li><Link href="/gallery">Our Gallery</Link></li>
-              <li><Link href="/appointment">Appointment</Link></li>
-              <li><Link href="/privacy-policy">Privacy Policy</Link></li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Bottom Horizontal Line & Copyright */}
-        <div className={styles.bottomSection}>
-          <p>Copyright ©2023 Surya Nursing Home. All Rights Reserved</p>
-        </div>
-      </div>
-    </footer>
-  );
-}
+import {
+    Box,
+    // Button,
+    Container,
+    Grid,
+    // Link,
+    Stack,
+    Typography,
+  } from "@mui/material";
+  import logo from "../../assets/logo.png";
+  import fb from "../../assets/fb.png";
+  import pinterest from "../../assets/pinterest.png";
+  import twitter from "../../assets/twitter.png";
+  import yt from "../../assets/yt.png";
+  import FooterLink from "./FooterLink";
+  
+  export default function Footer() {
+    return (
+      <Box bgcolor="primary.secondary" pb={3} pt={6}>
+        <Container maxWidth="xl">
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={4.5}>
+              <Stack
+                alignItems="flex-start"
+                justifyContent="space-between"
+                height={1}
+              >
+                <Box src={logo} height={36} alt="Medify" component="img" mb={2} />
+                <Stack direction="row" spacing={1.5}>
+                  <Box component="img" src={fb} height={36} />
+                  <Box component="img" src={twitter} height={36} />
+                  <Box component="img" src={yt} height={36} />
+                  <Box component="img" src={pinterest} height={36} />
+                </Stack>
+              </Stack>
+            </Grid>
+  
+            <Grid item xs={12} md={2.5}>
+              <Stack spacing={2}>
+                <FooterLink>About Us</FooterLink>
+                <FooterLink>Our Pricing</FooterLink>
+                <FooterLink>Our Gallery</FooterLink>
+                <FooterLink>Appointment</FooterLink>
+                <FooterLink>Privacy Policy</FooterLink>
+              </Stack>
+            </Grid>
+  
+            <Grid item xs={12} md={2.5}>
+              <Stack spacing={2}>
+                <FooterLink>Orthology</FooterLink>
+                <FooterLink>Neurology</FooterLink>
+                <FooterLink>Dental Care</FooterLink>
+                <FooterLink>Opthalmology</FooterLink>
+                <FooterLink>Cardiology</FooterLink>
+              </Stack>
+            </Grid>
+  
+            <Grid item xs={12} md={2.5}>
+              <Stack spacing={2}>
+                <FooterLink>About Us</FooterLink>
+                <FooterLink>Our Pricing</FooterLink>
+                <FooterLink>Our Gallery</FooterLink>
+                <FooterLink>Appointment</FooterLink>
+                <FooterLink>Privacy Policy</FooterLink>
+              </Stack>
+            </Grid>
+          </Grid>
+  
+          <Typography
+            fontWeight={300}
+            color="#fff"
+            fontSize={14}
+            pt={3}
+            mt={5}
+            borderTop="1px solid rgba(255,255,255,0.1)"
+          >
+            Copyright ©2023 Surya Nursing Home.com. All Rights Reserved
+          </Typography>
+        </Container>
+      </Box>
+    );
+  }
+  
