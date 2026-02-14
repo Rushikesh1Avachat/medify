@@ -13,28 +13,12 @@ export default function HospitalCard({
 }) {
   const [showCalendar, setShowCalendar] = useState(false);
 
-  // ────────────────────────────────────────────────
-  //  Safe access with fallback values
-  // ────────────────────────────────────────────────
-  const hospitalName   = details?.["Hospital Name"]   ?? "Unknown Hospital";
-  const city           = details?.["City"]            ?? "";
-  const state          = details?.["State"]           ?? "";
-  const hospitalType   = details?.["Hospital Type"]   ?? "General";
-  const rating         = details?.["Hospital overall rating"] ?? "Not Available";
-
-  // For display – capitalize first letter of each word
-  const capitalize = (str) =>
-    str
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(" ");
-
   return (
     <Box sx={{ borderRadius: 2, bgcolor: "#fff", p: { xs: 2, md: 4 } }}>
       <Stack
         direction={{ xs: "column", md: "row" }}
         spacing={{ xs: 1, md: 4 }}
-        flexWrap="wrap"
+        flexWrap={"wrap"}
       >
         <Box
           component="img"
@@ -50,24 +34,22 @@ export default function HospitalCard({
             fontWeight={600}
             fontSize={{ xs: 18, md: 20 }}
             mb={1}
+            textTransform="capitalize"
             lineHeight={1}
           >
-            {capitalize(hospitalName)}
+            {details["Hospital Name"].toLowerCase()}
           </Typography>
-
           <Typography
             textTransform="capitalize"
             color="#414146"
             fontSize={14}
             fontWeight={700}
           >
-            {city ? `${capitalize(city)}, ${state || "—"}` : "Location not available"}
+            {`${details["City"].toLowerCase()}, ${details["State"]}`}
           </Typography>
-
           <Typography fontSize={14} mb={1}>
-            {hospitalType}
+            {details["Hospital Type"]}
           </Typography>
-
           <Stack direction="row" flexWrap="wrap" spacing="4px" mb={2}>
             <Typography
               fontWeight={800}
@@ -83,9 +65,7 @@ export default function HospitalCard({
             </Typography>
             <Typography>Consultation fee at clinic</Typography>
           </Stack>
-
           <Divider sx={{ borderStyle: "dashed", mb: 2 }} />
-
           <Stack
             direction="row"
             alignItems="center"
@@ -97,7 +77,7 @@ export default function HospitalCard({
             spacing="4px"
           >
             <Box
-              component="img"
+              component={"img"}
               src={thumb}
               width={{ xs: 16, md: 20 }}
               height={{ xs: 16, md: 20 }}
@@ -106,9 +86,11 @@ export default function HospitalCard({
               fontWeight={700}
               fontSize={{ xs: 14, md: 16 }}
               color="#fff"
-              sx={{ opacity: 0.9 }}
+              sx={{ opacity: 0.5 }}
             >
-              {rating === "Not Available" ? "—" : rating}
+              {details["Hospital overall rating"] === "Not Available"
+              ? 0
+              : details["Hospital overall rating"]}
             </Typography>
           </Stack>
         </Box>
@@ -133,29 +115,33 @@ export default function HospitalCard({
                 disableElevation
                 onClick={() => setShowCalendar((prev) => !prev)}
               >
-                {showCalendar ? "Hide Booking Calendar" : "Book FREE Center Visit"}
+                {!showCalendar
+                  ? "Book FREE Center Visit"
+                  : "Hide Booking Calendar"}
               </Button>
             </>
           )}
 
           {booking && (
             <Stack direction="row" spacing={1} mt={{ xs: 2, md: 0 }}>
-              {details?.bookingTime && (
-                <Chip
-                  label={details.bookingTime}
-                  variant="outlined"
-                  color="primary"
-                  sx={{ borderRadius: 1, fontSize: 14 }}
-                />
-              )}
-              {details?.bookingDate && (
-                <Chip
-                  label={format(new Date(details.bookingDate), "dd MMMM yyyy")}
-                  variant="outlined"
-                  color="success"
-                  sx={{ borderRadius: 1, fontSize: 14 }}
-                />
-              )}
+              <Chip
+                label={details.bookingTime}
+                variant="outlined"
+                color="primary"
+                sx={{
+                  borderRadius: 1,
+                  fontSize: 14,
+                }}
+              />
+              <Chip
+                label={format(new Date(details.bookingDate), "dd MMMM yyyy")}
+                variant="outlined"
+                color="success"
+                sx={{
+                  borderRadius: 1,
+                  fontSize: 14,
+                }}
+              />
             </Stack>
           )}
         </Stack>
