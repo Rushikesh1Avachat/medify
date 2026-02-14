@@ -1,11 +1,11 @@
 import { Box, Typography, Container, Stack } from "@mui/material";
 import HospitalCard from "../components/HospitalCard/HospitalCard";
 import { useEffect, useState } from "react";
+import cta from "../assets/cta.png";
 import SearchBar from "../components/SearchBar/SearchBar";
 import NavBar from "../components/NavBar/NavBar";
-import cta from "../assets/cta.png";
 
-export default function MyBookings() {
+ function MyBookings() {
   const [bookings, setBookings] = useState([]);
   const [filteredBookings, setFilteredBookings] = useState([]);
 
@@ -14,6 +14,7 @@ export default function MyBookings() {
     try {
       const stored = localStorage.getItem("bookings");
       const parsed = stored ? JSON.parse(stored) : [];
+      // Make sure it's always an array
       setBookings(Array.isArray(parsed) ? parsed : []);
     } catch (err) {
       console.error("Failed to load bookings from localStorage:", err);
@@ -21,11 +22,9 @@ export default function MyBookings() {
     }
   }, []);
 
-  // Filter out invalid/incomplete bookings early
+  // Sync filtered list when bookings change
   useEffect(() => {
-    const valid = bookings.filter((item) => item && typeof item === "object" && item !== null);
-
-    setFilteredBookings(valid);
+    setFilteredBookings(bookings);
   }, [bookings]);
 
   return (
@@ -73,7 +72,10 @@ export default function MyBookings() {
                 sx={{ translate: { md: "0 50px" } }}
                 width={{ xs: 1, md: "auto" }}
               >
-                <SearchBar list={bookings} filterList={setFilteredBookings} />
+                <SearchBar
+                  list={bookings}
+                  filterList={setFilteredBookings}
+                />
               </Box>
             </Stack>
           </Container>
@@ -93,7 +95,11 @@ export default function MyBookings() {
               {filteredBookings.length > 0 ? (
                 filteredBookings.map((hospital, index) => (
                   <HospitalCard
-                    key={hospital?.["Hospital Name"] ?? hospital?.id ?? `booking-${index}`}
+                    key={
+                      hospital["Hospital Name"] ||
+                      hospital.id ||
+                      `booking-${index}`
+                    }
                     details={hospital}
                     booking={true}
                   />
@@ -125,7 +131,6 @@ export default function MyBookings() {
                 height: "auto",
                 borderRadius: 2,
                 boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
-                display: { xs: "none", md: "block" }, // hide on very small screens if desired
               }}
             />
           </Stack>
@@ -134,3 +139,4 @@ export default function MyBookings() {
     </>
   );
 }
+export default MyBookings
