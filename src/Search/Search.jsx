@@ -1,4 +1,3 @@
-// src/pages/Search.jsx  (or wherever your search route points)
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
@@ -47,8 +46,6 @@ export default function Search() {
 
     fetchHospitals();
   }, [state, city]);
-
-  const formatCity = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 
   return (
     <Box className={styles.pageWrapper}>
