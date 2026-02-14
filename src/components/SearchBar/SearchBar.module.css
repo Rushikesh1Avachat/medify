@@ -1,73 +1,56 @@
-/* src/components/SearchBar/SearchBar.module.css */
-.searchContainer {
-  background: #ffffff;
-  padding: 40px;
-  border-radius: 15px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.06);
-  max-width: 1170px;
-  margin: -110px auto 40px; /* Overlaps the HeroSlider */
-  position: relative;
-  z-index: 20;
-}
-
-.form {
+.searchCardWrapper {
   display: flex;
-  gap: 20px;
   justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
+  margin-top: -80px; /* overlaps hero */
 }
 
-.inputWrapper {
+.searchCard {
+  background: #fff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  max-width: 900px;
+}
+
+.searchForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.selectWrapper {
   position: relative;
   flex: 1;
-  min-width: 280px;
+  min-width: 150px;
 }
 
-.inputIcon {
+.selectWrapper select {
+  width: 100%;
+  padding: 12px 12px 12px 40px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.icon {
   position: absolute;
-  left: 14px;
+  left: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: #ABB6C7; /* Placeholder grey */
-  z-index: 2;
-}
-
-.select {
-  padding: 14px 14px 14px 45px;
-  border-radius: 8px;
-  border: 1px solid #F0F0F0;
-  background-color: #FAFBFE; /* Light grey interior */
-  width: 100%;
-  color: #ABB6C7;
-  appearance: none;
-  font-family: 'Poppins', sans-serif;
+  color: #888;
 }
 
 .searchButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 14px 35px;
-  font-size: 1rem;
-  font-weight: 500;
-  color: white;
-  background: #2AA7FF; /* Exact blue */
-  border: none;
+  height: 48px;
+  padding: 0 24px;
   border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.2s ease;
+  text-transform: none;
+  font-weight: 500;
 }
 
-.searchButton:hover {
-  background: #1a96ef;
-}
-
-.servicesHeading {
-  color: #1B3C74 !important; /* Specific dark blue */
-  font-weight: 500 !important;
-  font-size: 1.1rem !important;
-  margin-bottom: 20px !important;
+@media (max-width: 600px) {
+  .searchForm {
+    flex-direction: column;
+  }
 }

@@ -18,40 +18,43 @@ export default function MyBookings() {
   const [filteredBookings, setFilteredBookings] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Load bookings and normalize keys
   useEffect(() => {
-    const saved = localStorage.getItem("bookings");
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      setBookings(parsed);
-      setFilteredBookings(parsed);
-    }
+    const saved = JSON.parse(localStorage.getItem("bookings")) || [];
+    const normalized = saved.map((b) => ({
+      hospitalName: b.hospitalName || b["Hospital Name"] || "",
+      city: b.city || b.City || "",
+      state: b.state || b.State || "",
+      date: b.date || "",
+      time: b.time || "",
+    }));
+    setBookings(normalized);
+    setFilteredBookings(normalized);
   }, []);
 
+  // Search filter
   const handleSearch = (e) => {
     e.preventDefault();
-
     if (!searchQuery.trim()) {
       setFilteredBookings(bookings);
       return;
     }
 
-    const filtered = bookings.filter((b) =>
-      b["Hospital Name"]
-        ?.toLowerCase()
-        .includes(searchQuery.toLowerCase())
+    setFilteredBookings(
+      bookings.filter(
+        (b) =>
+          b.hospitalName &&
+          b.hospitalName.toLowerCase().includes(searchQuery.toLowerCase())
+      )
     );
-
-    setFilteredBookings(filtered);
   };
 
   return (
     <Box className={styles.pageWrapper}>
-      {/* HERO */}
+      {/* HERO SECTION */}
       <Box className={styles.blueHero}>
-        <Container maxWidth="lg" className={styles.heroContainer}>
-          <Typography variant="h4" className={styles.heroTitle}>
-            My Bookings
-          </Typography>
+        <Container maxWidth="lg">
+          <h1 className={styles.heroTitle}>My Bookings</h1>
 
           <Box
             component="form"
@@ -70,7 +73,6 @@ export default function MyBookings() {
                       type="submit"
                       variant="contained"
                       startIcon={<SearchIcon />}
-                      className={styles.searchButton}
                     >
                       Search
                     </Button>
@@ -82,32 +84,34 @@ export default function MyBookings() {
         </Container>
       </Box>
 
-      {/* CONTENT */}
+      {/* CONTENT SECTION */}
       <Container maxWidth="lg" className={styles.contentWrapper}>
         <Box className={styles.rowLayout}>
-          
-          {/* LEFT SIDE */}
+          {/* LEFT: Bookings List */}
           <Box className={styles.leftSection}>
             {filteredBookings.length > 0 ? (
               <Stack spacing={3}>
-                {filteredBookings.map((booking, index) => (
+                {filteredBookings.map((b, idx) => (
                   <HospitalCard
-                    key={index}
-                    data={booking}
+                    key={idx}
+                    data={{
+                      ...b,
+                      "Hospital Name": b.hospitalName,
+                      City: b.city,
+                      State: b.state,
+                    }}
                     booking={true}
                   />
                 ))}
               </Stack>
             ) : (
               <Box className={styles.emptyState}>
-                <Typography variant="h6">
-                  No bookings found.
-                </Typography>
+                <Typography variant="h6">No bookings found.</Typography>
               </Box>
             )}
           </Box>
 
-          {/* RIGHT SIDE */}
+          {/* RIGHT: Promotional Banner */}
           {filteredBookings.length > 0 && (
             <Box className={styles.rightSection}>
               <img
@@ -117,7 +121,6 @@ export default function MyBookings() {
               />
             </Box>
           )}
-
         </Box>
       </Container>
     </Box>

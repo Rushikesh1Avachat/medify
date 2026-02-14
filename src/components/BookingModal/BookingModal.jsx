@@ -1,14 +1,5 @@
 import { useState } from "react";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Typography,
-  Box,
-  Grid,
-} from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Box, Grid } from "@mui/material";
 import { format, addDays } from "date-fns";
 
 export default function BookingModal({ open, onClose, hospital }) {
@@ -27,36 +18,29 @@ export default function BookingModal({ open, onClose, hospital }) {
   const handleBook = () => {
     if (dateIndex === null || selectedSlot === null) return;
 
-    const dateObj = dates[dateIndex];
-
-    // ✅ IMPORTANT: Save structure compatible with HospitalCard
     const booking = {
-      "Hospital Name": hospital["Hospital Name"],
-      City: hospital.City,
-      State: hospital.State,
-      date: format(dateObj, "dd MMM yyyy"),
+      hospitalName: hospital["Hospital Name"],
+      city: hospital.City,
+      state: hospital.State,
+      date: format(dates[dateIndex], "dd MMM yyyy"),
       time: selectedSlot.time,
     };
 
     const prev = JSON.parse(localStorage.getItem("bookings") || "[]");
     localStorage.setItem("bookings", JSON.stringify([...prev, booking]));
 
+    setDateIndex(null);
+    setSelectedSlot(null);
+
     onClose();
   };
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>
-        Book Appointment at {hospital["Hospital Name"]}
-      </DialogTitle>
+      <DialogTitle>Book Appointment at {hospital["Hospital Name"]}</DialogTitle>
 
       <DialogContent dividers>
-
-        {/* ✅ Select Date Title */}
-        <Typography component="p" fontWeight="medium" gutterBottom>
-          Select Date
-        </Typography>
-
+        <Typography component="p" fontWeight="medium" gutterBottom>Select Date</Typography>
         <Grid container spacing={1}>
           {dates.map((d, i) => (
             <Grid item key={i}>
@@ -65,7 +49,6 @@ export default function BookingModal({ open, onClose, hospital }) {
                 size="small"
                 onClick={() => setDateIndex(i)}
               >
-                {/* ✅ Ensure Today is plain text inside button */}
                 {i === 0 ? "Today" : format(d, "dd MMM")}
               </Button>
             </Grid>
@@ -76,22 +59,14 @@ export default function BookingModal({ open, onClose, hospital }) {
           <Box mt={4}>
             {timePeriods.map((p) => (
               <Box key={p.name} mb={3}>
-                {/* ✅ REQUIRED P TAG */}
-                <Typography component="p" fontWeight="medium" gutterBottom>
-                  {p.name}
-                </Typography>
-
+                <Typography component="p" fontWeight="medium" gutterBottom>{p.name}</Typography>
                 <Grid container spacing={1}>
                   {p.times.map((t) => (
                     <Grid item key={t}>
                       <Button
-                        variant={
-                          selectedSlot?.time === t ? "contained" : "outlined"
-                        }
+                        variant={selectedSlot?.time === t ? "contained" : "outlined"}
                         size="small"
-                        onClick={() =>
-                          setSelectedSlot({ period: p.name, time: t })
-                        }
+                        onClick={() => setSelectedSlot({ period: p.name, time: t })}
                       >
                         {t}
                       </Button>
@@ -106,7 +81,6 @@ export default function BookingModal({ open, onClose, hospital }) {
 
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-
         <Button
           variant="contained"
           disabled={dateIndex === null || selectedSlot === null}
@@ -118,6 +92,7 @@ export default function BookingModal({ open, onClose, hospital }) {
     </Dialog>
   );
 }
+
 
 
 

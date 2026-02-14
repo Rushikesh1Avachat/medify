@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import axios from "axios";
 import SearchIcon from "@mui/icons-material/Search";
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography, Button } from "@mui/material";
 import IconCard from "../IconCard/IconCard";
 import styles from "./SearchBar.module.css";
 
@@ -28,48 +28,41 @@ export default function SearchBar() {
     { title: "Ambulance", icon: ambulanceIcon },
   ];
 
-  // =============================
-  // Fetch States
-  // =============================
+  // Fetch states
   useEffect(() => {
-    axios
-      .get("https://meddata-backend.onrender.com/states")
-      .then((res) => {
+    const fetchStates = async () => {
+      try {
+        const res = await axios.get(
+          "https://meddata-backend.onrender.com/states"
+        );
         setStates(res.data || []);
-      })
-      .catch((err) => console.error("States fetch error:", err));
+      } catch {
+        setStates([]);
+      }
+    };
+    fetchStates();
   }, []);
 
-  // =============================
-  // Fetch Cities when state changes
-  // =============================
+  // Fetch cities when state changes
   useEffect(() => {
-    if (!selectedState) {
-      setCities([]);
-      return;
-    }
-
-    axios
-      .get(
-        `https://meddata-backend.onrender.com/cities/${encodeURIComponent(
-          selectedState
-        )}`
-      )
-      .then((res) => {
+    if (!selectedState) return setCities([]);
+    const fetchCities = async () => {
+      try {
+        const res = await axios.get(
+          `https://meddata-backend.onrender.com/cities/${encodeURIComponent(
+            selectedState
+          )}`
+        );
         setCities(res.data || []);
-      })
-      .catch((err) => {
-        console.error("Cities fetch error:", err);
+      } catch {
         setCities([]);
-      });
+      }
+    };
+    fetchCities();
   }, [selectedState]);
 
-  // =============================
-  // Handle Search
-  // =============================
   const handleSearch = (e) => {
     e.preventDefault();
-
     if (!selectedState || !selectedCity) return;
 
     navigate({
@@ -82,82 +75,81 @@ export default function SearchBar() {
   };
 
   return (
-    <Box className={styles.searchContainer}>
-      <form onSubmit={handleSearch} className={styles.form}>
-        
-        {/* ===== STATE DROPDOWN ===== */}
-        <div id="state" className={styles.inputWrapper}>
-          <SearchIcon className={styles.inputIcon} />
-          <select
-            value={selectedState}
-            onChange={(e) => {
-              setSelectedState(e.target.value);
-              setSelectedCity("");
-            }}
-            className={styles.select}
-            required
-          >
-            <option value="" disabled>
-              State
-            </option>
-
-            {states.map((state) => (
-              <option key={state} value={state}>
-                {state}
+    <Box className={styles.searchCardWrapper}>
+      {/* Card container */}
+      <Box className={styles.searchCard}>
+        <form onSubmit={handleSearch} className={styles.searchForm}>
+          {/* STATE SELECT */}
+          <Box className={styles.selectWrapper}>
+            <SearchIcon className={styles.icon} />
+            <select
+              value={selectedState}
+              onChange={(e) => {
+                setSelectedState(e.target.value);
+                setSelectedCity("");
+              }}
+              required
+            >
+              <option value="" disabled>
+                Select State
               </option>
-            ))}
-          </select>
-        </div>
+              {states.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
+          </Box>
 
-        {/* ===== CITY DROPDOWN ===== */}
-        <div id="city" className={styles.inputWrapper}>
-          <SearchIcon className={styles.inputIcon} />
-          <select
-            value={selectedCity}
-            onChange={(e) => setSelectedCity(e.target.value)}
-            className={styles.select}
-            disabled={!selectedState}
-            required
-          >
-            <option value="" disabled>
-              City
-            </option>
-
-            {cities.map((city) => (
-              <option key={city} value={city}>
-                {city}
+          {/* CITY SELECT */}
+          <Box className={styles.selectWrapper}>
+            <SearchIcon className={styles.icon} />
+            <select
+              value={selectedCity}
+              onChange={(e) => setSelectedCity(e.target.value)}
+              disabled={!selectedState}
+              required
+            >
+              <option value="" disabled>
+                Select City
               </option>
+              {cities.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+          </Box>
+
+          {/* SEARCH BUTTON */}
+          <Button
+            type="submit"
+            variant="contained"
+            className={styles.searchButton}
+            startIcon={<SearchIcon />}
+          >
+            Search
+          </Button>
+        </form>
+
+        {/* SERVICES SECTION */}
+        <Box sx={{ mt: 4, textAlign: "center" }}>
+          <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 500 }}>
+            You may be looking for
+          </Typography>
+
+          <Grid container spacing={2} justifyContent="center">
+            {services.map((service) => (
+              <Grid item key={service.title} xs={6} sm={4} md={2.2}>
+                <IconCard
+                  img={service.icon}
+                  title={service.title}
+                  active={service.active}
+                />
+              </Grid>
             ))}
-          </select>
-        </div>
-
-        {/* ===== SEARCH BUTTON ===== */}
-        <button
-          type="submit"
-          id="searchBtn"
-          className={styles.searchButton}
-        >
-          <SearchIcon /> Search
-        </button>
-      </form>
-
-      {/* ===== SERVICES SECTION ===== */}
-      <Box sx={{ mt: 5, textAlign: "center" }}>
-        <Typography variant="h6" className={styles.servicesHeading}>
-          You may be looking for
-        </Typography>
-
-        <Grid container spacing={2} justifyContent="center" sx={{ mt: 3 }}>
-          {services.map((service) => (
-            <Grid item key={service.title} xs={6} sm={4} md={2.2}>
-              <IconCard
-                img={service.icon}
-                title={service.title}
-                active={service.active}
-              />
-            </Grid>
-          ))}
-        </Grid>
+          </Grid>
+        </Box>
       </Box>
     </Box>
   );

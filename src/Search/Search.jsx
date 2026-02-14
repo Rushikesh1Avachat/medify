@@ -14,85 +14,79 @@ export default function Search() {
   const city = searchParams.get("city") || "";
 
   const [hospitals, setHospitals] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-useEffect(() => {
-  if (!state || !city) {
-    setHospitals([]);
-    setLoading(false);
-    return;
-  }
-
-  setLoading(true);
-
-  axios
-    .get(
-      `https://meddata-backend.onrender.com/data?state=${encodeURIComponent(
-        state
-      )}&city=${encodeURIComponent(city)}`
-    )
-    .then((res) => {
-      setHospitals(res.data || []);
-      setLoading(false);
-    })
-    .catch(() => {
+  // Fetch hospitals based on state + city
+  useEffect(() => {
+    if (!state || !city) {
       setHospitals([]);
-      setLoading(false);
-    });
-}, [state, city]);
+      return;
+    }
 
+    setLoading(true);
+
+    axios
+      .get(
+        `https://meddata-backend.onrender.com/data?state=${encodeURIComponent(
+          state
+        )}&city=${encodeURIComponent(city)}`
+      )
+      .then((res) => setHospitals(res.data || []))
+      .catch(() => setHospitals([]))
+      .finally(() => setLoading(false));
+  }, [state, city]);
 
   return (
     <Box className={styles.pageWrapper}>
-      {/* Hero */}
+      {/* HERO SECTION */}
       <Box className={styles.blueHero}>
         <Container maxWidth="lg">
-          <Box className={styles.searchBarContainer}>
-            <SearchBar smallVariant={true} />
+          {/* Figma-style Search Card */}
+          <Box className={styles.searchCardWrapper}>
+            <SearchBar />
           </Box>
         </Container>
       </Box>
 
+      {/* SEARCH RESULTS */}
       <Container maxWidth="lg" sx={{ mt: 12, pb: 8 }}>
         {loading ? (
-          <Typography variant="h5" sx={{ py: 10, textAlign: "center" }}>
+          <Typography
+            variant="h5"
+            sx={{ py: 10, textAlign: "center", color: "#555" }}
+          >
             Finding medical centers...
           </Typography>
         ) : (
           <>
-            {/* ✅ REQUIRED H1 HEADING */}
             <h1 className={styles.resultsCount}>
-              {hospitals.length} medical centers available in {city}
+              {hospitals.length} medical centers available in {city.toLowerCase()}
             </h1>
 
             <Box className={styles.subInfo}>
               <img src={checkmarkIcon} alt="verified" width="22" />
               <Typography>
-                Book appointments with minimum wait-time & verified doctor
-                details
+                Book appointments with minimum wait-time & verified doctor details
               </Typography>
             </Box>
 
             <Stack spacing={4} sx={{ mt: 4 }}>
-              {hospitals.map((hospital, index) => (
-                <Box key={index} className={styles.resultRow}>
-                  <HospitalCard data={hospital} />
-
-                  <Box className={styles.bannerWrapper}>
-                    <img
-                      src={offerBanner}
-                      alt="Offer Banner"
-                      className={styles.adImage}
-                    />
+              {hospitals.length > 0 ? (
+                hospitals.map((hospital) => (
+                  <Box key={hospital["Hospital Name"]} className={styles.resultRow}>
+                    <HospitalCard data={hospital} />
+                    <Box className={styles.bannerWrapper}>
+                      <img
+                        src={offerBanner}
+                        alt="Offer Banner"
+                        className={styles.adImage}
+                      />
+                    </Box>
                   </Box>
-                </Box>
-              ))}
-
-              {hospitals.length === 0 && (
+                ))
+              ) : (
                 <Box className={styles.emptyBox}>
-                  <Typography variant="h6">
-                    No medical centers found.
-                  </Typography>
+                  <Typography variant="h6">No medical centers found.</Typography>
                 </Box>
               )}
             </Stack>
