@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Box, Grid } from "@mui/material";
 import { format, addDays } from "date-fns";
 
-export default function BookingModal({ open, onClose, hospital }) {
+export default function BookingModal({ open, onClose, hospital, onConfirm }) {
   const [dateIndex, setDateIndex] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
 
@@ -17,21 +17,9 @@ export default function BookingModal({ open, onClose, hospital }) {
 
   const handleBook = () => {
     if (dateIndex === null || selectedSlot === null) return;
-
-    const booking = {
-      hospitalName: hospital["Hospital Name"],
-      city: hospital.City,
-      state: hospital.State,
-      date: format(dates[dateIndex], "dd MMM yyyy"),
-      time: selectedSlot.time,
-    };
-
-    const prev = JSON.parse(localStorage.getItem("bookings") || "[]");
-    localStorage.setItem("bookings", JSON.stringify([...prev, booking]));
-
+    onConfirm(format(dates[dateIndex], "dd MMM yyyy"), selectedSlot.time);
     setDateIndex(null);
     setSelectedSlot(null);
-    onClose();
   };
 
   return (
@@ -78,15 +66,17 @@ export default function BookingModal({ open, onClose, hospital }) {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button variant="contained" disabled={dateIndex === null || selectedSlot === null} onClick={handleBook}>
+        <Button
+          variant="contained"
+          disabled={dateIndex === null || selectedSlot === null}
+          onClick={handleBook}
+        >
           Confirm Booking
         </Button>
       </DialogActions>
     </Dialog>
   );
 }
-
-
 
 
 

@@ -1,58 +1,63 @@
 .searchCardWrapper {
+  width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: -80px; /* overlaps hero */
+  padding: 16px;
 }
 
 .searchCard {
-  background: #fff;
-  padding: 24px;
+  background-color: #fff;
   border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 24px;
   width: 100%;
-  max-width: 900px;
+  max-width: 1200px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
 }
 
 .searchForm {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
+  align-items: center;
 }
 
 .selectWrapper {
   position: relative;
-  flex: 1;
-  min-width: 150px;
+  flex: 1 1 200px;
 }
 
 .selectWrapper select {
   width: 100%;
-  padding: 12px 12px 12px 40px;
+  padding: 10px 40px 10px 12px;
   border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 16px;
+  border: 1px solid #CBD5E1;
+  font-size: 0.9rem;
   appearance: none;
 }
 
 .icon {
   position: absolute;
-  left: 12px;
+  right: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: #888;
+  color: #94A3B8;
 }
 
 .searchButton {
-  height: 48px;
-  padding: 0 24px;
-  border-radius: 8px;
+  background-color: #2563EB;
+  color: #fff;
   text-transform: none;
-  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
 }
 
-@media (max-width: 600px) {
+.searchButton:hover {
+  background-color: #1D4ED8;
+}
+
+@media (max-width: 768px) {
   .searchForm {
     flex-direction: column;
   }
 }
-

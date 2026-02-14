@@ -6,7 +6,6 @@ import { Box, Grid, Typography, Button } from "@mui/material";
 import IconCard from "../IconCard/IconCard";
 import styles from "./SearchBar.module.css";
 
-// Assets
 import doctorIcon from "../../assets/Doctor.jpg";
 import labIcon from "../../assets/blood-test.jpg";
 import hospitalIcon from "../../assets/cardiology.jpg";
@@ -29,94 +28,61 @@ export default function SearchBar() {
   ];
 
   useEffect(() => {
-    const fetchStates = async () => {
-      try {
-        const res = await axios.get("https://meddata-backend.onrender.com/states");
-        setStates(res.data || []);
-      } catch {
-        setStates([]);
-      }
-    };
-    fetchStates();
+    axios.get("https://meddata-backend.onrender.com/states")
+      .then(res => setStates(res.data || []))
+      .catch(console.error);
   }, []);
 
   useEffect(() => {
     if (!selectedState) return setCities([]);
-    const fetchCities = async () => {
-      try {
-        const res = await axios.get(
-          `https://meddata-backend.onrender.com/cities/${encodeURIComponent(selectedState)}`
-        );
-        setCities(res.data || []);
-      } catch {
-        setCities([]);
-      }
-    };
-    fetchCities();
+    axios.get(`https://meddata-backend.onrender.com/cities/${encodeURIComponent(selectedState)}`)
+      .then(res => setCities(res.data || []))
+      .catch(console.error);
   }, [selectedState]);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (!selectedState || !selectedCity) return;
-    navigate({
-      pathname: "/search",
-      search: createSearchParams({
-        state: selectedState,
-        city: selectedCity,
-      }).toString(),
-    });
+    if (selectedState && selectedCity) {
+      navigate({
+        pathname: "/search",
+        search: createSearchParams({ state: selectedState, city: selectedCity }).toString(),
+      });
+    }
   };
 
   return (
     <Box className={styles.searchCardWrapper}>
       <Box className={styles.searchCard}>
         <form onSubmit={handleSearch} className={styles.searchForm}>
-          {/* STATE SELECT */}
           <Box className={styles.selectWrapper} id="state">
             <SearchIcon className={styles.icon} />
-            <select
-              value={selectedState}
-              onChange={(e) => { setSelectedState(e.target.value); setSelectedCity(""); }}
-              required
-            >
+            <select value={selectedState} onChange={(e) => { setSelectedState(e.target.value); setSelectedCity(""); }} required>
               <option value="" disabled>Select State</option>
-              {states.map((s) => <option key={s} value={s}>{s}</option>)}
+              {states.map(s => <option key={s} value={s}>{s}</option>)}
             </select>
           </Box>
 
-          {/* CITY SELECT */}
           <Box className={styles.selectWrapper} id="city">
             <SearchIcon className={styles.icon} />
-            <select
-              value={selectedCity}
-              onChange={(e) => setSelectedCity(e.target.value)}
-              disabled={!selectedState}
-              required
-            >
+            <select value={selectedCity} onChange={(e) => setSelectedCity(e.target.value)} disabled={!selectedState} required>
               <option value="" disabled>Select City</option>
-              {cities.map((c) => <option key={c} value={c}>{c}</option>)}
+              {cities.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
           </Box>
 
-          <Button
-            type="submit"
-            variant="contained"
-            className={styles.searchButton}
-            startIcon={<SearchIcon />}
-          >
+          <Button type="submit" id="searchBtn" variant="contained" startIcon={<SearchIcon />} disableElevation>
             Search
           </Button>
         </form>
 
-        {/* SERVICES SECTION */}
         <Box sx={{ mt: 4, textAlign: "center" }}>
-          <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 500 }}>
+          <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 500, color: "#102851" }}>
             You may be looking for
           </Typography>
           <Grid container spacing={2} justifyContent="center">
-            {services.map((service) => (
-              <Grid item key={service.title} xs={6} sm={4} md={2.2}>
-                <IconCard img={service.icon} title={service.title} active={service.active}/>
+            {services.map(s => (
+              <Grid item key={s.title} xs={6} sm={4} md={2.2}>
+                <IconCard img={s.icon} title={s.title} active={s.active} />
               </Grid>
             ))}
           </Grid>

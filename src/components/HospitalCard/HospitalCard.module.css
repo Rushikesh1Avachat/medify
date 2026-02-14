@@ -1,11 +1,16 @@
 .card {
   display: flex;
   flex-direction: column;
-  border-radius: 16px;
   padding: 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   background-color: #fff;
   position: relative;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
 }
 
 .iconContainer {
@@ -15,47 +20,57 @@
 }
 
 .hospitalName {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  margin: 0 0 4px 0;
+  margin-bottom: 4px;
+  color: #102851;
 }
 
 .locationText {
-  color: #555;
-  margin-bottom: 12px;
+  font-size: 0.85rem;
+  color: #5A5A5A;
+  margin-bottom: 8px;
 }
 
 .freeTag {
-  background-color: #e0f7fa;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #16A34A;
+  border: 1px solid #16A34A;
   padding: 2px 6px;
   border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: #00796b;
-}
-
-.actionSection {
-  margin-top: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: flex-start;
-}
-
-.availableText {
-  font-weight: 500;
-  color: #4caf50;
-}
-
-.bookButton {
-  width: 100%;
-  border-radius: 8px;
-  text-transform: none;
 }
 
 .timeBadge, .dateBadge {
-  background-color: #f0f0f0;
+  font-size: 0.75rem;
   padding: 4px 8px;
   border-radius: 6px;
-  font-size: 0.875rem;
+  background-color: #F3F4F6;
+  color: #102851;
+}
+
+.actionSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.availableText {
+  font-size: 0.75rem;
+  color: #16A34A;
+  font-weight: 600;
+}
+
+.bookButton {
+  background-color: #2563EB;
+  color: #fff;
+  font-weight: 600;
+  text-transform: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+.bookButton:hover {
+  background-color: #1D4ED8;
 }

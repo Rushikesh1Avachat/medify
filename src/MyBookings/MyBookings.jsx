@@ -12,27 +12,22 @@ export default function MyBookings() {
 
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem("bookings")) || [];
-    const normalized = saved.map((b) => ({
-      hospitalName: b.hospitalName || b["Hospital Name"] || "",
-      city: b.city || b.City || "",
-      state: b.state || b.State || "",
-      date: b.date || "",
-      time: b.time || "",
-    }));
-    setBookings(normalized);
-    setFilteredBookings(normalized);
+    setBookings(saved);
+    setFilteredBookings(saved);
   }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
     if (!searchQuery.trim()) return setFilteredBookings(bookings);
-    setFilteredBookings(bookings.filter(b => b.hospitalName.toLowerCase().includes(searchQuery.toLowerCase())));
+    setFilteredBookings(bookings.filter(b =>
+      b.hospitalName.toLowerCase().includes(searchQuery.toLowerCase())
+    ));
   };
 
   return (
     <Box className={styles.pageWrapper}>
       <Box className={styles.blueHero}>
-        <Container maxWidth="lg">
+        <Container maxWidth="lg" className={styles.heroContainer}>
           <h1 className={styles.heroTitle}>My Bookings</h1>
           <Box component="form" onSubmit={handleSearch} className={styles.searchBarContainer}>
             <TextField
@@ -43,7 +38,7 @@ export default function MyBookings() {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <Button type="submit" variant="contained" startIcon={<SearchIcon />}>Search</Button>
+                    <Button type="submit" id="searchBtn" variant="contained" startIcon={<SearchIcon />}>Search</Button>
                   </InputAdornment>
                 ),
               }}
@@ -72,12 +67,9 @@ export default function MyBookings() {
               </Box>
             )}
           </Box>
-
-          {filteredBookings.length > 0 && (
-            <Box className={styles.rightSection}>
-              <img src={offerBanner} alt="Promotional Banner" className={styles.adImage} />
-            </Box>
-          )}
+          <Box className={styles.rightSection}>
+            <img src={offerBanner} alt="Promotional Banner" className={styles.adImage} />
+          </Box>
         </Box>
       </Container>
     </Box>

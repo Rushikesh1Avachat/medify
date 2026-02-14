@@ -6,7 +6,22 @@ import hospitalIcon from "../../assets/hospitalicon.jpg";
 
 export default function HospitalCard({ data, booking = false }) {
   const [open, setOpen] = useState(false);
+
   if (!data) return null;
+
+  // Handle booking confirmation
+  const handleBookingConfirm = (date, time) => {
+    const bookingData = {
+      hospitalName: data["Hospital Name"],
+      city: data.City,
+      state: data.State,
+      date,
+      time,
+    };
+    const existing = JSON.parse(localStorage.getItem("bookings") || "[]");
+    localStorage.setItem("bookings", JSON.stringify([...existing, bookingData]));
+    setOpen(false);
+  };
 
   return (
     <>
@@ -16,7 +31,10 @@ export default function HospitalCard({ data, booking = false }) {
         </Box>
 
         <CardContent sx={{ flexGrow: 1, p: 0 }}>
-          <h3 className={styles.hospitalName}>{data["Hospital Name"]}</h3>
+          <Typography component="h3" className={styles.hospitalName}>
+            {data["Hospital Name"]}
+          </Typography>
+
           <Typography variant="body2" className={styles.locationText}>
             {data.City}, {data.State}
           </Typography>
@@ -38,14 +56,24 @@ export default function HospitalCard({ data, booking = false }) {
         {!booking && (
           <Box className={styles.actionSection}>
             <Typography className={styles.availableText}>Available Today</Typography>
-            <Button variant="contained" onClick={() => setOpen(true)} className={styles.bookButton}>
+            <Button
+              onClick={() => setOpen(true)}
+              className={styles.bookButton}
+            >
               Book FREE Center Visit
             </Button>
           </Box>
         )}
       </Card>
 
-      {!booking && <BookingModal open={open} onClose={() => setOpen(false)} hospital={data} />}
+      {!booking && (
+        <BookingModal
+          open={open}
+          onClose={() => setOpen(false)}
+          hospital={data}
+          onConfirm={handleBookingConfirm}
+        />
+      )}
     </>
   );
 }
